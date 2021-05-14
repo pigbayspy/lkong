@@ -1,0 +1,21 @@
+ext {
+
+    def ktxVersion = "1.3.2"
+    def appcompatVersion = "1.2.0"
+    def materialVersion = "1.3.0"
+    def constraintLayoutVersion = "2.0.4"
+    def navigationVersion = "2.3.4"
+    def livedataKtxVersion = "2.2.0"
+    def viewModelKtxVersion = "2.3.1"
+
+    dependency = [
+            ktx               : "androidx.core:core-ktx:$ktxVersion",
+            appcomcat         : "androidx.appcompat:appcompat:$appcompatVersion",
+            material          : "com.google.android.material:material:$materialVersion",
+            constraintlayout  : "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion",
+            livedata          : "androidx.lifecycle:lifecycle-livedata-ktx:$livedataKtxVersion",
+            viewmodel         : "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelKtxVersion",
+            navigationFragment: "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
+            navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    ]
+}
