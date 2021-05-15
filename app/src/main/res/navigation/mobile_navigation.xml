@@ -19,7 +19,13 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="io.pig.lkong.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="io.pig.lkong.ui.history.HistoryFragment"
+        android:label="@string/menu_history"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="io.pig.lkong.ui.setting.SettingFragment"
+        android:label="@string/menu_setting"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

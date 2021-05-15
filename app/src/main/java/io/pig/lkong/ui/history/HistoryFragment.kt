@@ -1,4 +1,4 @@
-package io.pig.lkong.ui.slideshow
+package io.pig.lkong.ui.history
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import io.pig.lkong.databinding.FragmentSlideshowBinding
+import io.pig.lkong.databinding.FragmentHistoryBinding
 
-class SlideshowFragment : Fragment() {
+class HistoryFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: SlideshowViewModel
-    private var _binding: FragmentSlideshowBinding? = null
+    private lateinit var historyViewModel: HistoryViewModel
+    private var _binding: FragmentHistoryBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,14 +23,14 @@ class SlideshowFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        slideshowViewModel =
-            ViewModelProvider(this).get(SlideshowViewModel::class.java)
+        historyViewModel =
+            ViewModelProvider(this).get(HistoryViewModel::class.java)
 
-        _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textSlideshow
-        slideshowViewModel.text.observe(viewLifecycleOwner, {
+        historyViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
         return root
