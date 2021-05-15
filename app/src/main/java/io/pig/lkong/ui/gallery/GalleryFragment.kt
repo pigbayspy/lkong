@@ -3,8 +3,6 @@ package io.pig.lkong.ui.gallery
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
@@ -27,9 +25,7 @@ class GalleryFragment : Fragment() {
         selfBinding = FragmentGalleryBinding.inflate(inflater, container, false)
         val root: View = selfBinding.root
 
-        // Todo 自定义 toolbar
-
-        // 自定义 menu
+        // 自定义的menu
         setHasOptionsMenu(true)
 
         val textView: TextView = selfBinding.textGallery
@@ -40,6 +36,7 @@ class GalleryFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.gallery_fragment, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -49,18 +46,5 @@ class GalleryFragment : Fragment() {
             // Todo
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    /**
-     * 使用自定义标题栏
-     */
-    private fun initToolbar(toolbar: Toolbar, title: String, isDisplayHomeAsUp: Boolean) {
-        val appCompatActivity = activity as AppCompatActivity
-        appCompatActivity.setSupportActionBar(toolbar)
-        val actionBar = appCompatActivity.supportActionBar
-        if (actionBar != null) {
-            actionBar.title = title
-            actionBar.setDisplayHomeAsUpEnabled(isDisplayHomeAsUp)
-        }
     }
 }

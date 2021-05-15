@@ -9,6 +9,9 @@
     <string name="action_logout">退出账号</string>
     <string name="action_settings">设置</string>
     <string name="action_evening">夜间模式</string>
+    <string name="action_notification">通知</string>
+    <string name="action_clear">清理</string>
+    <string name="action_search">搜索</string>
 
     <!-- fragment 字段 -->
     <string name="menu_home">个人主页</string>
