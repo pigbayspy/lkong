@@ -2,8 +2,10 @@ package io.pig.lkong
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -12,14 +14,18 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import io.pig.lkong.databinding.ActivityMainBinding
+import io.pig.lkong.ui.main.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -42,6 +48,17 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(topLevel, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // 设置 ViewModel
+        val headView = binding.navView.getHeaderView(0)
+        val userEmailView = headView.findViewById<TextView>(R.id.account_email)
+        mainViewModel.accountEmail.observe(this) {
+            userEmailView.text = it
+        }
+        val userNameView = headView.findViewById<TextView>(R.id.account_name)
+        mainViewModel.accountName.observe(this) {
+            userNameView.text = it
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

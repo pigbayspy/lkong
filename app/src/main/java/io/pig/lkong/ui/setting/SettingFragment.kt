@@ -10,10 +10,6 @@ import io.pig.lkong.R
 
 class SettingFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = SettingFragment()
-    }
-
     private lateinit var viewModel: SettingViewModel
 
     override fun onCreateView(

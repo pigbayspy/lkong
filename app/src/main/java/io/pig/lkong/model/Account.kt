@@ -7,8 +7,8 @@ package io.pig.lkong.model
  * @since 2021/5/15
  */
 class Account(
-    private val name: String,
-    private val email: String,
-    private val avatar: String
+    val name: String,
+    val email: String,
+    val avatarUrl: String
 ) {
 }

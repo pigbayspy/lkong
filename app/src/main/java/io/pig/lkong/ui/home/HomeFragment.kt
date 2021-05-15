@@ -12,11 +12,7 @@ import io.pig.lkong.databinding.FragmentHomeBinding
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
-    private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var selfBinding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,18 +22,13 @@ class HomeFragment : Fragment() {
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        selfBinding = FragmentHomeBinding.inflate(inflater, container, false)
+        val root: View = selfBinding.root
 
-        val textView: TextView = binding.textHome
+        val textView: TextView = selfBinding.textHome
         homeViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
         return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

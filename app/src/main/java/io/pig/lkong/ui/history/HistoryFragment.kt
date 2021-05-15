@@ -12,11 +12,7 @@ import io.pig.lkong.databinding.FragmentHistoryBinding
 class HistoryFragment : Fragment() {
 
     private lateinit var historyViewModel: HistoryViewModel
-    private var _binding: FragmentHistoryBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var selfBinding: FragmentHistoryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,18 +22,13 @@ class HistoryFragment : Fragment() {
         historyViewModel =
             ViewModelProvider(this).get(HistoryViewModel::class.java)
 
-        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        selfBinding = FragmentHistoryBinding.inflate(inflater, container, false)
+        val root: View = selfBinding.root
 
-        val textView: TextView = binding.textSlideshow
+        val textView: TextView = selfBinding.textSlideshow
         historyViewModel.text.observe(viewLifecycleOwner, {
             textView.text = it
         })
         return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
