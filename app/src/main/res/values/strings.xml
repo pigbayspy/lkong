@@ -4,8 +4,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="nav_header_desc">头像</string>
-    <string name="action_settings">Settings</string>
 
+    <!-- menu 字段 -->
+    <string name="action_logout">退出账号</string>
+    <string name="action_settings">设置</string>
+    <string name="action_evening">夜间模式</string>
+
+    <!-- fragment 字段 -->
     <string name="menu_home">个人主页</string>
     <string name="menu_gallery">我的收藏</string>
     <string name="menu_history">浏览历史</string>
