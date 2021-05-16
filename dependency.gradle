@@ -7,6 +7,9 @@ ext {
     def navigationVersion = "2.3.4"
     def livedataKtxVersion = "2.2.0"
     def viewModelKtxVersion = "2.3.1"
+    def hiltVersion = "2.28-alpha"
+    def preferenceVersion = "1.1.1"
+    def rxVersion = "3.0.4"
 
     dependency = [
             ktx               : "androidx.core:core-ktx:$ktxVersion",
@@ -16,6 +19,16 @@ ext {
             livedata          : "androidx.lifecycle:lifecycle-livedata-ktx:$livedataKtxVersion",
             viewmodel         : "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelKtxVersion",
             navigationFragment: "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
-            navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+            navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationVersion",
+
+            // 依赖注入
+            hilt              : "com.google.dagger:hilt-android:$hiltVersion",
+            hiltKapt          : "com.google.dagger:hilt-android-compiler:$hiltVersion",
+
+            // preference
+            preference        : "androidx.preference:preference-ktx:$preferenceVersion",
+
+            // rx
+            rx                : "io.reactivex.rxjava3:rxjava:$rxVersion"
     ]
 }

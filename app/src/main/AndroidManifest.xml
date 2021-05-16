@@ -3,6 +3,7 @@
     package="io.pig.lkong">
 
     <application
+        android:name=".application.LkongApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/lkong_backup_rules"
         android:icon="@mipmap/ic_launcher"

@@ -13,17 +13,31 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.databinding.ActivityMainBinding
 import io.pig.lkong.ui.main.MainViewModel
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        val Running = AtomicBoolean(false)
+    }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
+    @Inject
+    private lateinit var userAccountMgr: UserAccountManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Running.set(true)
 
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 

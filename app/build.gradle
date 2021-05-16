@@ -3,6 +3,9 @@ plugins {
     id 'kotlin-android'
 }
 
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -47,5 +50,11 @@ dependencies {
     implementation dependency.viewmodel
     implementation dependency.navigationFragment
     implementation dependency.navigationUi
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation dependency.hilt
+    kapt dependency.hiltKapt
+
+    implementation dependency.preference
+
+    implementation dependency.rx
 }

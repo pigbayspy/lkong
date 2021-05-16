@@ -1,0 +1,173 @@
+package io.pig.lkong.account
+
+import android.accounts.Account
+import android.accounts.AccountManager
+import android.content.Context
+import android.content.Intent
+import android.os.Handler
+import android.os.HandlerThread
+import android.util.Log
+import dagger.hilt.android.qualifiers.ApplicationContext
+import io.pig.lkong.MainActivity
+import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AUTH
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AVATAR
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_ID
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_NAME
+import io.pig.lkong.preference.LongPrefs
+import io.pig.lkong.preference.PrefConst.DEFAULT_ACCOUNT_UID
+import io.pig.lkong.preference.PrefConst.DEFAULT_ACCOUNT_UID_VALUE
+import io.pig.lkong.preference.Prefs
+import io.pig.lkong.rx.RxEventBus
+import io.pig.lkong.rx.event.AccountChangeEvent
+import io.pig.lkong.rx.event.AccountCreateEvent
+import io.pig.lkong.rx.event.AccountRemoveEvent
+import javax.inject.Inject
+
+/**
+ * 用户账户管理器
+ *
+ * @author yinhang
+ * @since 2021/5/16
+ */
+class UserAccountManager @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+
+    companion object {
+        const val TAG = "UserAccountManager"
+
+        lateinit var handlerThread: HandlerThread
+        lateinit var handler: Handler
+    }
+
+    private val userAccounts = mutableMapOf<Long, UserAccount>()
+
+    private val defaultAccountUid: LongPrefs
+    private val accountMgr: AccountManager
+
+    private var currentAccount: UserAccount? = null
+    private var authObject: LkongAuthObject? = null
+
+    init {
+        defaultAccountUid = Prefs.getLongPrefs(DEFAULT_ACCOUNT_UID, DEFAULT_ACCOUNT_UID_VALUE)
+        accountMgr = AccountManager.get(context)
+    }
+
+    /**
+     * 用户是否登录
+     */
+    fun isSignedIn(): Boolean {
+        return userAccounts.isNotEmpty()
+    }
+
+    fun init() {
+        update()
+        accountMgr.addOnAccountsUpdatedListener(
+            { accountArr ->
+                synchronized(this) {
+                    if (accountArr == null) {
+                        return@addOnAccountsUpdatedListener
+                    }
+                    val lkongAccounts = accountArr.filter {
+                        it.type === ACCOUNT_TYPE
+                    }
+                    if (lkongAccounts.size != userAccounts.size) {
+                        Log.w(TAG, "Account count change!")
+                    }
+                    update()
+                    if (userAccounts.isEmpty() && lkongAccounts.isNotEmpty()) {
+                        if (!MainActivity.Running.get()) {
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(intent)
+                        }
+                        RxEventBus.sendEvent(AccountChangeEvent())
+                    } else if (lkongAccounts.size > userAccounts.size) {
+                        RxEventBus.sendEvent(AccountCreateEvent())
+                    } else if (lkongAccounts.size < userAccounts.size && userAccounts.isNotEmpty()) {
+                        RxEventBus.sendEvent(AccountRemoveEvent())
+                    }
+                }
+            }, handler, true
+        )
+        Log.d(TAG, "UserAccountManager init done")
+    }
+
+    fun removeAllAccounts(): Boolean {
+        val accountArr = accountMgr.getAccountsByType(ACCOUNT_TYPE)
+        var successCount = 0
+        for (account in accountArr) {
+            if (accountMgr.removeAccountExplicitly(account)) {
+                ++successCount
+            }
+        }
+        return successCount == accountArr.size
+    }
+
+    private fun setCurrentUserAccount(userId: Long) {
+        this.currentAccount = userAccounts[userId]
+        this.authObject = getAuthObject(currentAccount!!)
+        this.defaultAccountUid.set(userId)
+    }
+
+    /**
+     * 更新数据
+     */
+    @Synchronized
+    private fun update() {
+        userAccounts.clear()
+        val accountArr = accountMgr.getAccountsByType(ACCOUNT_TYPE)
+        for (account in accountArr) {
+            val userAccount = getUserFromAccount(account)
+            if (userAccount != null) {
+                userAccounts[userAccount.userId] = userAccount
+            }
+        }
+        val uid = defaultAccountUid.get()
+        val defaultAccount = userAccounts[uid]
+        val firstAccount = getFirstAccount()
+        if (defaultAccount == null && firstAccount != null) {
+            setCurrentUserAccount(firstAccount.userId)
+        } else if (currentAccount != null) {
+            setCurrentUserAccount(currentAccount!!.userId)
+        } else {
+            defaultAccountUid.set(DEFAULT_ACCOUNT_UID_VALUE)
+        }
+    }
+
+    private fun getAuthObject(account: UserAccount): LkongAuthObject {
+        return LkongAuthObject(
+            account.userId,
+            account.userName
+        )
+    }
+
+    private fun getFirstAccount(): UserAccount? {
+        if (userAccounts.isEmpty()) {
+            return null
+        }
+        return userAccounts.iterator().next().value
+    }
+
+    /**
+     * Account 转换为 UserAccount
+     */
+    private fun getUserFromAccount(account: Account): UserAccount? {
+        val idStr = accountMgr.getUserData(account, KEY_ACCOUNT_USER_ID)
+        val userAuth = accountMgr.getUserData(account, KEY_ACCOUNT_USER_AUTH)
+        val userName = accountMgr.getUserData(account, KEY_ACCOUNT_USER_NAME)
+        val userAvatar = accountMgr.getUserData(account, KEY_ACCOUNT_USER_AVATAR)
+        if (userAuth.isNullOrEmpty()) {
+            return null
+        }
+        val id = idStr.toLong()
+        val userEmail = account.name
+        return UserAccount(
+            id,
+            userName,
+            userEmail,
+            userAvatar
+        )
+    }
+}
