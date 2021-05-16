@@ -2,9 +2,13 @@ package io.pig.lkong.navigation
 
 import android.accounts.AccountManager
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import io.pig.lkong.R
 import io.pig.lkong.account.const.AccountConst
+import io.pig.lkong.application.const.AppConst
 
 /**
  * @author yinhang
@@ -22,6 +26,10 @@ object AppNavigation {
         )
     }
 
+    fun navigateToFaq(activity: Activity) {
+        openUrl(AppConst.FAQ_URL, activity)
+    }
+
     private fun addNewAccount(activity: Activity, accountType: String, authTokenType: String) {
         val accountManager = AccountManager.get(activity)
         accountManager.addAccount(
@@ -35,5 +43,13 @@ object AppNavigation {
                 }
             }, null
         )
+    }
+
+    private fun openUrl(url: String, context: Context) {
+        val uri = Uri.parse(url)
+        val intent = Intent()
+        intent.action = Intent.ACTION_VIEW
+        intent.data = uri
+        context.startActivity(intent)
     }
 }

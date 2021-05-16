@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_bg_sign_in"
+    tools:context=".ui.activity.SignInActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/activity_sign_in_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        app:cardElevation="6dp">
+
+        <RelativeLayout
+            android:id="@+id/sign_in_input_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/activity_sign_in_card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="8dp"
+                android:text="@string/activity_sign_in_card_title"
+                android:textSize="@dimen/text_size_headline" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_email_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_sign_in_card_title">
+
+                <EditText
+                    android:id="@+id/sign_in_edit_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="emailAddress"
+                    android:hint="@string/hint_account_email"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:nextFocusDown="@+id/sign_in_edit_password"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_password_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_email_text">
+
+                <EditText
+                    android:id="@+id/sign_in_edit_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="password"
+                    android:hint="@string/hint_account_password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/sign_in_result_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_password_text"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/text_size_subhead" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sign_in_result_textview">
+
+                <Button
+                    android:id="@+id/button_sign_in"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="?selectableItemBackground"
+                    android:onClick="onSignInClick"
+                    android:text="@string/button_sign_in" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/button_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="32dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:text="@string/button_sign_up"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_title"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/button_faq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:text="@string/button_faq"
+        android:onClick="onFaqClick"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_title" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
