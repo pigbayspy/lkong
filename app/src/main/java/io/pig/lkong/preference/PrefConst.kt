@@ -11,4 +11,8 @@ object PrefConst {
     const val DEFAULT_ACCOUNT_UID = "default_account_uid"
 
     const val DEFAULT_ACCOUNT_UID_VALUE = 0L
+
+    const val CHECK_NOTIFICATION_DURATION = "prefs_check_notification_duration"
+
+    const val CHECK_NOTIFICATION_DURATION_VALUE = "1800"
 }

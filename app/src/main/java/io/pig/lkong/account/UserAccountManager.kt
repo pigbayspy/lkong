@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.pig.lkong.MainActivity
 import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AUTH
@@ -22,7 +21,6 @@ import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.AccountChangeEvent
 import io.pig.lkong.rx.event.AccountCreateEvent
 import io.pig.lkong.rx.event.AccountRemoveEvent
-import javax.inject.Inject
 
 /**
  * 用户账户管理器
@@ -30,15 +28,20 @@ import javax.inject.Inject
  * @author yinhang
  * @since 2021/5/16
  */
-class UserAccountManager @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
+class UserAccountManager(private val context: Context) {
 
     companion object {
         const val TAG = "UserAccountManager"
 
-        lateinit var handlerThread: HandlerThread
-        lateinit var handler: Handler
+        private const val THREAD_NAME = "UserAccountManagerThread"
+
+        private val handler: Handler
+
+        init {
+            val thread = HandlerThread(THREAD_NAME)
+            thread.start()
+            handler = Handler(thread.looper)
+        }
     }
 
     private val userAccounts = mutableMapOf<Long, UserAccount>()

@@ -7,7 +7,7 @@ ext {
     def navigationVersion = "2.3.4"
     def livedataKtxVersion = "2.2.0"
     def viewModelKtxVersion = "2.3.1"
-    def hiltVersion = "2.28-alpha"
+    def daggerVersion = "2.34"
     def preferenceVersion = "1.1.1"
     def rxVersion = "3.0.4"
 
@@ -22,8 +22,8 @@ ext {
             navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationVersion",
 
             // 依赖注入
-            hilt              : "com.google.dagger:hilt-android:$hiltVersion",
-            hiltKapt          : "com.google.dagger:hilt-android-compiler:$hiltVersion",
+            dagger              : "com.google.dagger:dagger:$daggerVersion",
+            daggerKapt          : "com.google.dagger:dagger-compiler:$daggerVersion",
 
             // preference
             preference        : "androidx.preference:preference-ktx:$preferenceVersion",

@@ -4,7 +4,6 @@ plugins {
 }
 
 apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
@@ -51,8 +50,9 @@ dependencies {
     implementation dependency.navigationFragment
     implementation dependency.navigationUi
 
-    implementation dependency.hilt
-    kapt dependency.hiltKapt
+    // 依赖注入
+    implementation dependency.dagger
+    kapt dependency.daggerKapt
 
     implementation dependency.preference
 

@@ -13,14 +13,18 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import dagger.hilt.android.AndroidEntryPoint
 import io.pig.lkong.account.UserAccountManager
+import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.databinding.ActivityMainBinding
+import io.pig.lkong.navigation.AppNavigation
+import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION
+import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION_VALUE
+import io.pig.lkong.preference.Prefs
+import io.pig.lkong.preference.StringPrefs
 import io.pig.lkong.ui.main.MainViewModel
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -30,19 +34,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var checkNoticeDuration: StringPrefs
 
     @Inject
-    private lateinit var userAccountMgr: UserAccountManager
+    lateinit var userAccountMgr: UserAccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Running.set(true)
+        injectThis()
 
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 检查是否登录
+        if (!userAccountMgr.isSignedIn()) {
+            AppNavigation.navigateToSignInActivity(this)
+            finish()
+        }
+
+        // 初始化检查通知时间
+        checkNoticeDuration = Prefs.getStringPrefs(
+            CHECK_NOTIFICATION_DURATION,
+            CHECK_NOTIFICATION_DURATION_VALUE
+        )
 
         setSupportActionBar(binding.appBarMain.mainToolbar)
 
@@ -89,5 +106,9 @@ class MainActivity : AppCompatActivity() {
             R.id.action_main_logout -> false
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun injectThis() {
+        LkongApplication.get(this).presentComponent().inject(this)
     }
 }

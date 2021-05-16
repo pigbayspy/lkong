@@ -21,4 +21,9 @@ object AccountConst {
     const val KEY_ACCOUNT_USER_ID = "KEY_ACCOUNT_USER_ID"
     const val KEY_ACCOUNT_USER_AVATAR = "KEY_ACCOUNT_USER_AVATAR"
     const val KEY_ACCOUNT_USER_AUTH = "KEY_ACCOUNT_USER_AUTH"
+
+    /**
+     * AuthToken(AT) 信息
+     */
+    const val AT_TYPE_FULL_ACCESS = "Full access"
 }

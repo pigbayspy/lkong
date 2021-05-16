@@ -3,6 +3,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- 账户信息 -->
+    <string name="account_type">io.pig.lkong</string>
+
     <string name="nav_header_desc">头像</string>
 
     <!-- menu 字段 -->

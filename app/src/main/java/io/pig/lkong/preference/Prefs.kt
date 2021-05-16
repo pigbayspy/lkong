@@ -23,4 +23,8 @@ object Prefs {
     fun getLongPrefs(key: String, defaultValue: Long): LongPrefs {
         return LongPrefs(key, defaultValue, preference)
     }
+
+    fun getStringPrefs(key: String, defaultValue: String): StringPrefs {
+        return StringPrefs(key, defaultValue, preference)
+    }
 }
