@@ -11,6 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lkong">
+        <service
+            android:name=".account.service.LkongAuthenticateService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator" />
+        </service>
+
         <activity
             android:name=".ui.activity.SignInActivity"
             android:label="@string/title_activity_sign_in"

@@ -71,7 +71,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/sign_in_result_textview"
+                android:id="@+id/sign_in_result_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_password_text"
@@ -83,7 +83,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/sign_in_result_textview">
+                android:layout_below="@+id/sign_in_result_text">
 
                 <Button
                     android:id="@+id/button_sign_in"

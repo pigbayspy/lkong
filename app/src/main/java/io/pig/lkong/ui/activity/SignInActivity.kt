@@ -14,6 +14,8 @@ import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
 import io.pig.lkong.R
 import io.pig.lkong.account.const.AccountConst
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_TYPE
+import io.pig.lkong.account.const.AccountConst.KEY_ERROR_MESSAGE
 import io.pig.lkong.databinding.ActivitySignInBinding
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.util.UiUtil
@@ -23,17 +25,13 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import rx.android.schedulers.AndroidSchedulers
 
+
 class SignInActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "SignInActivity"
 
-        const val START_MAIN_ACTIVITY = "start_main_activity"
-        const val ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE"
-        const val ARG_AUTH_TYPE = "AUTH_TYPE"
-        const val ARG_ACCOUNT_NAME = "ACCOUNT_NAME"
-
-        private const val KEY_ERROR_MESSAGE = "ERR_MSG"
+        private const val START_MAIN_ACTIVITY = "start_main_activity"
     }
 
     private lateinit var binding: ActivitySignInBinding
@@ -76,7 +74,7 @@ class SignInActivity : AppCompatActivity() {
         if (intent.hasExtra(START_MAIN_ACTIVITY)) {
             startMainActivity = intent.getBooleanExtra(START_MAIN_ACTIVITY, startMainActivity)
         }
-        authTokenType = intent.getStringExtra(ARG_ACCOUNT_TYPE) ?: AccountConst.AT_TYPE_FULL_ACCESS
+        authTokenType = intent.getStringExtra(KEY_ACCOUNT_TYPE) ?: AccountConst.AT_TYPE_FULL_ACCESS
         // 获取 AccountManager
         accountMgr = AccountManager.get(baseContext)
     }
@@ -93,7 +91,7 @@ class SignInActivity : AppCompatActivity() {
                 Log.e(TAG, "started authenticating")
                 val userName = email.toString()
                 val userPassword = password.toString()
-                val accountType = intent.getStringExtra(ARG_ACCOUNT_TYPE)
+                val accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE)
                 val data = Bundle()
                 // Todo 调用登录接口
                 val intent = Intent()
