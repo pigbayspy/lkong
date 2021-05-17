@@ -10,6 +10,7 @@ ext {
     def daggerVersion = "2.34"
     def preferenceVersion = "1.1.1"
     def rxVersion = "3.0.4"
+    def okHttpVersion = "4.9.0"
 
     dependency = [
             ktx               : "androidx.core:core-ktx:$ktxVersion",
@@ -22,13 +23,16 @@ ext {
             navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationVersion",
 
             // 依赖注入
-            dagger              : "com.google.dagger:dagger:$daggerVersion",
-            daggerKapt          : "com.google.dagger:dagger-compiler:$daggerVersion",
+            dagger            : "com.google.dagger:dagger:$daggerVersion",
+            daggerKapt        : "com.google.dagger:dagger-compiler:$daggerVersion",
 
             // preference
             preference        : "androidx.preference:preference-ktx:$preferenceVersion",
 
             // rx
-            rx                : "io.reactivex.rxjava3:rxjava:$rxVersion"
+            rx                : "io.reactivex.rxjava3:rxjava:$rxVersion",
+
+            // http
+            okHttp            : "com.squareup.okhttp3:okhttp:$okHttpVersion"
     ]
 }

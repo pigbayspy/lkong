@@ -56,5 +56,9 @@ dependencies {
 
     implementation dependency.preference
 
+    // rx
     implementation dependency.rx
+
+    // http
+    implementation dependency.okHttp
 }
