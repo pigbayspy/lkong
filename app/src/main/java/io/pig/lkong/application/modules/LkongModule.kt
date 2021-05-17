@@ -1,5 +1,6 @@
 package io.pig.lkong.application.modules
 
+import android.accounts.AccountManager
 import android.content.Context
 import android.net.ConnectivityManager
 import dagger.Module
@@ -34,5 +35,11 @@ class LkongModule(private val context: Context) {
     @Provides
     fun provideConnectivityManager(): ConnectivityManager {
         return context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
+    @Singleton
+    @Provides
+    fun provideAccountManager(): AccountManager? {
+        return AccountManager.get(context)
     }
 }

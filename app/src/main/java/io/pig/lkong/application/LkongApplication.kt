@@ -34,7 +34,6 @@ class LkongApplication : Application() {
         initComponent()
     }
 
-
     fun getUserAccountManager(): UserAccountManager {
         return userAccountMgr
     }
