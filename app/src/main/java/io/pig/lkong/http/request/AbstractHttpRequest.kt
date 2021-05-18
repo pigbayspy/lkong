@@ -9,7 +9,7 @@ import okhttp3.Response
  * @author yinhang
  * @since 2021/5/17
  */
-abstract class AbstractHttpRequest<T>(private val handler: HttpHandler = DefaultHttpHandler) {
+abstract class AbstractHttpRequest<T>(val handler: HttpHandler = DefaultHttpHandler) {
 
     protected abstract fun parseResponse(response: Response): T?
     protected abstract fun buildRequest(): Request

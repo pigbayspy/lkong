@@ -36,4 +36,9 @@ object AccountConst {
     const val KEY_ACCOUNT_NAME = "ACCOUNT_NAME"
     const val KEY_IS_ADDING_NEW_ACCOUNT = "IS_ADDING_ACCOUNT"
     const val KEY_ERROR_MESSAGE = "ERR_MSG"
+
+    /**
+     * 登录信息
+     */
+    const val PARAM_USER_PASS = "USER_PASS"
 }

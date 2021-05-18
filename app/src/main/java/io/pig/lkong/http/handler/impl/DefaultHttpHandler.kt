@@ -3,10 +3,7 @@ package io.pig.lkong.http.handler.impl
 import io.pig.lkong.http.CookieManager
 import io.pig.lkong.http.cookie.impl.InMemoryCookieStore
 import io.pig.lkong.http.handler.HttpHandler
-import okhttp3.Call
-import okhttp3.CookieJar
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -29,5 +26,9 @@ object DefaultHttpHandler : HttpHandler {
 
     override fun clearCookies() {
         cookieJar.clear()
+    }
+
+    override fun getCookies(): Map<HttpUrl, Set<Cookie>> {
+        return cookieJar.getAll()
     }
 }

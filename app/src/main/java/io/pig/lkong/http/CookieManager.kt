@@ -1,6 +1,8 @@
 package io.pig.lkong.http
 
+import okhttp3.Cookie
 import okhttp3.CookieJar
+import okhttp3.HttpUrl
 
 /**
  * @author yinhang
@@ -9,4 +11,6 @@ import okhttp3.CookieJar
 interface CookieManager : CookieJar {
 
     fun clear()
+
+    fun getAll(): Map<HttpUrl, Set<Cookie>>
 }

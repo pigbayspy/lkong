@@ -1,5 +1,7 @@
 package io.pig.lkong.ui.activity
 
+import android.accounts.Account
+import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
@@ -12,13 +14,23 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
+import com.google.android.material.snackbar.Snackbar
 import io.pig.lkong.R
 import io.pig.lkong.account.LkongServerAuthenticate
-import io.pig.lkong.account.const.AccountConst
+import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
+import io.pig.lkong.account.const.AccountConst.AT_TYPE_FULL_ACCESS
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_TYPE
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AUTH
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AVATAR
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_ID
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_NAME
 import io.pig.lkong.account.const.AccountConst.KEY_ERROR_MESSAGE
+import io.pig.lkong.account.const.AccountConst.KEY_IS_ADDING_NEW_ACCOUNT
+import io.pig.lkong.account.const.AccountConst.PARAM_USER_PASS
 import io.pig.lkong.databinding.ActivitySignInBinding
 import io.pig.lkong.navigation.AppNavigation
+import io.pig.lkong.ui.snack.em.SnackTypeEnum
+import io.pig.lkong.ui.snack.util.SnackBarUtil
 import io.pig.lkong.util.UiUtil
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -39,12 +51,19 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var accountMgr: AccountManager
     private lateinit var authTokenType: String
 
+    private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
     private var progress: ProgressBar? = null
 
     private var startMainActivity = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 设置 response
+        accountAuthenticatorResponse =
+            intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
+        accountAuthenticatorResponse?.onRequestContinued()
+
 
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -75,7 +94,7 @@ class SignInActivity : AppCompatActivity() {
         if (intent.hasExtra(START_MAIN_ACTIVITY)) {
             startMainActivity = intent.getBooleanExtra(START_MAIN_ACTIVITY, startMainActivity)
         }
-        authTokenType = intent.getStringExtra(KEY_ACCOUNT_TYPE) ?: AccountConst.AT_TYPE_FULL_ACCESS
+        authTokenType = intent.getStringExtra(KEY_ACCOUNT_TYPE) ?: AT_TYPE_FULL_ACCESS
         // 获取 AccountManager
         accountMgr = AccountManager.get(baseContext)
     }
@@ -92,12 +111,24 @@ class SignInActivity : AppCompatActivity() {
                 Log.e(TAG, "started authenticating")
                 val userName = email.toString()
                 val userPassword = password.toString()
-                val accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE)
-                val data = Bundle()
+
+                // 构建请求
                 val serverAuthenticate = LkongServerAuthenticate()
-                val result = serverAuthenticate.signIn(userName, userPassword)
-                var authToken = result?.combinedCookie
-                // Todo 测试没问题
+                val signResult = serverAuthenticate.signIn(userName, userPassword)
+
+                val accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE)
+
+                // 构建 Bundle
+                val data = Bundle()
+                data.putString(AccountManager.KEY_ACCOUNT_NAME, userName)
+                data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+                data.putString(PARAM_USER_PASS, userPassword)
+                data.putString(KEY_ACCOUNT_USER_ID, signResult?.uid.toString())
+                data.putString(KEY_ACCOUNT_USER_NAME, signResult?.name)
+                data.putString(KEY_ACCOUNT_USER_AVATAR, signResult?.avatar)
+                data.putString(KEY_ACCOUNT_USER_AUTH, signResult?.authCookie)
+
+                // 构建 intent
                 val intent = Intent()
                 intent.putExtras(data)
                 it.onNext(intent)
@@ -110,10 +141,11 @@ class SignInActivity : AppCompatActivity() {
                     }
 
                     override fun onNext(t: Intent) {
-                        if (t.hasExtra(KEY_ERROR_MESSAGE)) {
-                            // Todo
+                        val errorMessage = t.getStringExtra(KEY_ERROR_MESSAGE)
+                        if (errorMessage != null) {
+                            showSnackBar(errorMessage, SnackTypeEnum.ERROR, Snackbar.LENGTH_SHORT)
                         } else {
-                            // Todo
+                            finishLogin(t)
                         }
                     }
 
@@ -168,7 +200,83 @@ class SignInActivity : AppCompatActivity() {
         return Triple(true, email, password)
     }
 
+    private fun finish(result: Bundle?) {
+        if (result == null) {
+            accountAuthenticatorResponse?.onError(
+                AccountManager.ERROR_CODE_CANCELED,
+                "canceled"
+            )
+        } else {
+            accountAuthenticatorResponse?.onResult(result)
+        }
+        accountAuthenticatorResponse = null
+        super.finish()
+    }
+
+    private fun finishLogin(i: Intent) {
+        val accountName = i.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+        val accountPassword = i.getStringExtra(PARAM_USER_PASS)
+        val account = Account(accountName, i.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE))
+
+        if (i.getBooleanExtra(KEY_IS_ADDING_NEW_ACCOUNT, false)) {
+            val authToken = i.getStringExtra(AccountManager.KEY_AUTHTOKEN)
+            val authTokenType: String = authTokenType
+
+            val userId = i.getStringExtra(KEY_ACCOUNT_USER_ID)
+            val userName = i.getStringExtra(KEY_ACCOUNT_USER_NAME)
+            val userAvatar = i.getStringExtra(KEY_ACCOUNT_USER_AVATAR)
+            val userAuth = i.getStringExtra(KEY_ACCOUNT_USER_AUTH)
+            val userData = Bundle()
+            userData.putString(KEY_ACCOUNT_USER_ID, userId)
+            userData.putString(KEY_ACCOUNT_USER_NAME, userName)
+            userData.putString(KEY_ACCOUNT_USER_AVATAR, userAvatar)
+            userData.putString(KEY_ACCOUNT_USER_AUTH, userAuth)
+
+            // Creating the account on the device and setting the auth token we got
+            // (Not setting the auth token will cause another call to the server to authenticate the user)
+
+            // Creating the account on the device and setting the auth token we got
+            // (Not setting the auth token will cause another call to the server to authenticate the user)
+            val accounts = accountMgr.getAccountsByType(ACCOUNT_TYPE)
+            var isExist = false
+            for (existAccount in accounts) {
+                if (existAccount.name.compareTo(account.name) == 0) {
+                    accountMgr.setUserData(account, KEY_ACCOUNT_USER_ID, userId)
+                    accountMgr.setUserData(account, KEY_ACCOUNT_USER_NAME, userName)
+                    accountMgr.setUserData(account, KEY_ACCOUNT_USER_AVATAR, userAvatar)
+                    accountMgr.setUserData(account, KEY_ACCOUNT_USER_AUTH, userAuth)
+                    isExist = true
+                    break
+                }
+            }
+            if (!isExist) {
+                accountMgr.addAccountExplicitly(account, accountPassword, userData)
+            }
+            accountMgr.setAuthToken(account, authTokenType, authToken)
+        } else {
+            Log.d(TAG, "finish login and set password")
+            accountMgr.setPassword(account, accountPassword)
+        }
+        setResult(RESULT_OK, i)
+        // 结束
+        this.finish(i.extras)
+    }
+
     private fun isTablet(): Boolean {
         return resources.getBoolean(R.bool.isTablet)
+    }
+
+    private fun showSnackBar(content: CharSequence, type: SnackTypeEnum, length: Int) {
+        binding.root
+        SnackBarUtil.makeSimple(getSnackBarRootView(), content, type, length).show()
+    }
+
+    private var rootView: View? = null
+
+    private fun getSnackBarRootView(): View {
+        if (rootView == null) {
+            rootView = findViewById(android.R.id.content)
+        }
+        return rootView!!
     }
 }

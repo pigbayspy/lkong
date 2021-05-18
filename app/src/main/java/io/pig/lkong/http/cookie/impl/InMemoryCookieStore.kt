@@ -30,4 +30,8 @@ class InMemoryCookieStore : CookieManager {
     override fun clear() {
         store.clear()
     }
+
+    override fun getAll(): Map<HttpUrl, Set<Cookie>> {
+        return store
+    }
 }
