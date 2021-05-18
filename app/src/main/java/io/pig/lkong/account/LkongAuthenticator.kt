@@ -31,8 +31,13 @@ class LkongAuthenticator(private val context: Context) :
         var authToken = accountMgr.peekAuthToken(account, authTokenType)
         if (authToken.isNullOrEmpty()) {
             val password = accountMgr.getPassword(account)
-            // Todo 调用接口登录
-            authToken = ""
+            if (password.isNotEmpty()) {
+                val serverAuthenticate = LkongServerAuthenticate()
+                val result = serverAuthenticate.signIn(account.name, password)
+                if (result?.combinedCookie?.isNotEmpty() == true) {
+                    authToken = result.combinedCookie
+                }
+            }
         }
         if (authToken.isNotEmpty()) {
             val result = Bundle()

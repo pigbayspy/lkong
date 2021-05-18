@@ -61,4 +61,7 @@ dependencies {
 
     // http
     implementation dependency.okHttp
+
+    // gson
+    implementation dependency.gson
 }

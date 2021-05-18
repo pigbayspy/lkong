@@ -10,7 +10,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Lkong">
+        android:theme="@style/Theme.Lkong"
+        android:usesCleartextTraffic="true">
         <service
             android:name=".account.service.LkongAuthenticateService"
             android:enabled="true"

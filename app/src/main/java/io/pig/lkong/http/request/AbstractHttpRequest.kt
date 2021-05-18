@@ -11,7 +11,7 @@ import okhttp3.Response
  */
 abstract class AbstractHttpRequest<T>(private val handler: HttpHandler = DefaultHttpHandler) {
 
-    protected abstract fun parseResponse(response: Response): T
+    protected abstract fun parseResponse(response: Response): T?
     protected abstract fun buildRequest(): Request
 
     protected open fun onPreExecute() {}
@@ -24,10 +24,10 @@ abstract class AbstractHttpRequest<T>(private val handler: HttpHandler = Default
         return handler.newCall(buildRequest()).execute()
     }
 
-    fun execute(): T {
+    fun execute(): T? {
         onPreExecute()
         val response: Response = executeHttpRequest()
-        val result: T = parseResponse(response)
+        val result: T? = parseResponse(response)
         onPostExecute()
         return result
     }

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
 import io.pig.lkong.R
+import io.pig.lkong.account.LkongServerAuthenticate
 import io.pig.lkong.account.const.AccountConst
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_TYPE
 import io.pig.lkong.account.const.AccountConst.KEY_ERROR_MESSAGE
@@ -93,7 +94,10 @@ class SignInActivity : AppCompatActivity() {
                 val userPassword = password.toString()
                 val accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE)
                 val data = Bundle()
-                // Todo 调用登录接口
+                val serverAuthenticate = LkongServerAuthenticate()
+                val result = serverAuthenticate.signIn(userName, userPassword)
+                var authToken = result?.combinedCookie
+                // Todo 测试没问题
                 val intent = Intent()
                 intent.putExtras(data)
                 it.onNext(intent)
