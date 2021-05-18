@@ -45,6 +45,8 @@ class SignInActivity : AppCompatActivity() {
         private const val TAG = "SignInActivity"
 
         private const val START_MAIN_ACTIVITY = "start_main_activity"
+
+        private const val REQ_SIGNUP = 1
     }
 
     private lateinit var binding: ActivitySignInBinding
@@ -63,7 +65,6 @@ class SignInActivity : AppCompatActivity() {
         accountAuthenticatorResponse =
             intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
         accountAuthenticatorResponse?.onRequestContinued()
-
 
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -99,6 +100,13 @@ class SignInActivity : AppCompatActivity() {
         accountMgr = AccountManager.get(baseContext)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // The sign up activity returned that the user has successfully created an account
+        if (requestCode == REQ_SIGNUP && resultCode == RESULT_OK) {
+            finishLogin(data!!)
+        } else super.onActivityResult(requestCode, resultCode, data)
+    }
+
     fun onFaqClick(view: View) {
         AppNavigation.navigateToFaq(this)
     }
@@ -108,7 +116,7 @@ class SignInActivity : AppCompatActivity() {
         if (result) {
             setLoading(true)
             Observable.create<Intent> {
-                Log.e(TAG, "started authenticating")
+                Log.d(TAG, "started authenticating")
                 val userName = email.toString()
                 val userPassword = password.toString()
 
