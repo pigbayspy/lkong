@@ -21,6 +21,7 @@ import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.AccountChangeEvent
 import io.pig.lkong.rx.event.AccountCreateEvent
 import io.pig.lkong.rx.event.AccountRemoveEvent
+import javax.inject.Inject
 
 /**
  * 用户账户管理器
@@ -28,7 +29,7 @@ import io.pig.lkong.rx.event.AccountRemoveEvent
  * @author yinhang
  * @since 2021/5/16
  */
-class UserAccountManager(private val context: Context) {
+class UserAccountManager {
 
     companion object {
         const val TAG = "UserAccountManager"
@@ -46,16 +47,17 @@ class UserAccountManager(private val context: Context) {
 
     private val userAccounts = mutableMapOf<Long, UserAccount>()
 
-    private val defaultAccountUid: LongPrefs
-    private val accountMgr: AccountManager
+    private val defaultAccountUid: LongPrefs =
+        Prefs.getLongPrefs(DEFAULT_ACCOUNT_UID, DEFAULT_ACCOUNT_UID_VALUE)
+
+    @Inject
+    lateinit var accountMgr: AccountManager
+
+    @Inject
+    lateinit var context: Context
 
     private var currentAccount: UserAccount? = null
     private var authObject: LkongAuthObject? = null
-
-    init {
-        defaultAccountUid = Prefs.getLongPrefs(DEFAULT_ACCOUNT_UID, DEFAULT_ACCOUNT_UID_VALUE)
-        accountMgr = AccountManager.get(context)
-    }
 
     /**
      * 用户是否登录

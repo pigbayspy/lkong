@@ -1,13 +1,10 @@
-package io.pig.lkong.application.modules
+package io.pig.lkong.application.module
 
 import android.accounts.AccountManager
 import android.content.Context
 import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
-import io.pig.lkong.account.UserAccountManager
-import io.pig.lkong.application.LkongApplication
-import io.pig.lkong.application.qualifier.ApplicationContext
 import javax.inject.Singleton
 
 /**
@@ -19,16 +16,8 @@ class LkongModule(private val context: Context) {
 
     @Singleton
     @Provides
-    @ApplicationContext
     fun provideApplicationContext(): Context {
         return context
-    }
-
-    @Singleton
-    @Provides
-    fun provideUserAccountManager(): UserAccountManager {
-        val application = context as LkongApplication
-        return application.getUserAccountManager()
     }
 
     @Singleton
@@ -39,7 +28,7 @@ class LkongModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideAccountManager(): AccountManager? {
+    fun provideAccountManager(): AccountManager {
         return AccountManager.get(context)
     }
 }

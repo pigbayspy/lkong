@@ -4,8 +4,11 @@ import android.app.Application
 import android.content.Context
 import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.component.DaggerLkongPresentComponent
+import io.pig.lkong.application.component.DaggerUserAccountComponent
 import io.pig.lkong.application.component.LkongPresentComponent
-import io.pig.lkong.application.modules.LkongModule
+import io.pig.lkong.application.component.UserAccountComponent
+import io.pig.lkong.application.module.LkongModule
+import io.pig.lkong.application.module.UserAccountModule
 import io.pig.lkong.preference.Prefs
 import javax.inject.Singleton
 
@@ -26,12 +29,15 @@ class LkongApplication : Application() {
 
     private lateinit var presentComponent: LkongPresentComponent
 
+    private lateinit var userAccountComponent: UserAccountComponent
+
     override fun onCreate() {
         super.onCreate()
         Prefs.init(this)
-        userAccountMgr = UserAccountManager(this)
-        userAccountMgr.init()
+        userAccountMgr = UserAccountManager()
         initComponent()
+        userAccountComponent.inject(userAccountMgr)
+        userAccountMgr.init()
     }
 
     fun getUserAccountManager(): UserAccountManager {
@@ -44,6 +50,11 @@ class LkongApplication : Application() {
 
     private fun initComponent() {
         presentComponent = DaggerLkongPresentComponent
+            .builder()
+            .lkongModule(LkongModule(this))
+            .userAccountModule(UserAccountModule())
+            .build()
+        userAccountComponent = DaggerUserAccountComponent
             .builder()
             .lkongModule(LkongModule(this))
             .build()
