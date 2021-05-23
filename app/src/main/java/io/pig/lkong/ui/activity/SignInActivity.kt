@@ -1,7 +1,6 @@
 package io.pig.lkong.ui.activity
 
 import android.accounts.Account
-import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
@@ -11,12 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
 import com.google.android.material.snackbar.Snackbar
 import io.pig.lkong.R
 import io.pig.lkong.account.LkongServerAuthenticate
+import io.pig.lkong.account.commom.AccountAuthenticatorActivity
 import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
 import io.pig.lkong.account.const.AccountConst.AT_TYPE_FULL_ACCESS
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_TYPE
@@ -38,8 +37,11 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import rx.android.schedulers.AndroidSchedulers
 
-
-class SignInActivity : AppCompatActivity() {
+/**
+ * @author yinhang
+ * @since 2021/05/23
+ */
+class SignInActivity : AccountAuthenticatorActivity() {
 
     companion object {
         private const val TAG = "SignInActivity"
@@ -53,18 +55,12 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var accountMgr: AccountManager
     private lateinit var authTokenType: String
 
-    private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
     private var progress: ProgressBar? = null
 
     private var startMainActivity = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // 设置 response
-        accountAuthenticatorResponse =
-            intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
-        accountAuthenticatorResponse?.onRequestContinued()
 
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -208,32 +204,20 @@ class SignInActivity : AppCompatActivity() {
         return Triple(true, email, password)
     }
 
-    private fun finish(result: Bundle?) {
-        if (result == null) {
-            accountAuthenticatorResponse?.onError(
-                AccountManager.ERROR_CODE_CANCELED,
-                "canceled"
-            )
-        } else {
-            accountAuthenticatorResponse?.onResult(result)
-        }
-        accountAuthenticatorResponse = null
-        super.finish()
-    }
+    private fun finishLogin(loginIntent: Intent) {
+        val accountName = loginIntent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+        val accountPassword = loginIntent.getStringExtra(PARAM_USER_PASS)
+        val account =
+            Account(accountName, loginIntent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE))
 
-    private fun finishLogin(i: Intent) {
-        val accountName = i.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-        val accountPassword = i.getStringExtra(PARAM_USER_PASS)
-        val account = Account(accountName, i.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE))
-
-        if (i.getBooleanExtra(KEY_IS_ADDING_NEW_ACCOUNT, false)) {
-            val authToken = i.getStringExtra(AccountManager.KEY_AUTHTOKEN)
+        if (intent.getBooleanExtra(KEY_IS_ADDING_NEW_ACCOUNT, false)) {
+            val authToken = loginIntent.getStringExtra(AccountManager.KEY_AUTHTOKEN)
             val authTokenType: String = authTokenType
 
-            val userId = i.getStringExtra(KEY_ACCOUNT_USER_ID)
-            val userName = i.getStringExtra(KEY_ACCOUNT_USER_NAME)
-            val userAvatar = i.getStringExtra(KEY_ACCOUNT_USER_AVATAR)
-            val userAuth = i.getStringExtra(KEY_ACCOUNT_USER_AUTH)
+            val userId = loginIntent.getStringExtra(KEY_ACCOUNT_USER_ID)
+            val userName = loginIntent.getStringExtra(KEY_ACCOUNT_USER_NAME)
+            val userAvatar = loginIntent.getStringExtra(KEY_ACCOUNT_USER_AVATAR)
+            val userAuth = loginIntent.getStringExtra(KEY_ACCOUNT_USER_AUTH)
             val userData = Bundle()
             userData.putString(KEY_ACCOUNT_USER_ID, userId)
             userData.putString(KEY_ACCOUNT_USER_NAME, userName)
@@ -265,9 +249,10 @@ class SignInActivity : AppCompatActivity() {
             Log.d(TAG, "finish login and set password")
             accountMgr.setPassword(account, accountPassword)
         }
-        setResult(RESULT_OK, i)
+        setAccountAuthenticatorResult(intent.extras)
+        setResult(RESULT_OK, loginIntent)
         // 结束
-        this.finish(i.extras)
+        finish()
     }
 
     private fun isTablet(): Boolean {
