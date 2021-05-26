@@ -13,6 +13,7 @@ import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AUTH
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AVATAR
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_ID
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_NAME
+import io.pig.lkong.exception.SignInException
 import io.pig.lkong.preference.LongPrefs
 import io.pig.lkong.preference.PrefConst.DEFAULT_ACCOUNT_UID
 import io.pig.lkong.preference.PrefConst.DEFAULT_ACCOUNT_UID_VALUE
@@ -74,14 +75,17 @@ class UserAccountManager {
                     if (accountArr == null) {
                         return@addOnAccountsUpdatedListener
                     }
-                    val lkongAccounts = accountArr.filter {
-                        it.type === ACCOUNT_TYPE
+                    val lkongAccounts = mutableListOf<Account>()
+                    for (account in accountArr) {
+                        if (account.type.equals(ACCOUNT_TYPE, true)) {
+                            lkongAccounts.add(account)
+                        }
                     }
                     if (lkongAccounts.size != userAccounts.size) {
                         Log.w(TAG, "Account count change!")
                     }
-                    update()
                     if (userAccounts.isEmpty() && lkongAccounts.isNotEmpty()) {
+                        update()
                         if (!MainActivity.Running.get()) {
                             val intent = Intent(context, MainActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -89,9 +93,13 @@ class UserAccountManager {
                         }
                         RxEventBus.sendEvent(AccountChangeEvent())
                     } else if (lkongAccounts.size > userAccounts.size) {
+                        update()
                         RxEventBus.sendEvent(AccountCreateEvent())
                     } else if (lkongAccounts.size < userAccounts.size && userAccounts.isNotEmpty()) {
+                        update()
                         RxEventBus.sendEvent(AccountRemoveEvent())
+                    } else {
+                        update()
                     }
                 }
             }, handler, true
@@ -108,6 +116,30 @@ class UserAccountManager {
             }
         }
         return successCount == accountArr.size
+    }
+
+    /**
+     * 返回当前用户账户
+     *
+     * @throws SignInException 未登录异常
+     */
+    fun getCurrentUserAccount(): UserAccount {
+        if (currentAccount != null) {
+            return currentAccount!!
+        }
+        if (currentAccount == null && userAccounts.isNotEmpty()) {
+            var current = userAccounts[defaultAccountUid.get()]
+            if (current == null) {
+                current = getFirstAccount()
+            }
+            if (current != null) {
+                currentAccount = current
+                defaultAccountUid.set(current.userId)
+                authObject = getAuthObject(current)
+                return current
+            }
+        }
+        throw SignInException("need to sign in")
     }
 
     private fun setCurrentUserAccount(userId: Long) {
@@ -169,6 +201,7 @@ class UserAccountManager {
         val id = idStr.toLong()
         val userEmail = account.name
         return UserAccount(
+            account,
             id,
             userName,
             userEmail,

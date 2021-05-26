@@ -21,6 +21,7 @@ import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION_VALUE
 import io.pig.lkong.preference.Prefs
 import io.pig.lkong.preference.StringPrefs
+import io.pig.lkong.sync.SyncUtil
 import io.pig.lkong.ui.main.MainViewModel
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -106,6 +107,21 @@ class MainActivity : AppCompatActivity() {
             R.id.action_main_logout -> false
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Running.set(false)
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        val account = userAccountMgr.getCurrentUserAccount().account
+        SyncUtil.manualSync(account, SyncUtil.SYNC_AUTHORITY_CHECK_NOTICE)
+        SyncUtil.setPeriodicSync(
+            account, SyncUtil.SYNC_AUTHORITY_CHECK_NOTICE, false,
+            checkNoticeDuration.get().toLong()
+        )
     }
 
     private fun injectThis() {

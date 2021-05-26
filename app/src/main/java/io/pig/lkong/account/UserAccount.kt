@@ -1,5 +1,6 @@
 package io.pig.lkong.account
 
+import android.accounts.Account
 import java.io.Serializable
 
 /**
@@ -9,6 +10,7 @@ import java.io.Serializable
  * @since 2021/5/16
  */
 class UserAccount(
+    val account: Account,
     val userId: Long,
     val userName: String,
     val userEmail: String,

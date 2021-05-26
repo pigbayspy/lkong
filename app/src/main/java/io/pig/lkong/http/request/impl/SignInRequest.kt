@@ -1,6 +1,7 @@
 package io.pig.lkong.http.request.impl
 
 import com.google.gson.JsonParser
+import io.pig.lkong.http.const.RestApiConst.SIGN_URL
 import io.pig.lkong.http.data.LkongAuthResp
 import io.pig.lkong.http.request.AbstractHttpRequest
 import io.pig.lkong.http.util.CookieUtil
@@ -25,7 +26,7 @@ class SignInRequest(
             .add("rememberme", "on")
             .build()
         return Request.Builder()
-            .url("http://lkong.cn/index.php?mod=login")
+            .url(SIGN_URL)
             .post(formBody)
             .build()
     }
@@ -62,5 +63,4 @@ class SignInRequest(
         }
         return ""
     }
-
 }
