@@ -15,4 +15,8 @@ object PrefConst {
     const val CHECK_NOTIFICATION_DURATION = "prefs_check_notification_duration"
 
     const val CHECK_NOTIFICATION_DURATION_VALUE = "1800"
+
+    const val AVATAR_DOWNLOAD_POLICY = "prefs_avatar_download_policy"
+
+    const val AVATAR_DOWNLOAD_POLICY_VALUE = "0"
 }
