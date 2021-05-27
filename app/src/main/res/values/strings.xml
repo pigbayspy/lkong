@@ -21,6 +21,7 @@
     <string name="menu_gallery">我的收藏</string>
     <string name="menu_history">浏览历史</string>
     <string name="menu_setting">设置</string>
+    <string name="text_recycler_empty_text">这里什么都没有</string>
 
     <string name="new_post">发帖</string>
     <string name="title_activity_sign_in">SignInActivity</string>
