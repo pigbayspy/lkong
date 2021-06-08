@@ -1,8 +1,8 @@
 package io.pig.lkong.http.data
 
-import java.util.*
-
 /**
+ * 返回的帖子数据
+ *
  * @author yinhang
  * @since 2021/5/24
  */

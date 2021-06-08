@@ -7,6 +7,6 @@ package io.pig.lkong.http.data
 data class LkongForumThreadResp(
     val nexttime: Long,
     val tmp: String,
-    val data: List<LkongForumItemResp>,
+    val data: List<LkongForumItemResp>?,
     val nochecknew: Boolean
 )

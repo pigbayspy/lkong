@@ -35,6 +35,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    sourceSets {
+        test.java.srcDirs += 'src/test/kotlin'
+    }
 }
 
 dependencies {
@@ -64,4 +68,7 @@ dependencies {
 
     // gson
     implementation dependency.gson
+
+    // test
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
