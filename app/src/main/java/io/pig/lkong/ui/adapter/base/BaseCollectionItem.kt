@@ -7,7 +7,7 @@ import java.io.Serializable
  * @author yinhang
  * @since 2021/6/8
  */
-interface SimpleCollectionItem : Serializable, Parcelable {
+interface BaseCollectionItem : Serializable, Parcelable {
 
     /**
      * 获取排序的键

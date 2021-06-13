@@ -6,7 +6,9 @@
     <!-- 账户信息 -->
     <string name="account_type">io.pig.lkong</string>
 
+    <!-- 图片描述 -->
     <string name="nav_header_desc">头像</string>
+    <string name="thread_avatar_desc">头像</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>
@@ -21,10 +23,12 @@
     <string name="menu_gallery">我的收藏</string>
     <string name="menu_history">浏览历史</string>
     <string name="menu_setting">设置</string>
-    <string name="text_recycler_empty_text">这里什么都没有</string>
+    <string name="text_recycle_empty_text">这里什么都没有</string>
+    <string name="text_datetime_today">今天</string>
 
     <string name="new_post">发帖</string>
     <string name="title_activity_sign_in">SignInActivity</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -47,4 +51,8 @@
     <string name="button_sign_up">注册</string>
     <string name="button_faq">常见问题</string>
     <string name="button_sign_in">登录</string>
+
+    <!-- item -->
+    <string name="item_thread_text_title">帖子标题</string>
+    <string name="indicator_thread_digest">[精]&#160;</string>
 </resources>

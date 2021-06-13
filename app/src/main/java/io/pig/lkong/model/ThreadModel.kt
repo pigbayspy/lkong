@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.pig.lkong.account.util.AccountUtil
 import io.pig.lkong.http.data.LkongForumItemResp
-import io.pig.lkong.ui.adapter.base.SimpleCollectionItem
+import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 import io.pig.lkong.util.DateUtil
 import java.util.*
 
@@ -14,19 +14,19 @@ import java.util.*
  * @author yinhang
  * @since 2021/6/8
  */
-class ThreadModel : SimpleCollectionItem {
+class ThreadModel : BaseCollectionItem {
     private val sortKey: Long
     private val sortKeyTime: Date?
 
-    private val userName: String
-    private val userIcon: String
+    val userName: String
+    val userIcon: String
     private val userId: Long
 
-    private val dateline: Date?
-    private val subject: String
-    private val digest: Boolean
+    val dateline: Date?
+    val subject: String
+    val digest: Boolean
     private val closed: Int
-    private val replyCount: Int
+    val replyCount: Int
     private val id: String
     private val fid: Long
 

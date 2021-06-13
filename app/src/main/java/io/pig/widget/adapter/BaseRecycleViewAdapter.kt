@@ -8,9 +8,9 @@ import io.pig.widget.listener.RecycleViewOnItemLongClickListener
  * @author yinhang
  * @since 2021/6/8
  */
-abstract class SimpleRecycleViewAdapter<T : RecyclerView.ViewHolder>(
+abstract class BaseRecycleViewAdapter<T>(
     private var items: List<T>
-) : RecyclerView.Adapter<T>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var clickListener: RecycleViewOnItemClickListener? = null
     private var longClickListener: RecycleViewOnItemLongClickListener? = null
@@ -30,11 +30,15 @@ abstract class SimpleRecycleViewAdapter<T : RecyclerView.ViewHolder>(
         super.notifyDataSetChanged()
     }
 
+    fun getItem(pos: Int): T {
+        return items[pos]
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: T, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val onClickView = holder.itemView
         onClickView.tag = position
         onClickView.setOnClickListener {

@@ -2,6 +2,7 @@ package io.pig.lkong.util
 
 import android.content.Context
 import android.util.TypedValue
+import io.pig.lkong.R
 
 /**
  * @author yinhang
@@ -16,5 +17,12 @@ object UiUtil {
             dp, metrics
         )
         return result.toInt()
+    }
+
+    fun getDefaultAvatarSize(context: Context): Int {
+        return this.dp2px(
+            context,
+            context.resources.getDimension(R.dimen.size_avatar_default)
+        )
     }
 }
