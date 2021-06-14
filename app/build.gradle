@@ -69,6 +69,10 @@ dependencies {
     // gson
     implementation dependency.gson
 
+    // glide
+    implementation dependency.glide
+    annotationProcessor dependency.glideProcessor
+
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
