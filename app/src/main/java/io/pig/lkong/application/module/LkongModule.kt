@@ -5,6 +5,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
+import io.pig.lkong.data.LkongDatabase
+import io.pig.lkong.data.impl.LkongDatabaseSqliteImpl
 import javax.inject.Singleton
 
 /**
@@ -30,5 +32,11 @@ class LkongModule(private val context: Context) {
     @Provides
     fun provideAccountManager(): AccountManager {
         return AccountManager.get(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLkongDataBase(): LkongDatabase {
+        return LkongDatabaseSqliteImpl(context)
     }
 }
