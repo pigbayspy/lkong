@@ -1,6 +1,5 @@
 package io.pig.lkong.http.util
 
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.pig.lkong.util.HexUtil
 import okhttp3.Cookie

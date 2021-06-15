@@ -18,7 +18,7 @@ object DefaultHttpHandler : HttpHandler {
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .cookieJar(cookieJar)
-        .build();
+        .build()
 
     override fun newCall(request: Request): Call {
         return httpClient.newCall(request)

@@ -21,6 +21,8 @@ ext {
             constraintlayout  : "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion",
             livedata          : "androidx.lifecycle:lifecycle-livedata-ktx:$livedataKtxVersion",
             viewmodel         : "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelKtxVersion",
+
+            // navigation
             navigationFragment: "androidx.navigation:navigation-fragment-ktx:$navigationVersion",
             navigationUi      : "androidx.navigation:navigation-ui-ktx:$navigationVersion",
 
