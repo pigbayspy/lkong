@@ -65,6 +65,7 @@ dependencies {
 
     // http
     implementation dependency.okHttp
+    implementation dependency.retrofit
 
     // gson
     implementation dependency.gson
