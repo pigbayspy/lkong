@@ -6,7 +6,7 @@ package io.pig.lkong.http.const
  */
 object RestApiConst {
 
-    private const val BASE_URL = "http://lkong.cn"
+    const val BASE_URL = "http://lkong.cn"
 
     const val SIGN_URL = "$BASE_URL/index.php?mod=login"
 
