@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentGalleryBinding
+import io.pig.lkong.model.ThreadModel
 import io.pig.lkong.preference.PrefConst.AVATAR_DOWNLOAD_POLICY
 import io.pig.lkong.preference.PrefConst.AVATAR_DOWNLOAD_POLICY_VALUE
 import io.pig.lkong.preference.Prefs
 import io.pig.lkong.preference.StringPrefs
 import io.pig.lkong.rx.event.AbstractEvent
 import io.pig.lkong.rx.event.FavoriteChangeEvent
+import io.pig.lkong.ui.adapter.ThreadListAdapter
+import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 import io.pig.lkong.ui.common.Eventable
 
 
@@ -42,7 +45,12 @@ class GalleryFragment : Eventable, Fragment() {
 
         selfBinding = FragmentGalleryBinding.inflate(inflater, container, false)
         val root: View = selfBinding.root
-
+        // 初始化监听器
+        galleryViewModel.threadList.observe(viewLifecycleOwner) {
+            refreshThreadList(it)
+        }
+        // 初始化数据
+        galleryViewModel.getThreads()
         return root
     }
 
@@ -71,7 +79,6 @@ class GalleryFragment : Eventable, Fragment() {
     override fun onResume() {
         super.onResume()
         if (needReload) {
-
             needReload = false
         }
     }
@@ -80,5 +87,19 @@ class GalleryFragment : Eventable, Fragment() {
         if (event is FavoriteChangeEvent) {
             needReload = true
         }
+    }
+
+    private fun refreshThreadList(threads: List<ThreadModel>) {
+        val listener = object : OnThreadClickListener {
+            override fun onItemThreadClick(view: View, pos: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onProfileAreaClick(view: View, position: Int, uid: Long) {
+                TODO("Not yet implemented")
+            }
+        }
+        selfBinding.recycleListGallery.adapter =
+            ThreadListAdapter(requireActivity(), listener, threads)
     }
 }

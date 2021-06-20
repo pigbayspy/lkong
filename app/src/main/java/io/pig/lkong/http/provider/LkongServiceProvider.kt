@@ -1,5 +1,6 @@
 package io.pig.lkong.http.provider
 
+import io.pig.lkong.http.CookieManager
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.cookie.impl.InMemoryCookieStore
 import io.pig.lkong.http.spec.LkongSpec
@@ -15,19 +16,21 @@ import java.util.concurrent.TimeUnit
  */
 object LkongServiceProvider {
 
-    private val httpClient: OkHttpClient
+    val httpClient: OkHttpClient
 
     val lkongClient: LkongSpec
 
+    val lkongCookie: CookieManager
+
     init {
-        val cookieJar = InMemoryCookieStore()
+        lkongCookie = InMemoryCookieStore()
         httpClient = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
-            .cookieJar(cookieJar)
+            .cookieJar(lkongCookie)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl(RestApiConst.BASE_URL)
+            .baseUrl(RestApiConst.LKONG_HOST)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

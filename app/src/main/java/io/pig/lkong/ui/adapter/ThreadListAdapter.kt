@@ -25,7 +25,7 @@ import io.pig.widget.adapter.BaseRecycleViewAdapter
  */
 class ThreadListAdapter(
     val context: Context,
-    val listener: OnThreadClickListener,
+    private val listener: OnThreadClickListener,
     threads: List<ThreadModel>
 ) : BaseRecycleViewAdapter<ThreadModel>(threads) {
 

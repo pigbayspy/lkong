@@ -1,14 +1,18 @@
 package io.pig.lkong.http.const
 
+import okhttp3.HttpUrl.Companion.toHttpUrl
+
 /**
  * @author yinhang
  * @since 2021/5/24
  */
 object RestApiConst {
 
-    const val BASE_URL = "http://lkong.cn"
+    const val LKONG_HOST = "http://lkong.cn"
 
-    const val SIGN_URL = "$BASE_URL/index.php?mod=login"
+    val Lkong_URl = LKONG_HOST.toHttpUrl()
 
-    const val GET_FAVORITE_URL = "$BASE_URL/index.php?mod=data&sars=my/favorite"
+    const val SIGN_URL = "$LKONG_HOST/index.php?mod=login"
+
+    const val GET_FAVORITE_URL = "$LKONG_HOST/index.php?mod=data&sars=my/favorite"
 }

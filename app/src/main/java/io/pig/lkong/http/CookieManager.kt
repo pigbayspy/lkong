@@ -13,4 +13,6 @@ interface CookieManager : CookieJar {
     fun clear()
 
     fun getAll(): Map<HttpUrl, Set<Cookie>>
+
+    fun get(url: HttpUrl): Set<Cookie>
 }
