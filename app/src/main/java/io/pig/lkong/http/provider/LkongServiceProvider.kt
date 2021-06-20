@@ -5,6 +5,7 @@ import io.pig.lkong.http.cookie.impl.InMemoryCookieStore
 import io.pig.lkong.http.spec.LkongSpec
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
@@ -28,6 +29,7 @@ object LkongServiceProvider {
         val retrofit = Retrofit.Builder()
             .baseUrl(RestApiConst.BASE_URL)
             .client(httpClient)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
         lkongClient = retrofit.create(LkongSpec::class.java)
     }

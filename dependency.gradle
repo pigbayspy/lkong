@@ -40,7 +40,7 @@ ext {
             // http
             okHttp            : "com.squareup.okhttp3:okhttp:$okHttpVersion",
             retrofit          : "com.squareup.retrofit2:retrofit:$retrofitVersion",
-
+            retrofitGson      : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
             // json
             gson              : "com.google.code.gson:gson:$gsonVersion",
 

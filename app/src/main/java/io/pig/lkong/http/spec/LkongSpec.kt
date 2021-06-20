@@ -1,7 +1,6 @@
 package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.data.LkongForumThreadResp
-import retrofit2.Call
 import retrofit2.http.GET
 
 /**
@@ -13,5 +12,5 @@ import retrofit2.http.GET
 interface LkongSpec {
 
     @GET("/index.php?mod=data&sars=my/favorite")
-    fun getFavorite(): Call<LkongForumThreadResp>
+    suspend fun getFavorite(): LkongForumThreadResp
 }
