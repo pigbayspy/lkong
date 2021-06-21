@@ -73,7 +73,7 @@ dependencies {
 
     // glide
     implementation dependency.glide
-    annotationProcessor dependency.glideProcessor
+    kapt dependency.glideProcessor
 
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
