@@ -127,10 +127,10 @@ class SignInActivity : AccountAuthenticatorActivity() {
                 data.putString(AccountManager.KEY_ACCOUNT_NAME, userName)
                 data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
                 data.putString(PARAM_USER_PASS, userPassword)
-                data.putString(KEY_ACCOUNT_USER_ID, signResult?.uid.toString())
-                data.putString(KEY_ACCOUNT_USER_NAME, signResult?.name)
-                data.putString(KEY_ACCOUNT_USER_AVATAR, signResult?.avatar)
-                data.putString(KEY_ACCOUNT_USER_AUTH, signResult?.authCookie)
+                data.putString(KEY_ACCOUNT_USER_ID, signResult.uid.toString())
+                data.putString(KEY_ACCOUNT_USER_NAME, signResult.name)
+                data.putString(KEY_ACCOUNT_USER_AVATAR, signResult.avatar)
+                data.putString(KEY_ACCOUNT_USER_AUTH, signResult.authCookie)
 
                 // 构建 intent
                 val intent = Intent()

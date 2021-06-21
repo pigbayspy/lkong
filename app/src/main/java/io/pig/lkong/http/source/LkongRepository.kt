@@ -22,7 +22,7 @@ object LkongRepository {
         return lkongSpec.getFavorite()
     }
 
-    suspend fun signIn(signInReq: LkongSignReq): LkongAuthResp {
+    fun signIn(signInReq: LkongSignReq): LkongAuthResp {
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("action", signInReq.action)

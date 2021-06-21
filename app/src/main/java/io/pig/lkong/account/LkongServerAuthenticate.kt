@@ -1,7 +1,8 @@
 package io.pig.lkong.account
 
 import io.pig.lkong.http.data.LkongAuthResp
-import io.pig.lkong.http.request.impl.SignInRequest
+import io.pig.lkong.http.data.LkongSignReq
+import io.pig.lkong.http.source.LkongRepository
 
 /**
  * @author yinhang
@@ -9,8 +10,8 @@ import io.pig.lkong.http.request.impl.SignInRequest
  */
 class LkongServerAuthenticate {
 
-    fun signIn(email: String, password: String): LkongAuthResp? {
-        val signInRequest = SignInRequest(email, password)
-        return signInRequest.execute()
+    fun signIn(email: String, password: String): LkongAuthResp {
+        val signInReq = LkongSignReq(email, password)
+        return LkongRepository.signIn(signInReq)
     }
 }

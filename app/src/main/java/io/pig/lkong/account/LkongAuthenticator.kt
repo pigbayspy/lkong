@@ -34,7 +34,7 @@ class LkongAuthenticator(private val context: Context) :
             if (password.isNotEmpty()) {
                 val serverAuthenticate = LkongServerAuthenticate()
                 val result = serverAuthenticate.signIn(account.name, password)
-                if (result?.authCookie?.isNotEmpty() == true) {
+                if (result.authCookie.isNotEmpty()) {
                     authToken = result.authCookie
                 }
             }

@@ -12,7 +12,7 @@ object RestApiConst {
 
     val Lkong_URl = LKONG_HOST.toHttpUrl()
 
-    const val SIGN_URL = "$LKONG_HOST/index.php?mod=login"
+    const val SIGN_URL = "/index.php?mod=login"
 
-    const val GET_FAVORITE_URL = "$LKONG_HOST/index.php?mod=data&sars=my/favorite"
+    const val GET_FAVORITE_URL = "/index.php?mod=data&sars=my/favorite"
 }

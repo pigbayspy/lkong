@@ -1,5 +1,6 @@
 package io.pig.lkong.http.spec
 
+import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.LkongForumThreadResp
 import io.pig.lkong.http.data.LkongSignResp
 import okhttp3.RequestBody
@@ -16,9 +17,9 @@ import retrofit2.http.POST
  */
 interface LkongSpec {
 
-    @GET("/index.php?mod=data&sars=my/favorite")
+    @GET(RestApiConst.GET_FAVORITE_URL)
     suspend fun getFavorite(): LkongForumThreadResp
 
-    @POST("/index.php?mod=login")
-    suspend fun signIn(@Body body: RequestBody): Response<LkongSignResp>
+    @POST(RestApiConst.SIGN_URL)
+    fun signIn(@Body body: RequestBody): Response<LkongSignResp>
 }
