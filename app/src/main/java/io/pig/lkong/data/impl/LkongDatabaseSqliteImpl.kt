@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import com.google.gson.Gson
 import io.pig.lkong.data.LkongDatabase
+import io.pig.lkong.model.BrowseHistoryModel
 
 /**
  * @author yinhang
@@ -24,6 +25,20 @@ class LkongDatabaseSqliteImpl : LkongDatabase {
 
     override fun close() {
 
+    }
+
+    override fun getBrowseHistory(start: Int): List<BrowseHistoryModel> {
+        // TODO("Not yet implemented")
+        return emptyList()
+    }
+
+    override fun getBrowseHistory(uid: Long, start: Int): List<BrowseHistoryModel> {
+        // TODO("Not yet implemented")
+        return emptyList()
+    }
+
+    override fun clearBrowserHistory(uid: Long) {
+        TODO("Not yet implemented")
     }
 
 }
