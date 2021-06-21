@@ -30,6 +30,16 @@ object AppNavigation {
         openUrl(AppConst.FAQ_URL, activity)
     }
 
+    fun openActivityForUserProfile(context: Activity, startingLocation: IntArray, uid: Long) {
+        // Todo
+        // UserProfileActivity.startUserProfileFromLocation(context, startingLocation, uid)
+    }
+
+    fun openActivityForPostListByThreadId(context: Context, threadId: Long) {
+        // Todo
+        // openActivityForPostListByThreadId(context, threadId, 1)
+    }
+
     private fun addNewAccount(activity: Activity, accountType: String, authTokenType: String) {
         val accountManager = AccountManager.get(activity)
         accountManager.addAccount(

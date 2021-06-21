@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentGalleryBinding
 import io.pig.lkong.model.ThreadModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.PrefConst.AVATAR_DOWNLOAD_POLICY
 import io.pig.lkong.preference.PrefConst.AVATAR_DOWNLOAD_POLICY_VALUE
 import io.pig.lkong.preference.Prefs
@@ -92,11 +93,28 @@ class GalleryFragment : Eventable, Fragment() {
     private fun refreshThreadList(threads: List<ThreadModel>) {
         val listener = object : OnThreadClickListener {
             override fun onItemThreadClick(view: View, pos: Int) {
-                TODO("Not yet implemented")
+                if (pos < 0 && pos >= threads.size) {
+                    return
+                }
+                val thread = threads[pos]
+                val startLocation = intArrayOf(view.width / 2, 0)
+                view.getLocationOnScreen(startLocation)
+                AppNavigation.openActivityForUserProfile(
+                    requireActivity(),
+                    startLocation,
+                    thread.userId
+                )
             }
 
-            override fun onProfileAreaClick(view: View, position: Int, uid: Long) {
-                TODO("Not yet implemented")
+            override fun onProfileAreaClick(view: View, pos: Int, uid: Long) {
+                if (pos < 0 && pos >= threads.size) {
+                    return
+                }
+                val thread = threads[pos]
+                AppNavigation.openActivityForPostListByThreadId(
+                    requireContext(),
+                    thread.id.toLong()
+                )
             }
         }
         selfBinding.recycleListGallery.adapter =

@@ -25,7 +25,7 @@ class LkongAuthenticator(private val context: Context) :
         response: AccountAuthenticatorResponse,
         account: Account,
         authTokenType: String,
-        options: Bundle?
+        options: Bundle
     ): Bundle {
         val accountMgr = AccountManager.get(context)
         var authToken = accountMgr.peekAuthToken(account, authTokenType)
@@ -65,18 +65,18 @@ class LkongAuthenticator(private val context: Context) :
     }
 
     override fun editProperties(
-        response: AccountAuthenticatorResponse?,
-        accountType: String?
+        response: AccountAuthenticatorResponse,
+        accountType: String
     ): Bundle? {
         return null
     }
 
     override fun addAccount(
-        response: AccountAuthenticatorResponse?,
-        accountType: String?,
-        authTokenType: String?,
-        requiredFeatures: Array<out String>?,
-        options: Bundle?
+        response: AccountAuthenticatorResponse,
+        accountType: String,
+        authTokenType: String,
+        requiredFeatures: Array<out String>,
+        options: Bundle
     ): Bundle {
         val intent = Intent(context, SignInActivity::class.java)
         intent.putExtra(KEY_ACCOUNT_TYPE, accountType)
@@ -90,7 +90,7 @@ class LkongAuthenticator(private val context: Context) :
 
     override fun confirmCredentials(
         response: AccountAuthenticatorResponse?,
-        account: Account?,
+        account: Account,
         options: Bundle?
     ): Bundle? {
         return null
@@ -98,8 +98,8 @@ class LkongAuthenticator(private val context: Context) :
 
     override fun hasFeatures(
         response: AccountAuthenticatorResponse?,
-        account: Account?,
-        features: Array<out String>?
+        account: Account,
+        features: Array<out String>
     ): Bundle {
         val result = Bundle()
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false)

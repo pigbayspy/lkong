@@ -7,5 +7,5 @@ import android.view.View
  * @since 2021/6/13
  */
 interface OnItemProfileAreaClickListener {
-    fun onProfileAreaClick(view: View, position: Int, uid: Long)
+    fun onProfileAreaClick(view: View, pos: Int, uid: Long)
 }

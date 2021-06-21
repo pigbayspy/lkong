@@ -20,14 +20,14 @@ class ThreadModel : BaseCollectionItem {
 
     val userName: String
     val userIcon: String
-    private val userId: Long
+    val userId: Long
 
     val dateline: Date?
     val subject: String
     val digest: Boolean
     private val closed: Int
     val replyCount: Int
-    private val id: String
+    val id: String
     private val fid: Long
 
     constructor(itemResp: LkongForumItemResp) {

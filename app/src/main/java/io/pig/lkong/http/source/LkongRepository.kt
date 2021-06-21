@@ -28,7 +28,7 @@ object LkongRepository {
             .addFormDataPart("action", signInReq.action)
             .addFormDataPart("email", signInReq.email)
             .addFormDataPart("password", signInReq.password)
-            .addFormDataPart("rememberme", signInReq.rememberme)
+            .addFormDataPart("rememberme", signInReq.rememberMe)
             .build()
         val response = lkongSpec.signIn(requestBody)
         val responseBody = response.body()!!

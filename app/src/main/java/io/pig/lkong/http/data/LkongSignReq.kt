@@ -9,5 +9,5 @@ data class LkongSignReq(
     val password: String
 ) {
     val action = "login"
-    val rememberme = "on"
+    val rememberMe = "on"
 }
