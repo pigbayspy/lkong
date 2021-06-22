@@ -30,13 +30,13 @@ object LkongRepository {
             .addFormDataPart("password", signInReq.password)
             .addFormDataPart("rememberme", signInReq.rememberMe)
             .build()
-        val response = lkongSpec.signIn(requestBody)
+        val response = lkongSpec.signIn(requestBody).execute()
         val responseBody = response.body()!!
         val cookie = getCookie("auth")
         return LkongAuthResp(
             responseBody.name,
             responseBody.uid,
-            responseBody.yoosuu,
+            responseBody.yousuu,
             responseBody.success,
             cookie
         )
@@ -44,7 +44,7 @@ object LkongRepository {
 
     private fun getCookie(key: String): String {
         for (cookie in cookieManager.get(RestApiConst.Lkong_URl)) {
-            if (cookie.name.equals("auth", true)) {
+            if (cookie.name.equals(key, true)) {
                 if (CookieUtil.hasExpired(cookie)) {
                     continue
                 }

@@ -17,7 +17,7 @@ class TestRestApi {
         assertNotNull(resp, "返回数据不为空")
         assertTrue(resp.success, "登录失败")
         assertTrue(resp.name.isNotEmpty(), "登录失败")
-        assertTrue(resp.yoosuu.isNotEmpty(), "登录失败")
+        assertTrue(resp.yousuu.isNotEmpty(), "登录失败")
         assertTrue(resp.authCookie.isNotEmpty(), "登录失败")
     }
 }

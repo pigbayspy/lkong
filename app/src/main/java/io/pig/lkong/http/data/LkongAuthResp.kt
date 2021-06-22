@@ -9,7 +9,7 @@ import io.pig.lkong.account.util.AccountUtil
 class LkongAuthResp(
     val name: String,
     val uid: Long,
-    val yoosuu: String,
+    val yousuu: String,
     val success: Boolean,
     val authCookie: String
 ) {

@@ -4,7 +4,7 @@ import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.LkongForumThreadResp
 import io.pig.lkong.http.data.LkongSignResp
 import okhttp3.RequestBody
-import retrofit2.Response
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -21,5 +21,5 @@ interface LkongSpec {
     suspend fun getFavorite(): LkongForumThreadResp
 
     @POST(RestApiConst.SIGN_URL)
-    fun signIn(@Body body: RequestBody): Response<LkongSignResp>
+    fun signIn(@Body body: RequestBody): Call<LkongSignResp>
 }

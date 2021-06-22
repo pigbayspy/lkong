@@ -7,7 +7,7 @@ package io.pig.lkong.http.data
 data class LkongSignResp(
     val name: String,
     val uid: Long,
-    val yoosuu: String,
-    val error: String,
+    val yousuu: String,
+    val error: String?,
     val success: Boolean
 )
