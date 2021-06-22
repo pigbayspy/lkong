@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  */
 object LkongServiceProvider {
 
-    val httpClient: OkHttpClient
+    private val httpClient: OkHttpClient
 
     val lkongClient: LkongSpec
 
