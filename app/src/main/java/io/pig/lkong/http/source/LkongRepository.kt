@@ -43,12 +43,14 @@ object LkongRepository {
     }
 
     private fun getCookie(key: String): String {
-        for (cookie in cookieManager.get(RestApiConst.Lkong_URl)) {
-            if (cookie.name.equals(key, true)) {
-                if (CookieUtil.hasExpired(cookie)) {
-                    continue
+        for (cookies in cookieManager.getAll()) {
+            for (cookie in cookies.value) {
+                if (cookie.name.equals(key, true)) {
+                    if (CookieUtil.hasExpired(cookie)) {
+                        continue
+                    }
+                    return CookieUtil.encode(RestApiConst.LKONG_HOST, cookie)
                 }
-                return CookieUtil.encode(RestApiConst.LKONG_HOST, cookie)
             }
         }
         return ""
