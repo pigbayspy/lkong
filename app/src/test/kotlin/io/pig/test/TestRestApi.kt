@@ -23,4 +23,11 @@ class TestRestApi {
         assertNotNull(result, "get favorite not null")
         assertNotNull(result.data, "get favorite threads not null")
     }
+
+    @Test
+    fun testGetHot(): Unit = runBlocking {
+        val result = LkongRepository.getHot()
+        assertNotNull(result, "get hot not null")
+        assertNotNull(result.thread, "get hot threads not null")
+    }
 }

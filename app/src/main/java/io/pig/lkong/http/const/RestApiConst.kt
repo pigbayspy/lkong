@@ -15,4 +15,6 @@ object RestApiConst {
     const val SIGN_URL = "/index.php?mod=login"
 
     const val GET_FAVORITE_URL = "/index.php?mod=data&sars=my/favorite"
+
+    const val GET_HOST = "/index.php?mod=ajax&action=hotthread"
 }

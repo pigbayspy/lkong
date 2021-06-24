@@ -3,6 +3,7 @@ package io.pig.lkong.http.source
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.LkongAuthResp
 import io.pig.lkong.http.data.LkongForumThreadResp
+import io.pig.lkong.http.data.LkongHotThreadResp
 import io.pig.lkong.http.data.LkongSignReq
 import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.http.util.CookieUtil
@@ -20,6 +21,10 @@ object LkongRepository {
 
     suspend fun getFavoriteThread(): LkongForumThreadResp {
         return lkongSpec.getFavorite()
+    }
+
+    suspend fun getHot(): LkongHotThreadResp {
+        return lkongSpec.getHot()
     }
 
     fun signIn(signInReq: LkongSignReq): LkongAuthResp {
