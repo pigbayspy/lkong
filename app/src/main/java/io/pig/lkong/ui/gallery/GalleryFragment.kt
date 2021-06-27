@@ -93,29 +93,34 @@ class GalleryFragment : Eventable, Fragment() {
 
     private fun refreshThreadList(threads: List<ThreadModel>) {
         val listener = object : OnThreadClickListener {
-            override fun onItemThreadClick(view: View, pos: Int) {
+            private fun checkInvalid(pos: Int): Boolean {
                 if (pos < 0 && pos >= threads.size) {
-                    return
+                    return true
                 }
-                val thread = threads[pos]
-                val startLocation = intArrayOf(view.width / 2, 0)
-                view.getLocationOnScreen(startLocation)
-                AppNavigation.openActivityForUserProfile(
-                    requireActivity(),
-                    startLocation,
-                    thread.userId
-                )
+                return false
+            }
+
+            override fun onItemThreadClick(view: View, pos: Int) {
+                if (checkInvalid(pos)) {
+                    val thread = threads[pos]
+                    AppNavigation.openActivityForPostListByThreadId(
+                        requireContext(),
+                        thread.idNum()
+                    )
+                }
             }
 
             override fun onProfileAreaClick(view: View, pos: Int, uid: Long) {
-                if (pos < 0 && pos >= threads.size) {
-                    return
+                if (checkInvalid(pos)) {
+                    val thread = threads[pos]
+                    val startLocation = intArrayOf(view.width / 2, 0)
+                    view.getLocationOnScreen(startLocation)
+                    AppNavigation.openActivityForUserProfile(
+                        requireActivity(),
+                        startLocation,
+                        thread.userId
+                    )
                 }
-                val thread = threads[pos]
-                AppNavigation.openActivityForPostListByThreadId(
-                    requireContext(),
-                    thread.id.toLong()
-                )
             }
         }
         selfBinding.recycleListGallery.layoutManager =

@@ -6,6 +6,7 @@ import io.pig.lkong.account.util.AccountUtil
 import io.pig.lkong.http.data.LkongForumItemResp
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 import io.pig.lkong.util.DateUtil
+import io.pig.lkong.util.HtmlUtil
 import java.util.*
 
 /**
@@ -25,10 +26,10 @@ class ThreadModel : BaseCollectionItem {
     val dateline: Date?
     val subject: String
     val digest: Boolean
-    private val closed: Int
+    val closed: Int
     val replyCount: Int
     val id: String
-    private val fid: Long
+    val fid: Long
 
     constructor(itemResp: LkongForumItemResp) {
         this.sortKey = itemResp.sortkey
@@ -43,7 +44,7 @@ class ThreadModel : BaseCollectionItem {
         this.fid = itemResp.fid
         this.id = itemResp.id
         this.replyCount = itemResp.replynum
-        this.subject = itemResp.subject
+        this.subject = HtmlUtil.htmlToPlain(itemResp.subject)
     }
 
     override fun getSortKey(): Long {
@@ -84,6 +85,10 @@ class ThreadModel : BaseCollectionItem {
         this.id = parcel.readString()!!
         this.fid = parcel.readLong()
         this.userIcon = parcel.readString()!!
+    }
+
+    fun idNum(): Long {
+        return this.id.substring(7).toLong()
     }
 
     companion object CREATOR : Parcelable.Creator<ThreadModel> {
