@@ -19,7 +19,17 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/colorPrimaryLightDefault</item>
+        <item name="colorAccent">@color/colorAccentLightDefault</item>
+    </style>
+
     <style name="Theme.Lkong.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Lkong.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Translucent">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>

@@ -9,6 +9,8 @@ import android.util.Log
 import io.pig.lkong.R
 import io.pig.lkong.account.const.AccountConst
 import io.pig.lkong.application.const.AppConst
+import io.pig.lkong.application.const.DataContract
+import io.pig.lkong.ui.post.list.PostListActivity
 
 /**
  * @author yinhang
@@ -36,8 +38,14 @@ object AppNavigation {
     }
 
     fun openActivityForPostListByThreadId(context: Context, threadId: Long) {
-        // Todo
-        // openActivityForPostListByThreadId(context, threadId, 1)
+        openActivityForPostListByThreadId(context, threadId, 1)
+    }
+
+    private fun openActivityForPostListByThreadId(context: Context, threadId: Long, page: Int) {
+        val intent = Intent(context, PostListActivity::class.java)
+        intent.putExtra(DataContract.BUNDLE_THREAD_ID, threadId)
+        intent.putExtra(DataContract.BUNDLE_THREAD_CURRENT_PAGE, page)
+        context.startActivity(intent)
     }
 
     private fun addNewAccount(activity: Activity, accountType: String, authTokenType: String) {

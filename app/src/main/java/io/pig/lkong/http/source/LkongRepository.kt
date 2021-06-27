@@ -1,10 +1,7 @@
 package io.pig.lkong.http.source
 
 import io.pig.lkong.http.const.RestApiConst
-import io.pig.lkong.http.data.LkongAuthResp
-import io.pig.lkong.http.data.LkongForumThreadResp
-import io.pig.lkong.http.data.LkongHotThreadResp
-import io.pig.lkong.http.data.LkongSignReq
+import io.pig.lkong.http.data.*
 import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.http.util.CookieUtil
 import okhttp3.MultipartBody
@@ -25,6 +22,11 @@ object LkongRepository {
 
     suspend fun getHot(): LkongHotThreadResp {
         return lkongSpec.getHot()
+    }
+
+    suspend fun getPostList(thread: Long, page: Int): LkongPostListResp {
+        val postListReq = LkongPostListReq(thread, page)
+        return lkongSpec.getPostList(postListReq.sars, postListReq.mod)
     }
 
     fun signIn(signInReq: LkongSignReq): LkongAuthResp {
