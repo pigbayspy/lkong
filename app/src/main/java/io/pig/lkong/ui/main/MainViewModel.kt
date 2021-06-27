@@ -2,7 +2,10 @@ package io.pig.lkong.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.pig.lkong.model.Account
+import androidx.lifecycle.viewModelScope
+import io.pig.lkong.account.UserAccount
+import io.pig.lkong.account.UserAccountManager
+import kotlinx.coroutines.launch
 
 /**
  * @author yinhang
@@ -10,18 +13,11 @@ import io.pig.lkong.model.Account
  */
 class MainViewModel : ViewModel() {
 
-    private val account = Account(
-        "红烧猪蹄子",
-        "pigbayspy@gmail.com",
-        ""
-    )
+    val currentAccount = MutableLiveData<UserAccount>()
+    val userAccounts = MutableLiveData<List<UserAccount>>()
 
-
-    val accountEmail = MutableLiveData<String>().apply {
-        value = account.email
-    }
-
-    val accountName = MutableLiveData<String>().apply {
-        value = account.name
+    fun getAccounts(accountManager: UserAccountManager) {
+        currentAccount.value = accountManager.getCurrentUserAccount()
+        userAccounts.value = accountManager.getUserAccounts()
     }
 }

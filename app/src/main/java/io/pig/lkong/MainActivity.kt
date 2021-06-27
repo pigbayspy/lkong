@@ -3,6 +3,7 @@ package io.pig.lkong
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -16,13 +17,17 @@ import com.google.android.material.navigation.NavigationView
 import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.databinding.ActivityMainBinding
+import io.pig.lkong.exception.SignInException
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION_VALUE
 import io.pig.lkong.preference.Prefs
 import io.pig.lkong.preference.StringPrefs
+import io.pig.lkong.rx.RxEventBus
+import io.pig.lkong.rx.event.AccountChangeEvent
 import io.pig.lkong.sync.SyncUtil
 import io.pig.lkong.ui.main.MainViewModel
+import io.pig.lkong.util.ImageLoaderUtil
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -77,16 +82,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // 设置 ViewModel
-        val headView = binding.navView.getHeaderView(0)
-        val userEmailView = headView.findViewById<TextView>(R.id.account_email)
-        mainViewModel.accountEmail.observe(this) {
-            userEmailView.text = it
-        }
-        val userNameView = headView.findViewById<TextView>(R.id.account_name)
-        mainViewModel.accountName.observe(this) {
-            userNameView.text = it
-        }
+        initDrawer()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -126,5 +122,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun injectThis() {
         LkongApplication.get(this).presentComponent().inject(this)
+    }
+
+    private fun initDrawer() {
+        // 设置 ViewModel
+        val headView = binding.navView.getHeaderView(0)
+        val userEmailView = headView.findViewById<TextView>(R.id.account_email)
+        val userNameView = headView.findViewById<TextView>(R.id.account_name)
+        val userAvatarView = headView.findViewById<ImageView>(R.id.account_avatar)
+        mainViewModel.currentAccount.observe(this) {
+            userEmailView.text = it.userEmail
+            userNameView.text = it.userName
+            ImageLoaderUtil.loadAvatar(this, userAvatarView, it.userAvatar)
+        }
+        addAccountProfile()
+    }
+
+    private fun addAccountProfile() {
+        try {
+            mainViewModel.getAccounts(userAccountMgr)
+        } catch (e: SignInException) {
+            AppNavigation.navigateToSignInActivity(this)
+            finish()
+            return
+        }
+        RxEventBus.sendEvent(AccountChangeEvent())
     }
 }

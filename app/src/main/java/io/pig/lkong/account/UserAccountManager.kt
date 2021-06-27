@@ -22,6 +22,7 @@ import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.AccountChangeEvent
 import io.pig.lkong.rx.event.AccountCreateEvent
 import io.pig.lkong.rx.event.AccountRemoveEvent
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -65,6 +66,22 @@ class UserAccountManager {
      */
     fun isSignedIn(): Boolean {
         return userAccounts.isNotEmpty()
+    }
+
+    /**
+     * 返回所有用户账户
+     */
+    fun getUserAccounts(): List<UserAccount> {
+        val userAccounts: List<UserAccount> = ArrayList(userAccounts.values)
+        val currentUserAccount = currentAccount ?: return userAccounts
+        val currentUserId = currentUserAccount.userId
+        for (i in userAccounts.indices) {
+            if (userAccounts[i].userId == currentUserId) {
+                Collections.swap(userAccounts, 0, i)
+                break
+            }
+        }
+        return userAccounts
     }
 
     fun init() {

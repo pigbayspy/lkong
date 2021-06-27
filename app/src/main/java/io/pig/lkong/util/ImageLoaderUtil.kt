@@ -11,6 +11,15 @@ import io.pig.lkong.R
  */
 object ImageLoaderUtil {
 
+    fun loadAvatar(context: Context, target: ImageView, avatarUrl: String) {
+        Glide.with(context)
+            .load(toSmallAvatar(avatarUrl))
+            .error(R.drawable.ic_placeholder_avatar)
+            .placeholder(R.drawable.ic_placeholder_avatar)
+            .circleCrop()
+            .into(target)
+    }
+
     fun loadAvatar(
         context: Context, target: ImageView, avatarUrl: String, avatarSize: Int
     ) {
