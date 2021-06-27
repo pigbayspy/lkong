@@ -65,18 +65,18 @@ class LkongAuthenticator(private val context: Context) :
     }
 
     override fun editProperties(
-        response: AccountAuthenticatorResponse,
-        accountType: String
+        response: AccountAuthenticatorResponse?,
+        accountType: String?
     ): Bundle? {
         return null
     }
 
     override fun addAccount(
-        response: AccountAuthenticatorResponse,
-        accountType: String,
-        authTokenType: String,
-        requiredFeatures: Array<out String>,
-        options: Bundle
+        response: AccountAuthenticatorResponse?,
+        accountType: String?,
+        authTokenType: String?,
+        requiredFeatures: Array<out String>?,
+        options: Bundle?
     ): Bundle {
         val intent = Intent(context, SignInActivity::class.java)
         intent.putExtra(KEY_ACCOUNT_TYPE, accountType)

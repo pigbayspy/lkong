@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentGalleryBinding
 import io.pig.lkong.model.ThreadModel
@@ -47,9 +48,9 @@ class GalleryFragment : Eventable, Fragment() {
         selfBinding = FragmentGalleryBinding.inflate(inflater, container, false)
         val root: View = selfBinding.root
         // 初始化监听器
-        galleryViewModel.threadList.observe(viewLifecycleOwner) {
+        galleryViewModel.threadList.observe(viewLifecycleOwner, {
             refreshThreadList(it)
-        }
+        })
         // 初始化数据
         galleryViewModel.getThreads()
         return root
@@ -117,6 +118,8 @@ class GalleryFragment : Eventable, Fragment() {
                 )
             }
         }
+        selfBinding.recycleListGallery.layoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         selfBinding.recycleListGallery.adapter =
             ThreadListAdapter(requireActivity(), listener, threads)
     }
