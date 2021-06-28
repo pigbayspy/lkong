@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recycle_item_post_card_root_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/default_card_radius"
+    app:cardElevation="@dimen/default_card_elevation"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="0dp"
+    tools:layout_height="120dp">
+
+    <ImageView
+        android:id="@+id/recycle_item_post_image_avatar"
+        android:layout_width="@dimen/size_avatar_default"
+        android:layout_height="@dimen/size_avatar_default"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/image_avatar_desc" />
+
+    <ImageButton
+        android:id="@+id/recycle_item_post_button_rate"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="start|bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="?selectableItemBackground"
+        android:contentDescription="@string/button_share"
+        android:src="@drawable/ic_button_rate"
+        android:tag="tint|primary_text" />
+
+    <TextView
+        android:id="@+id/recycler_item_post_text_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_gravity="start|bottom"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="16dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center"
+        android:minWidth="48dp" />
+
+
+    <ImageButton
+        android:id="@+id/recycle_item_post_button_replay"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="?selectableItemBackground"
+        android:contentDescription="@string/button_reply"
+        android:src="@drawable/ic_button_comment"
+        android:tag="tint|primary_text" />
+
+    <ImageButton
+        android:id="@+id/recycle_item_post_button_share"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="16dp"
+        android:background="?selectableItemBackground"
+        android:contentDescription="@string/button_share"
+        android:src="@drawable/ic_button_share"
+        android:tag="tint|primary_text" />
+
+    <ImageButton
+        android:id="@+id/recycle_item_post_button_edit"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="16dp"
+        android:background="?selectableItemBackground"
+        android:contentDescription="@string/button_edit"
+        android:src="@drawable/ic_button_edit"
+        android:tag="tint|primary_text"
+        android:visibility="invisible" />
+
+</androidx.cardview.widget.CardView>

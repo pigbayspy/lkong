@@ -18,4 +18,8 @@
 
     <!-- size -->
     <dimen name="size_avatar_default">40dp</dimen>
+
+    <!-- card -->
+    <dimen name="default_card_elevation">2dp</dimen>
+    <dimen name="default_card_radius">2dp</dimen>
 </resources>
