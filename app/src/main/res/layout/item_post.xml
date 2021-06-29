@@ -32,16 +32,16 @@
         android:tag="tint|primary_text" />
 
     <TextView
-        android:id="@+id/recycler_item_post_text_rate"
+        android:id="@+id/recycle_item_post_text_rate"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_gravity="start|bottom"
         android:layout_marginStart="68dp"
         android:layout_marginBottom="16dp"
+        android:visibility="invisible"
         android:background="?selectableItemBackground"
         android:gravity="center"
         android:minWidth="48dp" />
-
 
     <ImageButton
         android:id="@+id/recycle_item_post_button_replay"

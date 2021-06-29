@@ -45,7 +45,7 @@ class ThreadListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val viewHolder: ThreadViewHolder = holder as ThreadViewHolder
+        val viewHolder = holder as ThreadViewHolder
         val threadModel: ThreadModel = getItem(position)
         bindThreadModel(viewHolder, threadModel)
     }

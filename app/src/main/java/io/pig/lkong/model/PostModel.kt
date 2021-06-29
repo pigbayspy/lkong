@@ -17,8 +17,8 @@ class PostModel : BaseCollectionItem {
     private val dateline: Date
     private val message: String
     private val authorName: String
-    private val authorId: Long
-    private val authorAvatar: String
+    val authorId: Long
+    val authorAvatar: String
     private val favorite: Boolean
     private val isMe: Boolean
     private val notGroup: Boolean
@@ -30,7 +30,7 @@ class PostModel : BaseCollectionItem {
     private val isAdmin: Boolean
     private val ordinal: Int
     private val tid: Long
-    private val rateScore: Int
+    val rateScore: Int
     private val rateLog: List<PostRateModel>
     private val author: PostAuthorModel
 
@@ -38,9 +38,9 @@ class PostModel : BaseCollectionItem {
         fid = parcel.readLong()
         sortKey = parcel.readLong()
         val tmpSortKeyTime: Long = parcel.readLong()
-        sortKeyTime = if (tmpSortKeyTime == -1L) null else Date(tmpSortKeyTime)
+        sortKeyTime = if (tmpSortKeyTime == -1L) Date() else Date(tmpSortKeyTime)
         val tmpDateline: Long = parcel.readLong()
-        dateline = if (tmpDateline == -1L) null else Date(tmpDateline)
+        dateline = if (tmpDateline == -1L) Date() else Date(tmpDateline)
         message = parcel.readString()!!
         authorName = parcel.readString()!!
         authorId = parcel.readLong()

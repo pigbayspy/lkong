@@ -3,6 +3,7 @@ package io.pig.lkong.ui.adapter.item
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
@@ -16,10 +17,18 @@ class PostViewHolder(
     private val listener: OnPostButtonClickListener
 ) : RecyclerView.ViewHolder(itemView) {
 
+    val avatarImage: ImageView
+    val rateButton: ImageButton
+    val rateText: TextView
+    val shareButton: ImageButton
+    val editButton: ImageButton
+
     init {
-        val avatarImage = itemView.findViewById<ImageView>(R.id.recycle_item_post_image_avatar)
-        val rateButton = itemView.findViewById<ImageButton>(R.id.recycle_item_post_button_rate)
-        val shareButton = itemView.findViewById<ImageButton>(R.id.recycle_item_post_button_share)
+        avatarImage = itemView.findViewById(R.id.recycle_item_post_image_avatar)
+        rateText = itemView.findViewById(R.id.recycle_item_post_text_rate)
+        rateButton = itemView.findViewById(R.id.recycle_item_post_button_rate)
+        shareButton = itemView.findViewById(R.id.recycle_item_post_button_share)
+        editButton = itemView.findViewById(R.id.recycle_item_post_button_edit)
         avatarImage.setOnClickListener {
             listener.onProfileImageClick(it, adapterPosition)
         }
