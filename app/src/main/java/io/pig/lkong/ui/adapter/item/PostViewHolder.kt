@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
+import io.pig.widget.PostItemView
 
 /**
  * @author yinhang
@@ -17,6 +18,7 @@ class PostViewHolder(
     private val listener: OnPostButtonClickListener
 ) : RecyclerView.ViewHolder(itemView) {
 
+    val postItem: PostItemView
     val avatarImage: ImageView
     val rateButton: ImageButton
     val rateText: TextView
@@ -24,6 +26,7 @@ class PostViewHolder(
     val editButton: ImageButton
 
     init {
+        postItem = itemView.findViewById(R.id.recycle_item_post_view_item)
         avatarImage = itemView.findViewById(R.id.recycle_item_post_image_avatar)
         rateText = itemView.findViewById(R.id.recycle_item_post_text_rate)
         rateButton = itemView.findViewById(R.id.recycle_item_post_button_rate)

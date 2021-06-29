@@ -22,13 +22,13 @@ class PostModel : BaseCollectionItem {
     private val favorite: Boolean
     private val isMe: Boolean
     private val notGroup: Boolean
-    private val pid: Long
+    val pid: Long
     private val first: Boolean
     private val status: Int
     private val id: String
     private val tsAdmin: Boolean
     private val isAdmin: Boolean
-    private val ordinal: Int
+    val ordinal: Int
     private val tid: Long
     val rateScore: Int
     private val rateLog: List<PostRateModel>

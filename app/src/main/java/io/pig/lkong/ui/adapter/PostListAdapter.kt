@@ -36,7 +36,9 @@ class PostListAdapter(
         super.onBindViewHolder(holder, position)
         val viewHolder = holder as PostViewHolder
         val post = getItem(position)
-        // Todo
+        viewHolder.postItem.postId = post.pid
+        viewHolder.postItem.identityTag = post.pid.toString()
+        viewHolder.postItem.ordinalText = post.ordinal.toString()
         if (post.rateScore != 0) {
             viewHolder.rateText.visibility = View.VISIBLE
             viewHolder.rateText.text = post.rateScore.toString()
