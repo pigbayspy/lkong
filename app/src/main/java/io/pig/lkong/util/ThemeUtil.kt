@@ -12,4 +12,9 @@ object ThemeUtil {
     fun accentColor(context: Context): Int {
         return Color.parseColor("#263238")
     }
+
+    fun textColorSecondary(context: Context): Int {
+        // Todo
+        return android.R.attr.textColorSecondary
+    }
 }
