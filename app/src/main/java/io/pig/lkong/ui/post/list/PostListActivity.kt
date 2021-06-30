@@ -3,6 +3,7 @@ package io.pig.lkong.ui.post.list
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityPostListBinding
@@ -11,6 +12,7 @@ class PostListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostListBinding
     private lateinit var postListViewModel: PostListViewModel
+    private lateinit var postListView: RecyclerView
 
     private var threadId = -1L
     private var targetPostId = -1L
@@ -23,6 +25,9 @@ class PostListActivity : AppCompatActivity() {
         binding = ActivityPostListBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_post_list)
 
+        // 获取 View
+        postListView = findViewById(R.id.recycle_list_post)
+
         // 设置参数
         if (intent.hasExtra(DataContract.BUNDLE_THREAD_ID)) {
             threadId = intent.getLongExtra(DataContract.BUNDLE_THREAD_ID, threadId)
@@ -33,6 +38,9 @@ class PostListActivity : AppCompatActivity() {
         if (threadId == -1L && targetPostId == -1L) {
             throw IllegalStateException("PostListActivity missing extra in intent.")
         }
+        initRecycleView()
+    }
 
+    private fun initRecycleView() {
     }
 }
