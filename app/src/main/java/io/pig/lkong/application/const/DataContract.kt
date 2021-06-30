@@ -8,5 +8,7 @@ object DataContract {
 
     const val BUNDLE_THREAD_ID = "bundle_thread_id"
 
+    const val BUNDLE_POST_ID = "bundle_post_id"
+
     const val BUNDLE_THREAD_CURRENT_PAGE = "bundle_thread_current_page"
 }

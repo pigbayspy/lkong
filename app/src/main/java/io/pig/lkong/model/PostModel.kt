@@ -33,6 +33,7 @@ class PostModel : BaseCollectionItem {
     val rateScore: Int
     private val rateLog: List<PostRateModel>
     private val author: PostAuthorModel
+    var postDisplayCache: PostDisplayModel? = null
 
     private constructor(parcel: Parcel) {
         fid = parcel.readLong()

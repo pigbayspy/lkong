@@ -38,6 +38,7 @@ class PostListAdapter(
         val post = getItem(position)
         viewHolder.postItem.postId = post.pid
         viewHolder.postItem.identityTag = post.pid.toString()
+        viewHolder.postItem.setPostDisplayCache(post.postDisplayCache!!)
         viewHolder.postItem.ordinalText = post.ordinal.toString()
         if (post.rateScore != 0) {
             viewHolder.rateText.visibility = View.VISIBLE
