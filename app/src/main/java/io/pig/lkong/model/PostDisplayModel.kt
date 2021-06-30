@@ -1,6 +1,7 @@
 package io.pig.lkong.model
 
 import android.text.DynamicLayout
+import android.text.StaticLayout
 
 /**
  * @author yinhang
@@ -9,6 +10,7 @@ import android.text.DynamicLayout
 class PostDisplayModel(
     val urlSpanCount: Int,
     val importantSpans: List<Any>,
-    val textLayout: DynamicLayout? = null
+    val textLayout: DynamicLayout? = null,
+    val authorLayout: StaticLayout? = null
 ) {
 }

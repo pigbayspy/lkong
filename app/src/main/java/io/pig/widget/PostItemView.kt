@@ -2,8 +2,12 @@ package io.pig.widget
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -11,12 +15,16 @@ import io.pig.lkong.R
 import io.pig.lkong.model.PostDisplayModel
 import io.pig.lkong.util.ThemeUtil
 import io.pig.lkong.util.UiUtil
+import io.pig.widget.html.AsyncDrawableType
+import io.pig.widget.html.EmptySpan
+import io.pig.widget.html.ImageSpanContainer
+import io.pig.widget.html.PendingImageSpan
 
 /**
  * @author yinhang
  * @since 2021/6/29
  */
-class PostItemView : View {
+class PostItemView : View, ImageSpanContainer {
 
     companion object {
         private const val MOVEMENT_LIMIT_DP = 12
@@ -48,6 +56,7 @@ class PostItemView : View {
     var identityTag: String? = null
     var ordinalText: String? = null
     private var postDisplayCache: PostDisplayModel? = null
+    private var invalidateRunnable: Runnable? = null
 
     constructor(context: Context) : super(context)
 
@@ -81,6 +90,18 @@ class PostItemView : View {
         if (isInEditMode) {
             return
         }
+        postDisplayCache?.authorLayout?.let {
+            canvas.save()
+            canvas.translate(px_margin_72.toFloat(), px_margin_16.toFloat())
+            it.draw(canvas)
+            canvas.restore()
+        }
+        postDisplayCache?.textLayout?.let {
+            canvas.save()
+            canvas.translate(px_margin_16.toFloat(), px_margin_72.toFloat())
+            it.draw(canvas)
+            canvas.save()
+        }
         val ordinalStr = ordinalText
         if (!ordinalStr.isNullOrEmpty()) {
             ordinalPaint.getTextBounds(ordinalStr.toString(), 0, ordinalStr.length, ordinalBound)
@@ -109,12 +130,51 @@ class PostItemView : View {
         post {
             val viewImageMaxWidth = measuredWidth - px_margin_16 * 2
             for (i in postDisplayModel.urlSpanCount..postDisplayModel.importantSpans.size) {
-                // Todo
+                val pendingImageSpan = postDisplayModel.importantSpans[i] as PendingImageSpan
+                pendingImageSpan.loadImage(this, viewImageMaxWidth, Color.argb(255, 229, 229, 229))
             }
+        }
+    }
+
+    override fun notifyImageSpanLoaded(tag: Any, drawable: Drawable, type: AsyncDrawableType) {
+        if (tag != identityTag) {
+            return
+        }
+        // TODO: re-layout and invalidate
+        if (invalidateRunnable == null) {
+            invalidateRunnable = Runnable {
+                if (tag == identityTag) {
+                    if (type == AsyncDrawableType.NORMAL) {
+                        val charSequence =
+                            postDisplayCache!!.textLayout!!.text as SpannableStringBuilder
+                        notifyDynamicLayoutChange(charSequence)
+                        requestLayout()
+                    }
+                    invalidate()
+                }
+            }
+            postDelayed(invalidateRunnable, 1000)
         }
     }
 
     private fun getDesiredHeight(): Int {
         return px_margin_72 + px_height_68
+    }
+
+    private fun notifyDynamicLayoutChange(stringBuilder: SpannableStringBuilder) {
+        stringBuilder.setSpan(
+            EmptySpan(),
+            0,
+            stringBuilder.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        val emptySpans: Array<EmptySpan> =
+            stringBuilder.getSpans(
+                0, stringBuilder.length,
+                EmptySpan::class.java
+            )
+        for (emptySpan in emptySpans) {
+            stringBuilder.removeSpan(emptySpan)
+        }
     }
 }
