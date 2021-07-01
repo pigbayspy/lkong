@@ -18,6 +18,7 @@ class InMemoryCookieStore : CookieManager {
         return value.toList()
     }
 
+    @Synchronized
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         val value = store[url]
         if (value != null) {
@@ -27,6 +28,7 @@ class InMemoryCookieStore : CookieManager {
         }
     }
 
+    @Synchronized
     override fun clear() {
         store.clear()
     }
