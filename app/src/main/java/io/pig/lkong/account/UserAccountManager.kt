@@ -191,10 +191,11 @@ class UserAccountManager {
     }
 
     fun getAuthObject(): LkongAuthObject {
-        if (authObject == null && currentAccount != null) {
-            authObject = getAuthObject(currentAccount!!)
-        } else if (authObject == null) {
-            setCurrentUserAccount(getFirstAccount()!!.userId)
+        if (authObject == null) {
+            val account = currentAccount
+            if (account == null) {
+                setCurrentUserAccount(getFirstAccount()!!.userId)
+            }
             authObject = getAuthObject(currentAccount!!)
         }
         return authObject!!

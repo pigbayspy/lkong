@@ -9,7 +9,6 @@ import io.pig.lkong.application.component.LkongPresentComponent
 import io.pig.lkong.application.component.UserAccountComponent
 import io.pig.lkong.application.module.LkongModule
 import io.pig.lkong.application.module.UserAccountModule
-import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.preference.Prefs
 import javax.inject.Singleton
 
@@ -39,7 +38,6 @@ class LkongApplication : Application() {
         initComponent()
         userAccountComponent.inject(userAccountMgr)
         userAccountMgr.init()
-        LkongServiceProvider.addAccount(userAccountMgr.getAuthObject())
     }
 
     fun getUserAccountManager(): UserAccountManager {
