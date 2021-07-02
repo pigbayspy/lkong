@@ -21,4 +21,10 @@ object HexUtil {
         }
         return sb.toString()
     }
+
+    fun hexToBytes(str: String): ByteArray {
+        return str.chunked(2)
+            .map { it.toInt(16).toByte() }
+            .toByteArray()
+    }
 }

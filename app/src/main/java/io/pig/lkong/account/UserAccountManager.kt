@@ -190,10 +190,22 @@ class UserAccountManager {
         }
     }
 
+    fun getAuthObject(): LkongAuthObject {
+        if (authObject == null && currentAccount != null) {
+            authObject = getAuthObject(currentAccount!!)
+        } else if (authObject == null) {
+            setCurrentUserAccount(getFirstAccount()!!.userId)
+            authObject = getAuthObject(currentAccount!!)
+        }
+        return authObject!!
+    }
+
     private fun getAuthObject(account: UserAccount): LkongAuthObject {
         return LkongAuthObject(
             account.userId,
-            account.userName
+            account.userName,
+            account.authUrl,
+            account.authCookie
         )
     }
 
@@ -222,7 +234,8 @@ class UserAccountManager {
             id,
             userName,
             userEmail,
-            userAvatar
+            userAvatar,
+            userAuth
         )
     }
 }

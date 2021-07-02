@@ -1,6 +1,6 @@
 package io.pig.lkong.http.cookie.impl
 
-import io.pig.lkong.http.CookieManager
+import io.pig.lkong.http.cookie.CookieManager
 import okhttp3.Cookie
 import okhttp3.HttpUrl
 
