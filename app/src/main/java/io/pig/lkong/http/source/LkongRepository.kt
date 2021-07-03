@@ -39,13 +39,15 @@ object LkongRepository {
             .build()
         val response = lkongSpec.signIn(requestBody).execute()
         val responseBody = response.body()!!
-        val cookie = getCookie("auth")
+        val authCookie = getCookie("auth")
+        val discussCookie = getCookie("dzsbhey")
         return LkongAuthResp(
             responseBody.name,
             responseBody.uid,
             responseBody.yousuu,
             responseBody.success,
-            cookie
+            authCookie,
+            discussCookie
         )
     }
 

@@ -27,4 +27,8 @@ object Prefs {
     fun getStringPrefs(key: String, defaultValue: String): StringPrefs {
         return StringPrefs(key, defaultValue, preference)
     }
+
+    fun getBoolPrefs(key: String, defaultValue: Boolean): BoolPrefs {
+        return BoolPrefs(key, defaultValue, preference)
+    }
 }

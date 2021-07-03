@@ -11,7 +11,8 @@ class LkongAuthResp(
     val uid: Long,
     val yousuu: String,
     val success: Boolean,
-    val authCookie: String
+    val authCookie: String,
+    val discussCookie: String
 ) {
     val avatar = AccountUtil.generateAvatarUrl(uid)
 }

@@ -22,7 +22,7 @@ class GalleryViewModel : ViewModel() {
                 }
                 threadList.value = threadModels
             } catch (e: Exception) {
-                Log.e(TAG, "Lkong Network Request Fail, cause {}", e)
+                Log.e(TAG, "Lkong Network Request Fail", e)
                 threadList.value = emptyList()
             }
         }

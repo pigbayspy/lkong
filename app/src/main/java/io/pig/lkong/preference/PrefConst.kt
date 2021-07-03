@@ -19,4 +19,8 @@ object PrefConst {
     const val AVATAR_DOWNLOAD_POLICY = "prefs_avatar_download_policy"
 
     const val AVATAR_DOWNLOAD_POLICY_VALUE = "0"
+
+    const val FORUMS_FIRST= "prefs_use_forums_first"
+
+    const val FORUMS_FIRST_VALUE = false
 }

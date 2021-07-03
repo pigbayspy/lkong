@@ -3,6 +3,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="placeholder_thread_title">加载中…</string>
+
     <!-- 账户信息 -->
     <string name="account_type">io.pig.lkong</string>
 
@@ -56,4 +58,14 @@
     <!-- item -->
     <string name="item_thread_text_title">帖子标题</string>
     <string name="indicator_thread_digest">[精]&#160;</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- fragment -->
+    <string name="tab_item_hot_thread">热门</string>
+    <string name="tab_item_forum">板块</string>
+    <string name="tab_item_follow_forum">热门</string>
+    <string name="tab_item_timeline">时间线</string>
+    <string name="tab_item_digest_thread">精华</string>
+
 </resources>

@@ -18,7 +18,19 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.Lkong.PopupOverlay" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/fragment_content_main_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="tab_text|parent_dependent,tab_indicator|parent_dependent" />
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/fragment_content_main_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include layout="@layout/content_main" />
 
