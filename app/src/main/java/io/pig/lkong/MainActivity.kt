@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -14,33 +15,21 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.viewpager.widget.ViewPager
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.tabs.TabLayout
 import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.databinding.ActivityMainBinding
 import io.pig.lkong.exception.SignInException
 import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.navigation.AppNavigation
-import io.pig.lkong.preference.BoolPrefs
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION_VALUE
-import io.pig.lkong.preference.PrefConst.FORUMS_FIRST
-import io.pig.lkong.preference.PrefConst.FORUMS_FIRST_VALUE
 import io.pig.lkong.preference.Prefs
 import io.pig.lkong.preference.StringPrefs
 import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.AccountChangeEvent
 import io.pig.lkong.sync.SyncUtil
-import io.pig.lkong.ui.adapter.MainTabFragmentAdapter
-import io.pig.lkong.ui.adapter.item.FragmentItem
-import io.pig.lkong.ui.forum.ForumsFragment
-import io.pig.lkong.ui.forum.follow.FollowForumsFragment
 import io.pig.lkong.ui.main.MainViewModel
-import io.pig.lkong.ui.thread.digest.DigestThreadFragment
-import io.pig.lkong.ui.thread.hot.HotThreadFragment
-import io.pig.lkong.ui.timeline.TimeLineFragment
 import io.pig.lkong.util.ImageLoaderUtil
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -56,11 +45,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
 
-    private lateinit var pages: ViewPager
-    private lateinit var tabs: TabLayout
-
     private lateinit var checkNoticeDuration: StringPrefs
-    private lateinit var forumsFirst: BoolPrefs
 
     @Inject
     lateinit var userAccountMgr: UserAccountManager
@@ -154,12 +139,6 @@ class MainActivity : AppCompatActivity() {
             ImageLoaderUtil.loadAvatar(this, userAvatarView, it.userAvatar)
         }
         addAccountProfile()
-
-        // 初始化 tab
-        pages = binding.appBarMain.fragmentContentMainPager
-        tabs = binding.appBarMain.fragmentContentMainTab
-        tabs.setupWithViewPager(pages)
-        setupViewPager()
     }
 
     private fun addAccountProfile() {
@@ -173,64 +152,11 @@ class MainActivity : AppCompatActivity() {
         RxEventBus.sendEvent(AccountChangeEvent())
     }
 
-    private fun setupViewPager() {
-        val forumsFragment = ForumsFragment.newInstance()
-        val followForumsFragment = FollowForumsFragment.newInstance()
-        val timelineFragment = TimeLineFragment.newInstance()
-        val hotThreadFragment = HotThreadFragment.newInstance()
-        val digestThreadFragment = DigestThreadFragment.newInstance()
-        val forumsItem = FragmentItem(
-            forumsFragment,
-            getString(R.string.tab_item_forum),
-            R.drawable.ic_tab_forums
-        )
-        val followForumsItem = FragmentItem(
-            followForumsFragment,
-            getString(R.string.tab_item_follow_forum),
-            R.drawable.ic_tab_stared
-        )
-        val timeLineItem = FragmentItem(
-            timelineFragment,
-            getString(R.string.tab_item_timeline),
-            R.drawable.ic_tab_timeline
-        )
-        val hotThreadItem = FragmentItem(
-            hotThreadFragment,
-            getString(R.string.tab_item_hot_thread),
-            R.drawable.ic_tab_whatshot
-        )
-        val digestThreadItem = FragmentItem(
-            digestThreadFragment,
-            getString(R.string.tab_item_digest_thread),
-            R.drawable.ic_tab_digest
-        )
-        val fragments = if (forumsFirst.get()) {
-            listOf(forumsItem, followForumsItem, timeLineItem)
-        } else {
-            listOf(timeLineItem, followForumsItem, forumsItem)
-        } + listOf(hotThreadItem, digestThreadItem)
-
-        val fragmentAdapter = MainTabFragmentAdapter(supportFragmentManager, fragments)
-        pages.adapter = fragmentAdapter
-        for (i in 0..tabs.tabCount) {
-            val tab = tabs.getTabAt(i)
-            tab?.apply {
-                setIcon(fragmentAdapter.getIcon(i))
-                text = ""
-            }
-        }
-    }
-
     private fun initConfig() {
         // 初始化检查通知时间
         checkNoticeDuration = Prefs.getStringPrefs(
             CHECK_NOTIFICATION_DURATION,
             CHECK_NOTIFICATION_DURATION_VALUE
-        )
-        // 初始化界面设置
-        forumsFirst = Prefs.getBoolPrefs(
-            FORUMS_FIRST,
-            FORUMS_FIRST_VALUE
         )
     }
 }
