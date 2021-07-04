@@ -1,6 +1,6 @@
 package io.pig.lkong.http.data
 
-import io.pig.lkong.account.util.AccountUtil
+import io.pig.lkong.util.LkongUtil
 
 /**
  * @author yinhang
@@ -14,5 +14,5 @@ class LkongAuthResp(
     val authCookie: String,
     val discussCookie: String
 ) {
-    val avatar = AccountUtil.generateAvatarUrl(uid)
+    val avatar = LkongUtil.generateAvatarUrl(uid)
 }

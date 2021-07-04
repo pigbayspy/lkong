@@ -29,6 +29,11 @@ object LkongRepository {
         return lkongSpec.getPostList(postListReq.sars, postListReq.mod)
     }
 
+    suspend fun getForumInfo(forumId: Long): LkongForumInfoResp {
+        val forumInfoReq = LkongForumInfoReq(forumId)
+        return lkongSpec.getForumInfo(forumInfoReq.action, forumInfoReq.mod)
+    }
+
     fun signIn(signInReq: LkongSignReq): LkongAuthResp {
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)

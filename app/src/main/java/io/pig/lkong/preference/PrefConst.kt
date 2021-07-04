@@ -20,7 +20,11 @@ object PrefConst {
 
     const val AVATAR_DOWNLOAD_POLICY_VALUE = "0"
 
-    const val FORUMS_FIRST= "prefs_use_forums_first"
+    const val FORUMS_FIRST = "prefs_use_forums_first"
 
     const val FORUMS_FIRST_VALUE = false
+
+    const val FORUMS_IN_GRID = "prefs_forum_list_grid"
+
+    const val FORUMS_IN_GRID_VALUE = false
 }

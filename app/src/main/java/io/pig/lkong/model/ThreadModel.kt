@@ -2,7 +2,7 @@ package io.pig.lkong.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import io.pig.lkong.account.util.AccountUtil
+import io.pig.lkong.util.LkongUtil
 import io.pig.lkong.http.data.LkongForumItemResp
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 import io.pig.lkong.util.DateUtil
@@ -36,7 +36,7 @@ class ThreadModel : BaseCollectionItem {
         this.sortKeyTime = Date(this.sortKey * 1000L)
         // 用户信息
         this.userName = itemResp.username
-        this.userIcon = AccountUtil.generateAvatarUrl(itemResp.uid)
+        this.userIcon = LkongUtil.generateAvatarUrl(itemResp.uid)
         this.userId = itemResp.uid
         this.closed = itemResp.closed
         this.dateline = DateUtil.parse(itemResp.dateline)

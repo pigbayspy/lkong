@@ -1,10 +1,7 @@
 package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.const.RestApiConst
-import io.pig.lkong.http.data.LkongForumThreadResp
-import io.pig.lkong.http.data.LkongHotThreadResp
-import io.pig.lkong.http.data.LkongPostListResp
-import io.pig.lkong.http.data.LkongSignResp
+import io.pig.lkong.http.data.*
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -34,4 +31,10 @@ interface LkongSpec {
         @Query("sars") sars: String,
         @Query("mod") mod: String
     ): LkongPostListResp
+
+    @GET(RestApiConst.BASE_API)
+    suspend fun getForumInfo(
+        @Query("action") action: String,
+        @Query("mod") mod: String
+    ): LkongForumInfoResp
 }
