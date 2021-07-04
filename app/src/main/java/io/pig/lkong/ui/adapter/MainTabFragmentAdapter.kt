@@ -22,7 +22,7 @@ class MainTabFragmentAdapter(
         return fragmentList.size
     }
 
-    override fun getPageTitle(position: Int): CharSequence {
+    override fun getPageTitle(position: Int): String {
         return fragmentList[position].title
     }
 

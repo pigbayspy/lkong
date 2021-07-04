@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import io.pig.lkong.MainActivity
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentHomeBinding
 import io.pig.lkong.preference.BoolPrefs
@@ -46,13 +47,6 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val activity = requireActivity()
-        activity.invalidateOptionsMenu()
-        activity.title = getString(R.string.menu_home)
-    }
-
     private fun initConfig() {
         // 初始化界面设置
         forumsFirst = Prefs.getBoolPrefs(
@@ -70,7 +64,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViewPager() {
-        val activity = requireActivity()
+        val activity = requireActivity() as MainActivity
         val forumsFragment = ForumsFragment.newInstance()
         val followForumsFragment = FollowForumsFragment.newInstance()
         val timelineFragment = TimeLineFragment.newInstance()
@@ -121,7 +115,7 @@ class HomeFragment : Fragment() {
             override fun onPageScrollStateChanged(state: Int) {}
 
             override fun onPageSelected(position: Int) {
-                activity.title = fragmentAdapter.getPageTitle(position)
+                activity.setDrawerTitle(fragmentAdapter.getPageTitle(position))
             }
 
             override fun onPageScrolled(
