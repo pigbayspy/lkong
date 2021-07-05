@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity() {
 
         drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)!!
+        navController = navHostFragment.findNavController()
         val topLevel = setOf(
             R.id.nav_home,
             R.id.nav_gallery,
