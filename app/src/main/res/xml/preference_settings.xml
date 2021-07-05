@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/setting_item_account_setting_title"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:icon="@drawable/ic_setting_account"
+            android:key="prefs_goto_account_settings"
+            android:summary="@string/setting_item_account_setting_summary"
+            android:title="@string/setting_item_account_setting_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_category_display_title"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="prefs_theme"
+            android:summary="@string/setting_item_theme_color_summary"
+            android:title="@string/setting_item_theme_color_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/setting_item_screen_rotation_title"
+            android:entries="@array/setting_custom_rotation_title_array"
+            android:entryValues="@array/setting_custom_rotation_value_array"
+            android:icon="@drawable/ic_setting_rotate"
+            android:key="prefs_screen_rotation"
+            android:persistent="true"
+            android:summary="@string/setting_item_screen_rotation_summary"
+            android:title="@string/setting_item_screen_rotation_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_category_notify"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="prefs_enable_background_notification"
+            android:persistent="true"
+            android:summary="@string/setting_item_enable_background_notify_summary"
+            android:title="@string/setting_item_enable_background_notify_title" />
+
+        <ListPreference
+            android:defaultValue="1800"
+            android:dialogTitle="@string/setting_item_check_notify_duration_title"
+            android:entries="@array/setting_check_notify_duration_array"
+            android:entryValues="@array/setting_check_notify_duration_value_array"
+            android:key="prefs_check_notification_duration"
+            android:persistent="true"
+            android:summary="@string/setting_item_check_notify_duration_summary"
+            android:title="@string/setting_item_check_notify_duration_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_category_navigation"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="prefs_use_forums_first"
+            android:persistent="true"
+            android:summary="@string/setting_item_use_forums_first_summary"
+            android:title="@string/setting_item_use_forums_first_title" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="prefs_timeline_only_thread"
+            android:persistent="true"
+            android:summary="@string/setting_item_timeline_only_thread_summary"
+            android:title="@string/setting_item_timeline_only_thread_title" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="prefs_forum_list_grid"
+            android:persistent="true"
+            android:summary="@string/setting_item_forum_list_grid_summary"
+            android:title="@string/setting_item_forum_list_grid_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_category_forum_title"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/setting_item_image_download_policy_title"
+            android:entries="@array/setting_image_download_policy_array"
+            android:entryValues="@array/setting_image_download_policy_values_array"
+            android:key="prefs_image_download_policy"
+            android:persistent="true"
+            android:title="@string/setting_item_image_download_policy_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/setting_item_avatar_download_policy_title"
+            android:entries="@array/setting_image_download_policy_array"
+            android:entryValues="@array/setting_image_download_policy_values_array"
+            android:key="prefs_avatar_download_policy"
+            android:persistent="true"
+            android:title="@string/setting_item_avatar_download_policy_title" />
+
+        <EditTextPreference
+            android:defaultValue="@string/setting_item_post_extra_tail_text_default"
+            android:key="prefs_post_extra_tail_text"
+            android:summary="@string/setting_item_post_extra_tail_text_summary"
+            android:title="@string/setting_item_post_extra_tail_text_title" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="prefs_scroll_by_volume_key"
+            android:persistent="true"
+            android:summary="@string/setting_item_scroll_by_volume_key_summary"
+            android:title="@string/setting_item_scroll_by_volume_key_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_category_other_title"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:icon="@drawable/ic_setting_feedback"
+            android:key="prefs_feedback"
+            android:summary="@string/setting_item_feedback_value"
+            android:title="@string/setting_item_feedback_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_item_about_title"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="prefs_about_version"
+            android:summary=""
+            android:title="@string/setting_item_version" />
+
+        <Preference android:title="@string/setting_category_author_title">
+            <intent
+                android:targetClass="io.pig.lkong.ui.setting.SettingActivity"
+                android:targetPackage="io.pig.lkong">
+                <extra
+                    android:name="type"
+                    android:value="about" />
+            </intent>
+        </Preference>
+
+    </PreferenceCategory>
+</PreferenceScreen>

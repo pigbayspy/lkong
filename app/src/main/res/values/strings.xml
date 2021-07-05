@@ -68,4 +68,80 @@
     <string name="tab_item_timeline">时间线</string>
     <string name="tab_item_digest_thread">精华</string>
 
+    <!-- setting -->
+    <string name="setting_item_account_setting_title">账户设置</string>
+    <string name="setting_item_account_setting_summary">管理你的账户</string>
+    <string name="setting_category_display_title">显示</string>
+    <string name="setting_item_theme_color_title">主题</string>
+    <string name="setting_item_theme_color_summary">选择你喜欢的主题</string>
+    <string name="setting_item_screen_rotation_title">屏幕旋转</string>
+    <string name="setting_item_screen_rotation_summary">在这里调整屏幕旋转设置</string>
+    <string-array name="setting_custom_rotation_title_array">
+        <item>跟随系统设置</item>
+        <item>竖屏</item>
+        <item>横屏</item>
+    </string-array>
+    <string-array name="setting_custom_rotation_value_array">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="setting_category_notify">消息通知</string>
+    <string name="setting_item_enable_background_notify_summary">开启后可以在通知栏收到新消息提醒</string>
+    <string name="setting_item_enable_background_notify_title">开启消息通知</string>
+    <string name="setting_item_check_notify_duration_title">检查周期</string>
+    <string name="setting_item_check_notify_duration_summary">设置检查新消息的周期</string>
+    <string-array name="setting_check_notify_duration_array">
+        <item>15 分钟</item>
+        <item>30 分钟</item>
+        <item>45 分钟</item>
+        <item>1 小时</item>
+        <item>2 小时</item>
+        <item>3 小时</item>
+        <item>6 小时</item>
+        <item>12 小时</item>
+        <item>24 小时</item>
+    </string-array>
+    <string-array name="setting_check_notify_duration_value_array">
+        <item>900</item>
+        <item>1800</item>
+        <item>2700</item>
+        <item>3600</item>
+        <item>7200</item>
+        <item>10800</item>
+        <item>21600</item>
+        <item>43200</item>
+        <item>86400</item>
+    </string-array>
+    <string name="setting_category_navigation">导航</string>
+    <string name="setting_item_use_forums_first_summary">在第一页显示板块列表而不是信息流(重启应用生效)</string>
+    <string name="setting_item_use_forums_first_title">首页显示板块列表</string>
+    <string name="setting_item_timeline_only_thread_title">信息流只显示主题</string>
+    <string name="setting_item_timeline_only_thread_summary">信息流（时间线）只显示主题</string>
+    <string name="setting_item_forum_list_grid_title">网格显示板块列表</string>
+    <string name="setting_item_forum_list_grid_summary">板块列表将以网格方式显示（不显示详细信息, 重启应用生效）</string>
+    <string name="setting_category_forum_title">论坛设置</string>
+    <string name="setting_item_image_download_policy_title">图片加载策略</string>
+    <string name="setting_item_avatar_download_policy_title">头像加载策略</string>
+    <string-array name="setting_image_download_policy_array">
+        <item>总是加载</item>
+        <item>永不加载</item>
+        <item>仅 WiFi 加载</item>
+    </string-array>
+    <string-array name="setting_image_download_policy_values_array">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="setting_item_post_extra_tail_text_default">来自龙的天空 Android 客户端</string>
+    <string name="setting_item_post_extra_tail_text_title">小尾巴</string>
+    <string name="setting_item_post_extra_tail_text_summary">设置你的小尾巴内容</string>
+    <string name="setting_item_scroll_by_volume_key_title">音量控制键滚动</string>
+    <string name="setting_item_scroll_by_volume_key_summary">在帖子页面中通过音量键控制滚动</string>
+    <string name="setting_category_other_title">其他</string>
+    <string name="setting_item_feedback_value">有关界面、功能改进的建议，或者错误报告都可以</string>
+    <string name="setting_item_feedback_title">建议与反馈</string>
+    <string name="setting_item_about_title">关于</string>
+    <string name="setting_item_version">版本</string>
+    <string name="setting_category_author_title">关于作者</string>
 </resources>

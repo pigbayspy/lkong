@@ -54,10 +54,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.post.list.PostListActivity"
             android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.setting.SettingActivity" />
     </application>
 
 </manifest>

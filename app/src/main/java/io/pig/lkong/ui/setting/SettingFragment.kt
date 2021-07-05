@@ -1,28 +1,16 @@
 package io.pig.lkong.ui.setting
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceFragmentCompat
 import io.pig.lkong.R
 
-class SettingFragment : Fragment() {
+class SettingFragment : PreferenceFragmentCompat() {
 
     private lateinit var viewModel: SettingViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_setting, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         viewModel = ViewModelProvider(this).get(SettingViewModel::class.java)
-        // TODO: Use the ViewModel
+        setPreferencesFromResource(R.xml.preference_settings, rootKey)
     }
-
 }

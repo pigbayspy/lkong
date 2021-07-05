@@ -26,6 +26,5 @@
     <fragment
         android:id="@+id/nav_setting"
         android:name="io.pig.lkong.ui.setting.SettingFragment"
-        android:label="@string/menu_setting"
-        tools:layout="@layout/fragment_setting" />
+        android:label="@string/menu_setting" />
 </navigation>
