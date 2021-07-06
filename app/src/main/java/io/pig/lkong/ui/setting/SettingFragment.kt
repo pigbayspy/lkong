@@ -1,8 +1,10 @@
 package io.pig.lkong.ui.setting
 
+import android.content.ContentResolver
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import io.pig.lkong.R
@@ -43,15 +45,29 @@ class SettingFragment : PreferenceFragmentCompat() {
                         newDuration
                     )
                 }
+                PrefConst.ENABLE_BACKGROUND_NOTIFICATION -> {
+                    val newIsAutoSync = sharedPreferences.getBoolean(key, true)
+                    val isCheckNoticeAutoSync = ContentResolver.getSyncAutomatically(
+                        userAccountManager.getCurrentUserAccount().account,
+                        SyncUtil.SYNC_AUTHORITY_CHECK_NOTICE
+                    )
+                    if (newIsAutoSync != isCheckNoticeAutoSync) {
+                        ContentResolver.setSyncAutomatically(
+                            userAccountManager.getCurrentUserAccount().account,
+                            SyncUtil.SYNC_AUTHORITY_CHECK_NOTICE, newIsAutoSync
+                        )
+                    }
+                }
             }
         }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         viewModel = ViewModelProvider(this).get(SettingViewModel::class.java)
-        setPreferencesFromResource(R.xml.preference_settings, rootKey)
+        setPreferencesFromResource(R.xml.preference_setting, rootKey)
         injectThis()
         setImagePolicySummary()
         setAvatarPolicySummary()
+        setupThemePreference()
 
         // 账户设置
         val syncPrefs: Preference = findPreference("prefs_goto_account_settings")!!
@@ -87,7 +103,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         val imageDownloadPolicy =
             downloadPolicyString.toInt()
         val policyArray =
-            requireActivity().resources.getStringArray(R.array.setting_image_download_policy_values_array)
+            requireActivity().resources.getStringArray(R.array.setting_image_download_policy_array)
         val imageDownloadPolicyPrefs: Preference =
             findPreference(PrefConst.IMAGE_DOWNLOAD_POLICY)!!
         imageDownloadPolicyPrefs.summary = policyArray[imageDownloadPolicy]
@@ -101,9 +117,18 @@ class SettingFragment : PreferenceFragmentCompat() {
         val imageDownloadPolicy =
             avatarPolicyString.toInt()
         val policyArray =
-            requireActivity().resources.getStringArray(R.array.setting_image_download_policy_values_array)
+            requireActivity().resources.getStringArray(R.array.setting_image_download_policy_array)
         val avatarDownloadPolicyPrefs: Preference =
             findPreference(PrefConst.AVATAR_DOWNLOAD_POLICY)!!
         avatarDownloadPolicyPrefs.summary = policyArray[imageDownloadPolicy]
+    }
+
+    private fun setupThemePreference() {
+        val themePreference: Preference = findPreference("prefs_theme")!!
+        themePreference.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                findNavController().navigate(R.id.fragment_theme_setting)
+                return@OnPreferenceClickListener true
+            }
     }
 }

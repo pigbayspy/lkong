@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_theme_setting">
+    <PreferenceCategory android:title="@string/setting_theme_base_theme">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="dark_theme"
+            android:persistent="true"
+            android:summary="@string/setting_theme_dark_theme_summary"
+            android:title="@string/setting_theme_dark_theme"
+            android:widgetLayout="@layout/layout_setting_theme_color_checkbox" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/setting_theme_colors">
+        <ColorPreference
+            android:key="primary_color"
+            android:persistent="false"
+            android:summary="@string/setting_theme_primary_color_summary"
+            android:title="@string/setting_theme_primary_color" />
+
+        <ColorPreference
+            android:key="accent_color"
+            android:persistent="false"
+            android:summary="@string/setting_theme_accent_color_summary"
+            android:title="@string/setting_theme_accent_color" />
+
+        <ColorPreference
+            android:key="text_primary"
+            android:persistent="false"
+            android:summary="@string/setting_theme_primary_text_color_summary"
+            android:title="@string/setting_theme_primary_text_color" />
+
+        <ColorPreference
+            android:key="text_secondary"
+            android:persistent="false"
+            android:summary="@string/setting_theme_secondary_text_color_summary"
+            android:title="@string/setting_theme_secondary_text_color" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/setting_theme_system_ui_colors">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="colored_status_bar"
+            android:persistent="false"
+            android:summary="@string/setting_theme_status_bar_color_summary"
+            android:title="@string/setting_theme_status_bar_color" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="colored_nav_bar"
+            android:persistent="false"
+            android:summary="@string/setting_theme_nav_bar_summary_color"
+            android:title="@string/setting_theme_nav_bar_color" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/setting_theme_light_ui_modes">
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/setting_theme_light_status_mode_entries"
+            android:entryValues="@array/setting_theme_light_status_mode_values"
+            android:key="light_status_bar_mode"
+            android:persistent="true"
+            android:title="@string/setting_theme_light_status_bar_mode" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/setting_theme_light_toolbar_mode_entries"
+            android:entryValues="@array/setting_theme_light_status_mode_values"
+            android:key="light_toolbar_mode"
+            android:persistent="true"
+            android:title="@string/setting_theme_light_toolbar_mode" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/setting_theme_text_size">
+        <Preference
+            android:key="text_size|subheading"
+            android:persistent="false"
+            android:summary="@string/setting_theme_subheading_text_size_desc"
+            android:title="@string/setting_theme_subheading_text_size" />
+
+        <Preference
+            android:key="text_size|body"
+            android:persistent="false"
+            android:summary="@string/setting_theme_body_text_size_desc"
+            android:title="@string/setting_theme_body_text_size" />
+
+        <Preference
+            android:enabled="false"
+            android:summary="@string/setting_theme_other_text_size_note" />
+    </PreferenceCategory>
+</PreferenceScreen>

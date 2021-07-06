@@ -36,4 +36,5 @@ object PrefConst {
 
     const val SCREEN_ROTATION_VALUE = "0"
 
+    const val ENABLE_BACKGROUND_NOTIFICATION = "prefs_enable_background_notification"
 }
