@@ -5,11 +5,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import io.pig.lkong.R
 import io.pig.lkong.account.const.AccountConst
 import io.pig.lkong.application.const.AppConst
 import io.pig.lkong.application.const.DataContract
+import io.pig.lkong.sync.SyncUtil
 import io.pig.lkong.ui.post.list.PostListActivity
 
 /**
@@ -26,6 +28,15 @@ object AppNavigation {
             activity.resources.getString(R.string.account_type),
             AccountConst.AT_TYPE_FULL_ACCESS
         )
+    }
+
+    fun navigateToManageAccount(activity: Activity) {
+        val intent = Intent(Settings.ACTION_SYNC_SETTINGS)
+        intent.putExtra(
+            Settings.EXTRA_AUTHORITIES,
+            arrayOf(SyncUtil.SYNC_AUTHORITY_CHECK_NOTICE)
+        )
+        activity.startActivity(intent)
     }
 
     fun navigateToFaq(activity: Activity) {

@@ -31,4 +31,9 @@ object PrefConst {
     const val IMAGE_DOWNLOAD_POLICY = "prefs_image_download_policy"
 
     const val IMAGE_DOWNLOAD_POLICY_VALUE = "0"
+
+    const val SCREEN_ROTATION = "prefs_screen_rotation"
+
+    const val SCREEN_ROTATION_VALUE = "0"
+
 }
