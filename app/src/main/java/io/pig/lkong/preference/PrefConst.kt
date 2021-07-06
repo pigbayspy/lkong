@@ -27,4 +27,8 @@ object PrefConst {
     const val FORUMS_IN_GRID = "prefs_forum_list_grid"
 
     const val FORUMS_IN_GRID_VALUE = false
+
+    const val IMAGE_DOWNLOAD_POLICY = "prefs_image_download_policy"
+
+    const val IMAGE_DOWNLOAD_POLICY_VALUE = "0"
 }
