@@ -6,10 +6,10 @@
         app:iconSpaceReserved="false">
 
         <Preference
-            android:icon="@drawable/ic_setting_account"
             android:key="prefs_goto_account_settings"
             android:summary="@string/setting_item_account_setting_summary"
-            android:title="@string/setting_item_account_setting_title" />
+            android:title="@string/setting_item_account_setting_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -20,18 +20,19 @@
         <Preference
             android:key="prefs_theme"
             android:summary="@string/setting_item_theme_color_summary"
-            android:title="@string/setting_item_theme_color_title" />
+            android:title="@string/setting_item_theme_color_title"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/setting_item_screen_rotation_title"
             android:entries="@array/setting_custom_rotation_title_array"
             android:entryValues="@array/setting_custom_rotation_value_array"
-            android:icon="@drawable/ic_setting_rotate"
             android:key="prefs_screen_rotation"
             android:persistent="true"
             android:summary="@string/setting_item_screen_rotation_summary"
-            android:title="@string/setting_item_screen_rotation_title" />
+            android:title="@string/setting_item_screen_rotation_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -44,7 +45,8 @@
             android:key="prefs_enable_background_notification"
             android:persistent="true"
             android:summary="@string/setting_item_enable_background_notify_summary"
-            android:title="@string/setting_item_enable_background_notify_title" />
+            android:title="@string/setting_item_enable_background_notify_title"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="1800"
@@ -54,7 +56,8 @@
             android:key="prefs_check_notification_duration"
             android:persistent="true"
             android:summary="@string/setting_item_check_notify_duration_summary"
-            android:title="@string/setting_item_check_notify_duration_title" />
+            android:title="@string/setting_item_check_notify_duration_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -67,21 +70,24 @@
             android:key="prefs_use_forums_first"
             android:persistent="true"
             android:summary="@string/setting_item_use_forums_first_summary"
-            android:title="@string/setting_item_use_forums_first_title" />
+            android:title="@string/setting_item_use_forums_first_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="prefs_timeline_only_thread"
             android:persistent="true"
             android:summary="@string/setting_item_timeline_only_thread_summary"
-            android:title="@string/setting_item_timeline_only_thread_title" />
+            android:title="@string/setting_item_timeline_only_thread_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="prefs_forum_list_grid"
             android:persistent="true"
             android:summary="@string/setting_item_forum_list_grid_summary"
-            android:title="@string/setting_item_forum_list_grid_title" />
+            android:title="@string/setting_item_forum_list_grid_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -96,7 +102,8 @@
             android:entryValues="@array/setting_image_download_policy_values_array"
             android:key="prefs_image_download_policy"
             android:persistent="true"
-            android:title="@string/setting_item_image_download_policy_title" />
+            android:title="@string/setting_item_image_download_policy_title"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="0"
@@ -105,20 +112,23 @@
             android:entryValues="@array/setting_image_download_policy_values_array"
             android:key="prefs_avatar_download_policy"
             android:persistent="true"
-            android:title="@string/setting_item_avatar_download_policy_title" />
+            android:title="@string/setting_item_avatar_download_policy_title"
+            app:iconSpaceReserved="false" />
 
         <EditTextPreference
             android:defaultValue="@string/setting_item_post_extra_tail_text_default"
             android:key="prefs_post_extra_tail_text"
             android:summary="@string/setting_item_post_extra_tail_text_summary"
-            android:title="@string/setting_item_post_extra_tail_text_title" />
+            android:title="@string/setting_item_post_extra_tail_text_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="prefs_scroll_by_volume_key"
             android:persistent="true"
             android:summary="@string/setting_item_scroll_by_volume_key_summary"
-            android:title="@string/setting_item_scroll_by_volume_key_title" />
+            android:title="@string/setting_item_scroll_by_volume_key_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -127,10 +137,10 @@
         app:iconSpaceReserved="false">
 
         <Preference
-            android:icon="@drawable/ic_setting_feedback"
             android:key="prefs_feedback"
             android:summary="@string/setting_item_feedback_value"
-            android:title="@string/setting_item_feedback_title" />
+            android:title="@string/setting_item_feedback_title"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
@@ -141,9 +151,12 @@
         <Preference
             android:key="prefs_about_version"
             android:summary=""
-            android:title="@string/setting_item_version" />
+            android:title="@string/setting_item_version"
+            app:iconSpaceReserved="false" />
 
-        <Preference android:title="@string/setting_category_author_title">
+        <Preference
+            android:title="@string/setting_category_author_title"
+            app:iconSpaceReserved="false">
             <intent
                 android:targetClass="io.pig.lkong.ui.setting.SettingActivity"
                 android:targetPackage="io.pig.lkong">
