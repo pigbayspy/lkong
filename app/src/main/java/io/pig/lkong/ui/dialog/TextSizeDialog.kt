@@ -1,6 +1,5 @@
 package io.pig.lkong.ui.dialog
 
-import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.util.TypedValue
@@ -21,7 +20,7 @@ class TextSizeDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = MaterialDialog(requireContext())
             .customView(R.layout.layout_dialog_text_size, scrollable = true)
-            .title(requireArguments().getInt(KEY_TITLE))
+            .title(text = requireArguments().getString(KEY_TITLE))
             .positiveButton(android.R.string.ok)
             .negativeButton(android.R.string.cancel)
             .neutralButton(R.string.setting_theme_default_value)
@@ -73,13 +72,13 @@ class TextSizeDialog : DialogFragment() {
 
         fun show(
             context: FragmentActivity, textSizeMode: String,
-            ateKey: String, title: Int, recreateOnApply: Boolean
+            themeKey: String, title: CharSequence, recreateOnApply: Boolean
         ) {
             val dialog = TextSizeDialog()
             val args = Bundle()
             args.putString(KEY_MODE, textSizeMode)
-            args.putString(KEY_THEME_KEY, ateKey)
-            args.putInt(KEY_TITLE, title)
+            args.putString(KEY_THEME_KEY, themeKey)
+            args.putString(KEY_TITLE, title as String)
             args.putBoolean(KEY_RECREATE, recreateOnApply)
             dialog.arguments = args
             dialog.show(context.supportFragmentManager, TAG)

@@ -78,6 +78,7 @@ dependencies {
 
     // dialog
     implementation dependency.dialog
+    implementation dependency.colorDialog
 
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'

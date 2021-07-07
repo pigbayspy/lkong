@@ -32,35 +32,35 @@ object TextSizeUtil {
         key: String,
         mode: String
     ): Int {
-        var size: Int = ThemeUtil.prefs(context, key).getInt(mode, 0)
+        var size: Int = ThemeUtil.pref(context, key).getInt(mode, 0)
         if (size == 0) {
             size = when (mode) {
                 TEXT_SIZE_CAPTION -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_caption
+                    R.dimen.theme_default_text_size_caption
                 )
-               TEXT_SIZE_BODY -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_body
+                TEXT_SIZE_BODY -> context.resources.getDimensionPixelSize(
+                    R.dimen.theme_default_text_size_body
                 )
                 TEXT_SIZE_SUBHEADING -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_subheading
+                    R.dimen.theme_default_text_size_subheading
                 )
                 TEXT_SIZE_TITLE -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_title
+                    R.dimen.theme_default_text_size_title
                 )
                 TEXT_SIZE_HEADLINE -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_headline
+                    R.dimen.theme_default_text_size_headline
                 )
                 TEXT_SIZE_DISPLAY1 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display1
+                    R.dimen.theme_default_text_size_display1
                 )
                 TEXT_SIZE_DISPLAY2 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display2
+                    R.dimen.theme_default_text_size_display2
                 )
                 TEXT_SIZE_DISPLAY3 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display3
+                    R.dimen.theme_default_text_size_display3
                 )
                 TEXT_SIZE_DISPLAY4 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display4
+                    R.dimen.theme_default_text_size_display4
                 )
                 else -> throw IllegalArgumentException("Unknown text size mode: $mode")
             }

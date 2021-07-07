@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import io.pig.lkong.R
@@ -16,6 +15,7 @@ import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.ScreenOrientationSettingsChangeEvent
 import io.pig.lkong.sync.SyncUtil
 import javax.inject.Inject
+
 
 class SettingFragment : PreferenceFragmentCompat() {
 
@@ -127,7 +127,11 @@ class SettingFragment : PreferenceFragmentCompat() {
         val themePreference: Preference = findPreference("prefs_theme")!!
         themePreference.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                findNavController().navigate(R.id.fragment_theme_setting)
+                val themeSettingFragment = ThemeSettingFragment()
+                val fragmentManager = parentFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.fragment_setting, themeSettingFragment)
+                fragmentTransaction.commit()
                 return@OnPreferenceClickListener true
             }
     }

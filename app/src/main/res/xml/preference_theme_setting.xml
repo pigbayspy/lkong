@@ -12,25 +12,25 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_theme_colors">
-        <ColorPreference
+        <io.pig.ui.common.ColorPreference
             android:key="primary_color"
             android:persistent="false"
             android:summary="@string/setting_theme_primary_color_summary"
             android:title="@string/setting_theme_primary_color" />
 
-        <ColorPreference
+        <io.pig.ui.common.ColorPreference
             android:key="accent_color"
             android:persistent="false"
             android:summary="@string/setting_theme_accent_color_summary"
             android:title="@string/setting_theme_accent_color" />
 
-        <ColorPreference
+        <io.pig.ui.common.ColorPreference
             android:key="text_primary"
             android:persistent="false"
             android:summary="@string/setting_theme_primary_text_color_summary"
             android:title="@string/setting_theme_primary_text_color" />
 
-        <ColorPreference
+        <io.pig.ui.common.ColorPreference
             android:key="text_secondary"
             android:persistent="false"
             android:summary="@string/setting_theme_secondary_text_color_summary"

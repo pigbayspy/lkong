@@ -50,6 +50,7 @@ ext {
             glideProcessor    : "com.github.bumptech.glide:compiler:$glideVersion",
 
             // dialog
-            dialog : "com.afollestad.material-dialogs:core:$materialDialogVersion"
+            dialog            : "com.afollestad.material-dialogs:core:$materialDialogVersion",
+            colorDialog       : "com.afollestad.material-dialogs:color:$materialDialogVersion"
     ]
 }
