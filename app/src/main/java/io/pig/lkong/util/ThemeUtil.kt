@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import io.pig.lkong.R
+import io.pig.lkong.theme.ThemeConfig
 
 /**
  * @author yinhang
@@ -58,67 +59,30 @@ object ThemeUtil {
     }
 
     @ColorInt
-    fun textColorSecondary(context: Context,key: String): Int {
+    fun textColorSecondary(context: Context, key: String): Int {
         return prefs(context, key).getInt(
             KEY_TEXT_COLOR_SECONDARY,
             resolveColor(context, android.R.attr.textColorSecondary)
         )
     }
 
-    fun coloredStatusBar( context: Context,key: String): Boolean {
+    fun coloredStatusBar(context: Context, key: String): Boolean {
         return prefs(context, key)
             .getBoolean(KEY_APPLY_PRIMARY_DARK_STATUS_BAR, true)
     }
 
-    fun coloredNavigationBar( context: Context, key: String): Boolean {
+    fun coloredNavigationBar(context: Context, key: String): Boolean {
         return prefs(context, key)
             .getBoolean(KEY_APPLY_PRIMARY_NAV_BAR, false)
     }
 
-    fun textSizeForMode(
-        context: Context,
-        key: String,
-        mode: String
-    ): Int {
-        var size: Int = prefs(context, key).getInt(mode, 0)
-        if (size == 0) {
-            size = when (mode) {
-                com.afollestad.appthemeengine.Config.TEXTSIZE_CAPTION -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_caption
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_BODY -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_body
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_SUBHEADING -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_subheading
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_TITLE -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_title
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_HEADLINE -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_headline
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_DISPLAY1 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display1
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_DISPLAY2 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display2
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_DISPLAY3 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display3
-                )
-                com.afollestad.appthemeengine.Config.TEXTSIZE_DISPLAY4 -> context.resources.getDimensionPixelSize(
-                    R.dimen.ate_default_textsize_display4
-                )
-                else -> throw IllegalArgumentException(
-                    String.format(
-                        "Unknown text size mode: %s",
-                        mode
-                    )
-                )
-            }
-        }
-        return size
+    fun pref(context: Context, key: String): SharedPreferences {
+        return context.getSharedPreferences(
+            String.format(
+                CONFIG_PREFS_KEY_CUSTOM,
+                key
+            ), Context.MODE_PRIVATE
+        )
     }
 
     private fun prefs(
@@ -132,6 +96,10 @@ object ThemeUtil {
             ) else CONFIG_PREFS_KEY_DEFAULT,
             Context.MODE_PRIVATE
         )
+    }
+
+    fun markChanged(context: Context, key: String) {
+        ThemeConfig(context, key).commit()
     }
 
     private fun resolveColor(context: Context, attr: Int): Int {

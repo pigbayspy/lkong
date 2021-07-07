@@ -76,6 +76,9 @@ dependencies {
     implementation dependency.glide
     kapt dependency.glideProcessor
 
+    // dialog
+    implementation dependency.dialog
+
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }

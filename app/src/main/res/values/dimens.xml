@@ -22,4 +22,7 @@
     <!-- card -->
     <dimen name="default_card_elevation">2dp</dimen>
     <dimen name="default_card_radius">2dp</dimen>
+
+    <!-- dialog -->
+    <dimen name="dialog_content_inset">16dp</dimen>
 </resources>
