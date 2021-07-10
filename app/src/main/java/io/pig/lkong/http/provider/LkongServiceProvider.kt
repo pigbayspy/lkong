@@ -6,6 +6,7 @@ import io.pig.lkong.http.cookie.CookieManager
 import io.pig.lkong.http.cookie.impl.InMemoryCookieStore
 import io.pig.lkong.http.spec.LkongSpec
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -25,7 +26,10 @@ object LkongServiceProvider {
 
     init {
         lkongCookie = InMemoryCookieStore()
+        val logging = HttpLoggingInterceptor()
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         httpClient = OkHttpClient.Builder()
+            .addInterceptor(logging)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .cookieJar(lkongCookie)

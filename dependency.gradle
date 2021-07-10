@@ -40,6 +40,7 @@ ext {
 
             // http
             okHttp            : "com.squareup.okhttp3:okhttp:$okHttpVersion",
+            okHttpLogging     : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
             retrofit          : "com.squareup.retrofit2:retrofit:$retrofitVersion",
             retrofitGson      : "com.squareup.retrofit2:converter-gson:$retrofitVersion",
             // json

@@ -1,7 +1,7 @@
 package io.pig.test
 
-import io.pig.lkong.http.data.LkongSignReq
 import io.pig.lkong.http.source.LkongRepository
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -13,15 +13,15 @@ import kotlin.test.assertTrue
 class TestSignIn {
 
     @Test
-    fun testSignIn() {
+    fun testSignIn(): Unit = runBlocking {
         val userEmail = "469608745@qq.com"
         val password = "WODESHENGRI19970720"
-        val signInReq = LkongSignReq(userEmail, password)
-        val resp = LkongRepository.signIn(signInReq)
+        val resp = LkongRepository.sign(userEmail, password)
         assertNotNull(resp, "返回数据不为空")
-        assertTrue(resp.success, "登录失败")
-        assertTrue(resp.name.isNotEmpty(), "登录失败")
-        assertTrue(resp.yousuu.isNotEmpty(), "登录失败")
-        assertTrue(resp.authCookie.isNotEmpty(), "登录失败")
+        val respData = resp.data
+        assertNotNull(respData, "登录失败")
+        val signResp = respData.login
+        assertNotNull(signResp, "登录失败")
+        assertTrue(signResp.name.isNotEmpty(), "登录失败")
     }
 }

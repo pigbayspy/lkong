@@ -4,4 +4,12 @@
         <attr name="theme_key_pref_color" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="FixedAspectRatioAttr">
+        <attr name="far_fixed_orientation" format="enum">
+            <enum name="vertical" value="0" />
+            <enum name="horizontal" value="1" />
+        </attr>
+        <attr name="far_height_weight" format="integer"/>
+        <attr name="far_width_weight" format="integer"/>
+    </declare-styleable>
 </resources>

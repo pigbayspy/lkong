@@ -32,6 +32,14 @@ object ImageLoaderUtil {
             .into(target)
     }
 
+    fun loadForumIcon(context: Context, target: ImageView, iconUrl: String) {
+        Glide.with(context)
+            .load(iconUrl)
+            .placeholder(R.drawable.ic_forum_loading)
+            .error(R.drawable.ic_forum_error)
+            .into(target)
+    }
+
     private fun toSmallAvatar(url: String): String {
         return if (!NetworkUtil.isWifiConnect())
             url.replace(

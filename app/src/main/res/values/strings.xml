@@ -12,6 +12,7 @@
     <string name="nav_header_desc">头像</string>
     <string name="thread_avatar_desc">头像</string>
     <string name="image_avatar_desc">头像</string>
+    <string name="forum_icon_desc">板块</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>
@@ -192,4 +193,9 @@
     <string name="setting_theme_subheading_text_size_desc">将字体大小应用到所有子标题, %ddp</string>
     <string name="setting_theme_body_text_size_desc">将字体大小应用到所有正文 %ddp</string>
     <string name="setting_theme_default_value">默认</string>
+
+    <!-- format -->
+    <string name="format_unit_ten_kilo">万</string>
+    <string name="format_forum_item_summary">今日 %s</string>
+
 </resources>

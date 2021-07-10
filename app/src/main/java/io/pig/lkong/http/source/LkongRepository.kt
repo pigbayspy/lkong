@@ -2,6 +2,11 @@ package io.pig.lkong.http.source
 
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.*
+import io.pig.lkong.http.data.req.ForumReq
+import io.pig.lkong.http.data.req.SignReq
+import io.pig.lkong.http.data.resp.ForumResp
+import io.pig.lkong.http.data.resp.RespBase
+import io.pig.lkong.http.data.resp.SignResp
 import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.http.util.CookieUtil
 import okhttp3.MultipartBody
@@ -29,9 +34,14 @@ object LkongRepository {
         return lkongSpec.getPostList(postListReq.sars, postListReq.mod)
     }
 
-    suspend fun getForumInfo(forumId: Long): LkongForumInfoResp {
-        val forumInfoReq = LkongForumInfoReq(forumId)
-        return lkongSpec.getForumInfo(forumInfoReq.action, forumInfoReq.mod)
+    suspend fun getForums(): RespBase<ForumResp> {
+        val forumReq = ForumReq()
+        return lkongSpec.getForums(forumReq)
+    }
+
+    suspend fun sign(email: String, password: String): RespBase<SignResp> {
+        val signReq = SignReq(email, password)
+        return lkongSpec.signIn(signReq)
     }
 
     fun signIn(signInReq: LkongSignReq): LkongAuthResp {

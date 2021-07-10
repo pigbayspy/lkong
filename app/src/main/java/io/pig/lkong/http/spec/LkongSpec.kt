@@ -2,6 +2,11 @@ package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.*
+import io.pig.lkong.http.data.req.ForumReq
+import io.pig.lkong.http.data.req.SignReq
+import io.pig.lkong.http.data.resp.ForumResp
+import io.pig.lkong.http.data.resp.RespBase
+import io.pig.lkong.http.data.resp.SignResp
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -32,9 +37,9 @@ interface LkongSpec {
         @Query("mod") mod: String
     ): LkongPostListResp
 
-    @GET(RestApiConst.BASE_API)
-    suspend fun getForumInfo(
-        @Query("action") action: String,
-        @Query("mod") mod: String
-    ): LkongForumInfoResp
+    @POST("/graphql")
+    suspend fun signIn(@Body signReq: SignReq): RespBase<SignResp>
+
+    @POST("/graphql")
+    suspend fun getForums(@Body forumReq: ForumReq): RespBase<ForumResp>
 }

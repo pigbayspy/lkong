@@ -6,7 +6,7 @@ package io.pig.lkong.http.const
  */
 object RestApiConst {
 
-    const val LKONG_HOST = "http://lkong.cn"
+    const val LKONG_HOST = "http://api.lkong.com"
 
     const val BASE_API = "/index.php"
 
