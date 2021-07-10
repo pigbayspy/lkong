@@ -12,11 +12,11 @@ import io.pig.lkong.R
  */
 class ColorPreference(context: Context, attrs: AttributeSet) : Preference(context, attrs) {
 
-    private val themeKey:String
+    private val themeKey: String
 
     init {
         layoutResource = R.layout.layout_theme_layout_custom
-        widgetLayoutResource = R.layout.ate_preference_color
+        widgetLayoutResource = R.layout.layout_setting_preference_color
         isPersistent = false
 
         val a =

@@ -38,4 +38,7 @@
     <dimen name="theme_default_text_size_caption">12sp</dimen>
 
     <dimen name="theme_preference_inset">16dp</dimen>
+
+    <!-- setting -->
+    <dimen name="setting_theme_circle_view_border">1dp</dimen>
 </resources>
