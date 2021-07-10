@@ -12,7 +12,10 @@ import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_NAME
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_TYPE
 import io.pig.lkong.account.const.AccountConst.KEY_AUTH_TYPE
 import io.pig.lkong.account.const.AccountConst.KEY_IS_ADDING_NEW_ACCOUNT
+import io.pig.lkong.http.source.LkongRepository
 import io.pig.lkong.ui.activity.SignInActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * @author yinhang
@@ -32,10 +35,11 @@ class LkongAuthenticator(private val context: Context) :
         if (authToken.isNullOrEmpty()) {
             val password = accountMgr.getPassword(account)
             if (password.isNotEmpty()) {
-                val serverAuthenticate = LkongServerAuthenticate()
-                val result = serverAuthenticate.signIn(account.name, password)
-                if (result.authCookie.isNotEmpty()) {
-                    authToken = result.authCookie
+                GlobalScope.launch {
+                    val result = LkongRepository.signIn(account.name, password)
+                    if (result.authCookie.isNotEmpty()) {
+                        authToken = result.authCookie
+                    }
                 }
             }
         }

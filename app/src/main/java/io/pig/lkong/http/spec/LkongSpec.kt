@@ -9,6 +9,7 @@ import io.pig.lkong.http.data.resp.RespBase
 import io.pig.lkong.http.data.resp.SignResp
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -28,9 +29,6 @@ interface LkongSpec {
     @GET(RestApiConst.GET_HOST)
     suspend fun getHot(): LkongHotThreadResp
 
-    @POST(RestApiConst.SIGN_URL)
-    fun signIn(@Body body: RequestBody): Call<LkongSignResp>
-
     @GET(RestApiConst.BASE_API)
     suspend fun getPostList(
         @Query("sars") sars: String,
@@ -38,7 +36,7 @@ interface LkongSpec {
     ): LkongPostListResp
 
     @POST("/graphql")
-    suspend fun signIn(@Body signReq: SignReq): RespBase<SignResp>
+    suspend fun signIn(@Body signReq: SignReq): Response<RespBase<SignResp>>
 
     @POST("/graphql")
     suspend fun getForums(@Body forumReq: ForumReq): RespBase<ForumResp>

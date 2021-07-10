@@ -6,10 +6,8 @@ import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.SignReq
 import io.pig.lkong.http.data.resp.ForumResp
 import io.pig.lkong.http.data.resp.RespBase
-import io.pig.lkong.http.data.resp.SignResp
 import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.http.util.CookieUtil
-import okhttp3.MultipartBody
 
 /**
  * @author yinhang
@@ -39,31 +37,20 @@ object LkongRepository {
         return lkongSpec.getForums(forumReq)
     }
 
-    suspend fun sign(email: String, password: String): RespBase<SignResp> {
+    suspend fun signIn(email: String, password: String): LkongSignInResp {
         val signReq = SignReq(email, password)
-        return lkongSpec.signIn(signReq)
-    }
-
-    fun signIn(signInReq: LkongSignReq): LkongAuthResp {
-        val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("action", signInReq.action)
-            .addFormDataPart("email", signInReq.email)
-            .addFormDataPart("password", signInReq.password)
-            .addFormDataPart("rememberme", signInReq.rememberMe)
-            .build()
-        val response = lkongSpec.signIn(requestBody).execute()
-        val responseBody = response.body()!!
-        val authCookie = getCookie("auth")
-        val discussCookie = getCookie("dzsbhey")
-        return LkongAuthResp(
-            responseBody.name,
-            responseBody.uid,
-            responseBody.yousuu,
-            responseBody.success,
-            authCookie,
-            discussCookie
-        )
+        val response = lkongSpec.signIn(signReq)
+        val body = response.body()
+        if (response.isSuccessful && body != null) {
+            val authCookie = getCookie("EGG_SESS")
+            return LkongSignInResp(
+                body.data.login.name,
+                body.data.login.uid,
+                success = true,
+                authCookie
+            )
+        }
+        return LkongSignInResp(success = false)
     }
 
     private fun getCookie(key: String): String {

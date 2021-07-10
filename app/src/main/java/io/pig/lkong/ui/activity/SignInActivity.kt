@@ -12,9 +12,9 @@ import android.view.WindowManager
 import android.widget.ProgressBar
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.pig.lkong.R
-import io.pig.lkong.account.LkongServerAuthenticate
 import io.pig.lkong.account.commom.AccountAuthenticatorActivity
 import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
 import io.pig.lkong.account.const.AccountConst.AT_TYPE_FULL_ACCESS
@@ -27,6 +27,7 @@ import io.pig.lkong.account.const.AccountConst.KEY_ERROR_MESSAGE
 import io.pig.lkong.account.const.AccountConst.KEY_IS_ADDING_NEW_ACCOUNT
 import io.pig.lkong.account.const.AccountConst.PARAM_USER_PASS
 import io.pig.lkong.databinding.ActivitySignInBinding
+import io.pig.lkong.http.source.LkongRepository
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.snack.em.SnackTypeEnum
 import io.pig.lkong.ui.snack.util.SnackBarUtil
@@ -35,6 +36,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 
 /**
@@ -117,26 +119,26 @@ class SignInActivity : AccountAuthenticatorActivity() {
                 val userPassword = password.toString()
 
                 // 构建请求
-                val serverAuthenticate = LkongServerAuthenticate()
-                val signResult = serverAuthenticate.signIn(userName, userPassword)
+                lifecycleScope.launch {
+                    val signResult = LkongRepository.signIn(userName, userPassword)
+                    val accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE)
 
-                val accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE)
+                    // 构建 Bundle
+                    val data = Bundle()
+                    data.putString(AccountManager.KEY_ACCOUNT_NAME, userName)
+                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+                    data.putString(PARAM_USER_PASS, userPassword)
+                    data.putString(KEY_ACCOUNT_USER_ID, signResult.uid.toString())
+                    data.putString(KEY_ACCOUNT_USER_NAME, signResult.name)
+                    data.putString(KEY_ACCOUNT_USER_AVATAR, signResult.avatar)
+                    data.putString(KEY_ACCOUNT_USER_AUTH, signResult.authCookie)
 
-                // 构建 Bundle
-                val data = Bundle()
-                data.putString(AccountManager.KEY_ACCOUNT_NAME, userName)
-                data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
-                data.putString(PARAM_USER_PASS, userPassword)
-                data.putString(KEY_ACCOUNT_USER_ID, signResult.uid.toString())
-                data.putString(KEY_ACCOUNT_USER_NAME, signResult.name)
-                data.putString(KEY_ACCOUNT_USER_AVATAR, signResult.avatar)
-                data.putString(KEY_ACCOUNT_USER_AUTH, signResult.authCookie)
-
-                // 构建 intent
-                val intent = Intent()
-                intent.putExtras(data)
-                it.onNext(intent)
-                it.onComplete()
+                    // 构建 intent
+                    val intent = Intent()
+                    intent.putExtras(data)
+                    it.onNext(intent)
+                    it.onComplete()
+                }
             }.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<Intent> {
