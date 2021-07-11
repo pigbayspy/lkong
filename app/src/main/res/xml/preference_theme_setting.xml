@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_theme_setting">
     <PreferenceCategory android:title="@string/setting_theme_base_theme">
         <SwitchPreference
@@ -16,25 +17,29 @@
             android:key="primary_color"
             android:persistent="false"
             android:summary="@string/setting_theme_primary_color_summary"
-            android:title="@string/setting_theme_primary_color" />
+            android:title="@string/setting_theme_primary_color"
+            app:theme_key_pref_color="?theme_key" />
 
         <io.pig.ui.common.ColorPreference
             android:key="accent_color"
             android:persistent="false"
             android:summary="@string/setting_theme_accent_color_summary"
-            android:title="@string/setting_theme_accent_color" />
+            android:title="@string/setting_theme_accent_color"
+            app:theme_key_pref_color="?theme_key" />
 
         <io.pig.ui.common.ColorPreference
             android:key="text_primary"
             android:persistent="false"
             android:summary="@string/setting_theme_primary_text_color_summary"
-            android:title="@string/setting_theme_primary_text_color" />
+            android:title="@string/setting_theme_primary_text_color"
+            app:theme_key_pref_color="?theme_key" />
 
         <io.pig.ui.common.ColorPreference
             android:key="text_secondary"
             android:persistent="false"
             android:summary="@string/setting_theme_secondary_text_color_summary"
-            android:title="@string/setting_theme_secondary_text_color" />
+            android:title="@string/setting_theme_secondary_text_color"
+            app:theme_key_pref_color="?theme_key" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_theme_system_ui_colors">

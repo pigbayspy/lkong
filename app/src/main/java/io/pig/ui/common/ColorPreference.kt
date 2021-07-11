@@ -2,9 +2,11 @@ package io.pig.ui.common
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import io.pig.lkong.R
+import io.pig.ui.BorderCircleView
 
 /**
  * @author yinhang
@@ -13,6 +15,9 @@ import io.pig.lkong.R
 class ColorPreference(context: Context, attrs: AttributeSet) : Preference(context, attrs) {
 
     private val themeKey: String
+    private var border: Int = 0
+    private var color = 0
+    private var view: View? = null
 
     init {
         layoutResource = R.layout.layout_theme_layout_custom
@@ -28,7 +33,30 @@ class ColorPreference(context: Context, attrs: AttributeSet) : Preference(contex
         }
     }
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
+        this.view = holder.itemView
+        invalidateColor()
+    }
+
+    fun setColor(color: Int, border: Int) {
+        this.color = color
+        this.border = border
+        invalidateColor()
+    }
+
+    private fun invalidateColor() {
+        view?.apply {
+            val circleView:View = findViewById(R.id.setting_preference_color_circle)
+            if (circleView is BorderCircleView) {
+                if (color != 0) {
+                    circleView.setVisibility(View.VISIBLE)
+                    circleView.setBackgroundColor(color)
+                    circleView.setBorderColor(border)
+                } else {
+                    circleView.setVisibility(View.GONE)
+                }
+            }
+        }
     }
 }

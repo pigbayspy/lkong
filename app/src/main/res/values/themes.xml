@@ -14,22 +14,52 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.Lkong.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Lkong.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="Theme.Lkong.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="theme_key">light_theme</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/colorPrimaryLightDefault</item>
         <item name="colorAccent">@color/colorAccentLightDefault</item>
     </style>
 
-    <style name="Theme.Lkong.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.Lkong.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="AppTheme.Translucent">
+        <item name="theme_key">light_theme</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="AppTheme.NoTranslucent">
+        <item name="theme_key">light_theme</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <!-- dark mode -->
+    <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="theme_key">dark_theme</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/colorPrimaryDarkDefault</item>
+        <item name="colorAccent">@color/colorAccentDarkDefault</item>
+        <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat</item>
+    </style>
+
+    <style name="AppThemeDark.NoTranslucent">
+        <item name="theme_key">dark_theme</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat</item>
+    </style>
+
+    <style name="AppThemeDark.Translucent">
+        <item name="theme_key">dark_theme</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat</item>
     </style>
 </resources>

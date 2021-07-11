@@ -111,4 +111,10 @@ class BorderCircleView(
             check.draw(canvas!!)
         }
     }
+
+    fun setBorderColor(color: Int) {
+        paintBorder.color = color
+        requestLayout()
+        invalidate()
+    }
 }

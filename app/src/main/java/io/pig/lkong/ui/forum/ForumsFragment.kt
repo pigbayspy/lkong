@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentForumsBinding
 import io.pig.lkong.model.ForumModel
 import io.pig.lkong.preference.BoolPrefs
@@ -49,9 +50,18 @@ class ForumsFragment : Fragment() {
         showInGridPrefs = Prefs.getBoolPrefs(FORUMS_IN_GRID, FORUMS_IN_GRID_VALUE)
     }
 
+    private fun getLayoutManager(): GridLayoutManager {
+        val res = if (showInGridPrefs.get()) {
+            R.integer.fragment_forum_grid_count
+        } else {
+            R.integer.fragment_forum_list_column_count
+        }
+        val spanCount = resources.getInteger(res)
+        return GridLayoutManager(requireActivity(), spanCount)
+    }
+
     private fun refreshForumList(forums: List<ForumModel>) {
-        selfBinding.recycleListForum.layoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        selfBinding.recycleListForum.layoutManager = getLayoutManager()
         selfBinding.recycleListForum.adapter =
             ForumListAdapter(requireActivity(), showInGridPrefs.get(), forums)
     }

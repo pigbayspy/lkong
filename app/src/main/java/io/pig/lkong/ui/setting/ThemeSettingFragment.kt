@@ -1,9 +1,11 @@
 package io.pig.lkong.ui.setting
 
+import android.graphics.Color
 import android.graphics.Color.*
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.color.colorChooser
 import io.pig.lkong.R
@@ -11,6 +13,7 @@ import io.pig.lkong.theme.ThemeConfig
 import io.pig.lkong.ui.dialog.TextSizeDialog
 import io.pig.lkong.util.TextSizeUtil
 import io.pig.lkong.util.ThemeUtil
+import io.pig.ui.common.ColorPreference
 import io.pig.ui.common.getThemeKey
 
 class ThemeSettingFragment : PreferenceFragmentCompat() {
@@ -38,8 +41,8 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
             }
             return@setOnPreferenceClickListener true
         }
-        val accentColorPref: Preference = findPreference("accent_color")!!
-        // accentColorPref.setColor(ThemeUtil.accentColor(attachActivity, themeKey), Color.BLACK)
+        val accentColorPref: ColorPreference = findPreference("accent_color")!!
+        accentColorPref.setColor(ThemeUtil.accentColor(attachActivity, themeKey), Color.BLACK)
         accentColorPref.setOnPreferenceClickListener {
             MaterialDialog(attachActivity).show {
                 title(R.string.setting_theme_accent_color)
@@ -101,18 +104,18 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 .apply(attachActivity)
             return@setOnPreferenceChangeListener true
         }
-        val statusBarPref: Preference =
+        val statusBarPref: SwitchPreference =
             findPreference("colored_status_bar")!!
-        val navBarPref: Preference =
+        val navBarPref: SwitchPreference =
             findPreference("colored_nav_bar")!!
-        // statusBarPref.setChecked(ThemeUtil.coloredStatusBar(attachActivity, themeKey))
+        statusBarPref.isChecked = ThemeUtil.coloredStatusBar(attachActivity, themeKey)
         statusBarPref.setOnPreferenceChangeListener { _, newValue ->
             ThemeConfig(attachActivity, themeKey)
                 .coloredStatusBar(newValue as Boolean)
                 .apply(attachActivity)
             return@setOnPreferenceChangeListener true
         }
-        // navBarPref.setChecked(ThemeUtil.coloredNavigationBar(attachActivity, themeKey))
+        navBarPref.isChecked = ThemeUtil.coloredNavigationBar(attachActivity, themeKey)
         navBarPref.setOnPreferenceChangeListener { _, newValue ->
             ThemeConfig(attachActivity, themeKey)
                 .coloredNavigationBar(newValue as Boolean)
@@ -130,32 +133,6 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 )
                 return@OnPreferenceClickListener false
             }
-        val textSizeHeadline: Preference = findPreference("text_size|headline")!!
-
-        textSizeHeadline.onPreferenceClickListener = textSizeClickListener
-        textSizeHeadline.summary = getString(
-            R.string.setting_theme_headline_text_size_desc,
-            TextSizeUtil.pxToSp(
-                this,
-                TextSizeUtil.textSizeForMode(
-                    attachActivity,
-                    themeKey,
-                    TextSizeUtil.TEXT_SIZE_HEADLINE
-                )
-            )
-        )
-
-        val textSizeTitle: Preference = findPreference("text_size|title")!!
-
-        textSizeTitle.onPreferenceClickListener = textSizeClickListener
-        textSizeTitle.summary = getString(
-            R.string.setting_theme_title_text_size_desc,
-            TextSizeUtil.pxToSp(
-                this,
-                TextSizeUtil.textSizeForMode(attachActivity, themeKey, TextSizeUtil.TEXT_SIZE_TITLE)
-            )
-        )
-
         val textSizeSubheading: Preference = findPreference("text_size|subheading")!!
         textSizeSubheading.onPreferenceClickListener = textSizeClickListener
         textSizeSubheading.summary = getString(
@@ -179,6 +156,5 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 TextSizeUtil.textSizeForMode(attachActivity, themeKey, TextSizeUtil.TEXT_SIZE_BODY)
             )
         )
-
     }
 }
