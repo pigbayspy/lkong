@@ -41,4 +41,7 @@
 
     <!-- setting -->
     <dimen name="setting_theme_circle_view_border">1dp</dimen>
+
+    <!-- elevation -->
+    <dimen name="toolbar_elevation">4dp</dimen>
 </resources>

@@ -3,6 +3,7 @@ package io.pig.lkong
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,8 +29,12 @@ import io.pig.lkong.preference.StringPrefs
 import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.AccountChangeEvent
 import io.pig.lkong.sync.SyncUtil
+import io.pig.lkong.theme.ThemeConfig
 import io.pig.lkong.ui.main.MainViewModel
 import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.lkong.util.TextSizeUtil
+import io.pig.lkong.util.ThemeUtil
+import io.pig.ui.common.processToolbar
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -55,6 +60,19 @@ class MainActivity : AppCompatActivity() {
         Running.set(true)
         injectThis()
 
+        // theme
+        val lightMode = ThemeConfig(this, "light_theme")
+        if (!lightMode.isConfigured(BuildConfig.VERSION_CODE)) {
+            lightMode.activityTheme(R.style.AppTheme)
+                .primaryColorRes(R.color.colorPrimaryLightDefault)
+                .accentColorRes(R.color.colorAccentLightDefault)
+                .lightToolbarMode(ThemeUtil.LIGHT_TOOLBAR_AUTO)
+                .coloredActionBar(true)
+                .coloredNavigationBar(false)
+                .textSizeSpForMode(16, TextSizeUtil.TEXT_SIZE_BODY)
+                .commit();
+        }
+
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -72,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         initConfig()
 
         setSupportActionBar(binding.appBarMain.mainToolbar)
+        processToolbar(binding.appBarMain.mainToolbar)
 
         drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -117,6 +136,14 @@ class MainActivity : AppCompatActivity() {
 
     fun setDrawerTitle(title: String) {
         binding.appBarMain.mainToolbar.title = title
+    }
+
+    fun addAppBarView(view: View) {
+        binding.appBarMain.mainAppBar.addView(view)
+    }
+
+    fun removeAppBarView(view: View) {
+        binding.appBarMain.mainAppBar.removeView(view)
     }
 
     override fun onPostResume() {

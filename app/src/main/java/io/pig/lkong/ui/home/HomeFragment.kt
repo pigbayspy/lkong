@@ -21,6 +21,7 @@ import io.pig.lkong.ui.forum.follow.FollowForumsFragment
 import io.pig.lkong.ui.thread.digest.DigestThreadFragment
 import io.pig.lkong.ui.thread.hot.HotThreadFragment
 import io.pig.lkong.ui.timeline.TimeLineFragment
+import io.pig.ui.common.getPrimaryColor
 
 class HomeFragment : Fragment() {
 
@@ -43,8 +44,18 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         initConfig()
         val root: View = binding.root
-        initTabs()
+        initTabs(inflater, container)
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        attachTab()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        detachTab()
     }
 
     private fun initConfig() {
@@ -55,12 +66,22 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun initTabs() {
+    private fun initTabs(inflater: LayoutInflater, container: ViewGroup?) {
         // 初始化 tab
+        tabs = inflater.inflate(R.layout.layout_tab, container, false) as TabLayout
         pages = binding.fragmentContentMainPager
-        tabs = binding.fragmentContentMainTab
         tabs.setupWithViewPager(pages)
         setupViewPager()
+    }
+
+    private fun attachTab() {
+        val activity = requireActivity() as MainActivity
+        activity.addAppBarView(tabs)
+    }
+
+    private fun detachTab() {
+        val activity = requireActivity() as MainActivity
+        activity.removeAppBarView(tabs)
     }
 
     private fun setupViewPager() {

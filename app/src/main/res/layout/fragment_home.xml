@@ -6,24 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/fragment_content_main_tab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="tab_text|parent_dependent,tab_indicator|parent_dependent" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/fragment_content_main_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

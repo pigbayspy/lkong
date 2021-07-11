@@ -16,4 +16,9 @@
     <color name="colorAccentDarkDefault">#2196F3</color>
     <color name="activity_bg_sign_in">#2196F3</color>
 
+    <color name="theme_primary_text_light">#DE000000</color>
+    <color name="theme_primary_text_dark">#FFFFFFFF</color>
+    <color name="theme_secondary_text_light">#8A000000</color>
+    <color name="theme_secondary_text_dark">#B3FFFFFF</color>
+
 </resources>
