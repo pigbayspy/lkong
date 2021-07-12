@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentForumsBinding
 import io.pig.lkong.model.ForumModel
@@ -39,9 +40,23 @@ class ForumsFragment : Fragment() {
         forumsViewModel = ViewModelProvider(this).get(ForumsViewModel::class.java)
         selfBinding = FragmentForumsBinding.inflate(inflater, container, false)
         val view = selfBinding.root
-        forumsViewModel.forums.observe(viewLifecycleOwner) {
-            refreshForumList(it)
+        selfBinding.recycleListForum.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy < 0 && !recyclerView.canScrollVertically(-1)) {
+                    refresh()
+                }
+            }
+        })
+        forumsViewModel.apply {
+            forums.observe(viewLifecycleOwner) {
+                refreshForumList(it)
+            }
+            loading.observe(viewLifecycleOwner) {
+                refreshLoading(it)
+            }
         }
+
         forumsViewModel.getForums()
         return view
     }
@@ -60,10 +75,18 @@ class ForumsFragment : Fragment() {
         return GridLayoutManager(requireActivity(), spanCount)
     }
 
+    private fun refresh() {
+        forumsViewModel.refresh()
+    }
+
     private fun refreshForumList(forums: List<ForumModel>) {
         selfBinding.recycleListForum.layoutManager = getLayoutManager()
         selfBinding.recycleListForum.adapter =
             ForumListAdapter(requireActivity(), showInGridPrefs.get(), forums)
+    }
+
+    private fun refreshLoading(loading: Boolean) {
+        selfBinding.root.isRefreshing = loading
     }
 
     companion object {

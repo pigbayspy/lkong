@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 .coloredActionBar(true)
                 .coloredNavigationBar(false)
                 .textSizeSpForMode(16, TextSizeUtil.TEXT_SIZE_BODY)
-                .commit();
+                .commit()
         }
 
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
