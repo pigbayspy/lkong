@@ -9,8 +9,6 @@ import io.pig.lkong.http.data.resp.ForumResp
 import io.pig.lkong.http.data.resp.HotThreadResp
 import io.pig.lkong.http.data.resp.RespBase
 import io.pig.lkong.http.data.resp.SignResp
-import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -27,9 +25,6 @@ interface LkongSpec {
 
     @GET(RestApiConst.GET_FAVORITE_URL)
     suspend fun getFavorite(): LkongForumThreadResp
-
-    @GET(RestApiConst.GET_HOST)
-    suspend fun getHot(): LkongHotThreadResp
 
     @GET(RestApiConst.BASE_API)
     suspend fun getPostList(

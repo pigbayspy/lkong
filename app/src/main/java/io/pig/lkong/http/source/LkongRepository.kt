@@ -4,8 +4,10 @@ import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.*
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.SignReq
+import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.resp.ForumResp
 import io.pig.lkong.http.data.resp.RespBase
+import io.pig.lkong.http.data.resp.HotThreadResp
 import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.http.util.CookieUtil
 
@@ -23,8 +25,9 @@ object LkongRepository {
         return lkongSpec.getFavorite()
     }
 
-    suspend fun getHot(): LkongHotThreadResp {
-        return lkongSpec.getHot()
+    suspend fun getHot(): RespBase<HotThreadResp> {
+        val req = HotThreadReq()
+        return lkongSpec.getHot(req)
     }
 
     suspend fun getPostList(thread: Long, page: Int): LkongPostListResp {
