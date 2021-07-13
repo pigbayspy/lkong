@@ -3,8 +3,10 @@ package io.pig.lkong.http.spec
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.*
 import io.pig.lkong.http.data.req.ForumReq
+import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.req.SignReq
 import io.pig.lkong.http.data.resp.ForumResp
+import io.pig.lkong.http.data.resp.HotThreadResp
 import io.pig.lkong.http.data.resp.RespBase
 import io.pig.lkong.http.data.resp.SignResp
 import okhttp3.RequestBody
@@ -40,4 +42,7 @@ interface LkongSpec {
 
     @POST("/graphql")
     suspend fun getForums(@Body forumReq: ForumReq): RespBase<ForumResp>
+
+    @POST("/graphql")
+    suspend fun getHot(@Body hotReq: HotThreadReq):RespBase<HotThreadResp>
 }
