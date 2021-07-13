@@ -46,7 +46,7 @@ class GalleryFragment : Eventable, Fragment() {
             ViewModelProvider(this).get(GalleryViewModel::class.java)
 
         selfBinding = FragmentGalleryBinding.inflate(inflater, container, false)
-        val root: View = selfBinding.root
+        val root = selfBinding.root
         // 初始化监听器
         galleryViewModel.threadList.observe(viewLifecycleOwner, {
             refreshThreadList(it)

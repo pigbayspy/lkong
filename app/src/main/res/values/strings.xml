@@ -13,6 +13,7 @@
     <string name="thread_avatar_desc">头像</string>
     <string name="image_avatar_desc">头像</string>
     <string name="forum_icon_desc">板块</string>
+    <string name="hot_thread_desc">热门</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>
