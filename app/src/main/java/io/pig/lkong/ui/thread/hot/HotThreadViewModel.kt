@@ -20,7 +20,7 @@ class HotThreadViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val respBase = LkongRepository.getHot()
-                val hotThreadData = respBase?.data.hots?: emptyList()
+                val hotThreadData = respBase.data?.hots?: emptyList()
                 val threads = hotThreadData.map {
                     HotThreadModel(it.tid, it.title)
                 }

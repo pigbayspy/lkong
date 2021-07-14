@@ -27,8 +27,8 @@ class ForumsViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val forumResp = LkongRepository.getForums()
-                val forumData = forumResp?.data.commonNavbars?: emptyList()
-                val forumList = forumResp.filter { it.type == "forum" }.map { ForumModel(it) }
+                val forumData = forumResp.data?.commonNavbars?: emptyList()
+                val forumList = forumData.filter { it.type == "forum" }.map { ForumModel(it) }
                 forums.value = forumList
                 loading.value = false
             } catch (e: Exception) {

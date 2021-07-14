@@ -5,6 +5,6 @@ package io.pig.lkong.http.data.resp
  * @since 2021/7/10
  */
 data class RespBase<T>(
-    val data: T?
+    val data: T?,
     val errors: List<RespError>?
 )
