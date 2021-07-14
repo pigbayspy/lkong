@@ -12,8 +12,12 @@
     <string name="nav_header_desc">头像</string>
     <string name="thread_avatar_desc">头像</string>
     <string name="image_avatar_desc">头像</string>
+    <string name="user_profile_avatar_desc">头像</string>
     <string name="forum_icon_desc">板块</string>
     <string name="hot_thread_desc">热门</string>
+    <string name="back_desc">后退</string>
+    <string name="user_coin_desc">龙币</string>
+    <string name="user_diamond_desc">龙晶</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>
@@ -30,6 +34,14 @@
     <string name="menu_setting">设置</string>
     <string name="text_recycle_empty_text">这里什么都没有</string>
     <string name="text_datetime_today">今天</string>
+    <string name="text_user_all_activities_title">所有动态</string>
+    <string name="text_user_digest_title">精华</string>
+    <string name="text_user_wealth_title">财富</string>
+    <string name="text_last_punch_time">最后签到</string>
+    <string name="text_current_continuous_punch_days">当前连续签到</string>
+    <string name="text_longest_continuous_punch_days">最长连续签到</string>
+    <string name="text_user_registration_time_title">注册时间</string>
+    <string name="text_total_punch_days">总签到天数</string>
 
     <string name="new_post">发帖</string>
     <string name="title_activity_sign_in">登录界面</string>

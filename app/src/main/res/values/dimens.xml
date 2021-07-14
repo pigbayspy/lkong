@@ -18,6 +18,8 @@
 
     <!-- size -->
     <dimen name="size_avatar_default">40dp</dimen>
+    <dimen name="size_avatar_user_profile">88dp</dimen>
+    <dimen name="text_size_body2">14sp</dimen>
 
     <!-- card -->
     <dimen name="default_card_elevation">2dp</dimen>
