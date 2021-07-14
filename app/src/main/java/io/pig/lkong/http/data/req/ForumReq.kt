@@ -5,7 +5,7 @@ package io.pig.lkong.http.data.req
  * @since 2021/7/10
  */
 class ForumReq {
-    val operateName = "GetMe"
+    val operationName = "GetMe"
     val variables = emptyMap<Any, Any>()
     val query = """
         query GetMe {

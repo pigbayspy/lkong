@@ -26,10 +26,10 @@ class HotThreadFragment : Fragment() {
         hotThreadViewModel = ViewModelProvider(this).get(HotThreadViewModel::class.java)
         binding = FragmentHotThreadBinding.inflate(inflater, container, false)
         val root = binding.root
-        hotThreadViewModel.getHotThreads()
         hotThreadViewModel.hotThreads.observe(viewLifecycleOwner) {
             refreshHotThread(it)
         }
+        hotThreadViewModel.getHotThreads()
         return root
     }
 

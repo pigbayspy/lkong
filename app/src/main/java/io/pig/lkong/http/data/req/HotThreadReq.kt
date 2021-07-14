@@ -1,11 +1,11 @@
 package io.pig.lkong.http.data.req
 
 /**
- * 
+ *
  */
 class HotThreadReq {
 
-    val operateName = "ViewIndex"
+    val operationName = "ViewIndex"
 
     val variables = emptyMap<Any, Any>()
 
@@ -13,8 +13,9 @@ class HotThreadReq {
     query ViewIndex {
         ...indexConfigComponent
     }
+
     fragment indexConfigComponent on Query {
-        hots: threadsFragment(fid: 0, type: \"hot\") {
+        hots: threadsFragment(fid: 0, type: "hot") {
             tid
             title
             __typename
