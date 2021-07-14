@@ -44,7 +44,7 @@ object LkongRepository {
         val signReq = SignReq(email, password)
         val response = lkongSpec.signIn(signReq)
         val body = response.body()
-        if (response.isSuccessful && body != null) {
+        if (response.isSuccessful && body != null && body.data != null) {
             val authCookie = getCookie("EGG_SESS")
             return LkongSignInResp(
                 body.data.login.name,
