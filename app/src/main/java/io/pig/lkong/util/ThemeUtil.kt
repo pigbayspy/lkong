@@ -3,8 +3,10 @@ package io.pig.lkong.util
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import io.pig.lkong.R
 import io.pig.lkong.theme.ThemeConfig
 
@@ -22,6 +24,7 @@ object ThemeUtil {
     private const val KEY_TEXT_COLOR_SECONDARY = "text_color_secondary"
     private const val KEY_APPLY_PRIMARY_DARK_STATUS_BAR = "apply_primary_dark_statusbar"
     private const val KEY_APPLY_PRIMARY_NAV_BAR = "apply_primary_navbar"
+    private const val KEY_TEXT_COLOR_PRIMARY_INVERSE = "text_color_primary_inverse"
 
     private const val CONFIG_PREFS_KEY_DEFAULT = "[[theme-engine]]"
     private const val CONFIG_PREFS_KEY_CUSTOM = "[[theme-engine_%s]]"
@@ -192,5 +195,17 @@ object ThemeUtil {
         } finally {
             a.recycle()
         }
+    }
+
+    fun setTint(drawable: Drawable, color: Int) {
+        DrawableCompat.setTint(drawable, color)
+    }
+
+    @ColorInt
+    fun textColorPrimaryInverse(context: Context, key: String): Int {
+        return prefs(context, key).getInt(
+            KEY_TEXT_COLOR_PRIMARY_INVERSE,
+            resolveColor(context, android.R.attr.textColorPrimaryInverse)
+        )
     }
 }

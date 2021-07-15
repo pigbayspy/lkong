@@ -25,6 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lkong"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.profile.UserProfileActivity"></activity>
 
         <service
             android:name=".account.service.LkongAuthenticateService"
