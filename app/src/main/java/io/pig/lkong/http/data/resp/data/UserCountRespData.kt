@@ -5,12 +5,12 @@ package io.pig.lkong.http.data.resp.data
  * @since 2021/7/16
  */
 class UserCountRespData(
-    followings: Long,
-    followers: Long,
-    posts: Long,
-    threads: Long,
-    money: Long,
-    longjing: Long,
-    vertyInfo: String?,
-    level: String
+    val followings: Long,
+    val followers: Long,
+    val posts: Long,
+    val threads: Long,
+    val money: Long,
+    val longjing: Long,
+    val vertyInfo: String?,
+    val level: String
 )
