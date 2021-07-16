@@ -6,7 +6,6 @@ package io.pig.lkong.http.data.req
  */
 class ForumReq {
     val operationName = "GetMe"
-    val variables = emptyMap<Any, Any>()
     val query = """
         query GetMe {
             ... on Query {
@@ -16,7 +15,6 @@ class ForumReq {
                     fid
                     num
                     link
-                    __typename
                 }
             }
         }

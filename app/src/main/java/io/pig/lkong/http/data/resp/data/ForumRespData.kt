@@ -9,6 +9,5 @@ data class ForumRespData(
     val name: String,
     val fid: Long,
     val num: Long,
-    val link: String?,
-    val __typename: String
+    val link: String?
 )

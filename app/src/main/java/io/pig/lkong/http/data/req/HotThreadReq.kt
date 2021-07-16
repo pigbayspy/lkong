@@ -18,9 +18,7 @@ class HotThreadReq {
         hots: threadsFragment(fid: 0, type: "hot") {
             tid
             title
-            __typename
         }
-        __typename
     }
     """
 }

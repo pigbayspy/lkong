@@ -15,7 +15,6 @@ class SignReq(email: String, password: String) {
             login(email: ${'$'}email, password: ${'$'}password) {
                 uid
                 name
-                __typename
             }
         }
         """

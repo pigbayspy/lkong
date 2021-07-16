@@ -1,14 +1,13 @@
 package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.const.RestApiConst
-import io.pig.lkong.http.data.*
+import io.pig.lkong.http.data.LkongForumThreadResp
+import io.pig.lkong.http.data.LkongPostListResp
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.req.SignReq
-import io.pig.lkong.http.data.resp.ForumResp
-import io.pig.lkong.http.data.resp.HotThreadResp
-import io.pig.lkong.http.data.resp.RespBase
-import io.pig.lkong.http.data.resp.SignResp
+import io.pig.lkong.http.data.req.UserProfileReq
+import io.pig.lkong.http.data.resp.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -39,5 +38,8 @@ interface LkongSpec {
     suspend fun getForums(@Body forumReq: ForumReq): RespBase<ForumResp>
 
     @POST("/graphql")
-    suspend fun getHot(@Body hotReq: HotThreadReq):RespBase<HotThreadResp>
+    suspend fun getHot(@Body hotReq: HotThreadReq): RespBase<HotThreadResp>
+
+    @POST("/graphql")
+    suspend fun getUserProfile(@Body profileReq: UserProfileReq): RespBase<UserProfileResp>
 }
