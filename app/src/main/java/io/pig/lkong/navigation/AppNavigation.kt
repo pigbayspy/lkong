@@ -13,6 +13,7 @@ import io.pig.lkong.application.const.AppConst
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.sync.SyncUtil
 import io.pig.lkong.ui.post.list.PostListActivity
+import io.pig.lkong.ui.profile.UserProfileActivity
 
 /**
  * @author yinhang
@@ -43,9 +44,10 @@ object AppNavigation {
         openUrl(AppConst.FAQ_URL, activity)
     }
 
-    fun openActivityForUserProfile(context: Activity, startingLocation: IntArray, uid: Long) {
-        // Todo
-        // UserProfileActivity.startUserProfileFromLocation(context, startingLocation, uid)
+    fun openActivityForUserProfile(context: Activity, uid: Long) {
+        val intent = Intent(context, UserProfileActivity::class.java)
+        intent.putExtra(DataContract.BUNDLE_USER_ID, uid)
+        context.startActivity(intent)
     }
 
     fun openActivityForPostListByThreadId(context: Context, threadId: Long) {

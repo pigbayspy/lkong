@@ -4,8 +4,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import io.pig.lkong.util.HexUtil
 import okhttp3.Cookie
-import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.nio.charset.StandardCharsets
 
 /**
@@ -16,7 +14,6 @@ import java.nio.charset.StandardCharsets
  */
 object CookieUtil {
 
-    private const val KEY_URL = "url"
     private const val KEY_NAME = "name"
     private const val KEY_VALUE = "value"
     private const val KEY_PERSISTENT = "persistent"
@@ -31,9 +28,8 @@ object CookieUtil {
         return cookie.expiresAt < System.currentTimeMillis()
     }
 
-    fun encode(url: String, cookie: Cookie): String {
+    fun encode(cookie: Cookie): String {
         val json = JsonObject()
-        json.addProperty(KEY_URL, url)
         json.addProperty(KEY_NAME, cookie.name)
         json.addProperty(KEY_VALUE, cookie.value)
         json.addProperty(
@@ -50,11 +46,10 @@ object CookieUtil {
         return HexUtil.bytesToHex(jsonStr.toByteArray())
     }
 
-    fun decode(encodedCookie: String): Pair<HttpUrl, Cookie> {
+    fun decode(encodedCookie: String): Cookie {
         val bytes = HexUtil.hexToBytes(encodedCookie)
         val jsonStr = String(bytes, StandardCharsets.UTF_8)
         val obj = JsonParser.parseString(jsonStr) as JsonObject
-        val url = obj[KEY_URL].asString
         val builder = Cookie.Builder()
         builder.name(obj.get(KEY_NAME).asString)
         builder.value(obj.get(KEY_VALUE).asString)
@@ -74,7 +69,6 @@ object CookieUtil {
         if (obj.get(KEY_HOST_ONLY).asBoolean) {
             builder.hostOnlyDomain(domain)
         }
-        val cookie = builder.build()
-        return (url.toHttpUrl() to cookie)
+        return builder.build()
     }
 }

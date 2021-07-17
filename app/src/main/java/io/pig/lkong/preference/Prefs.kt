@@ -3,6 +3,7 @@ package io.pig.lkong.preference
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import io.pig.lkong.http.cookie.impl.PersistentCookieStore
 
 /**
  * @author yinhang
@@ -11,6 +12,7 @@ import androidx.preference.PreferenceManager
 object Prefs {
 
     private lateinit var preference: SharedPreferences
+    private lateinit var cookiePreferences: SharedPreferences
 
     fun init(context: Context, name: String = "") {
         preference = if (name.isBlank()) {
@@ -18,6 +20,12 @@ object Prefs {
         } else {
             context.getSharedPreferences(name, Context.MODE_PRIVATE)
         }
+        cookiePreferences =
+            context.getSharedPreferences(PersistentCookieStore.COOKIE_PREFS, Context.MODE_PRIVATE)
+    }
+
+    fun getCookiePreference(): SharedPreferences {
+        return cookiePreferences
     }
 
     fun getLongPrefs(key: String, defaultValue: Long): LongPrefs {

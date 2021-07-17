@@ -75,6 +75,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- user profile -->
+    <string name="text_profile_header_followers">粉丝</string>
+    <string name="text_profile_header_following">关注</string>
+    <string name="text_profile_header_threads">主题</string>
+    <string name="text_profile_header_posts">回复</string>
+    <string name="text_profile_header_count_zero">0</string>
+
     <!-- fragment -->
     <string name="tab_item_hot_thread">热门</string>
     <string name="tab_item_forum">板块</string>

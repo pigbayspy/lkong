@@ -117,7 +117,6 @@ class GalleryFragment : Eventable, Fragment() {
                     view.getLocationOnScreen(startLocation)
                     AppNavigation.openActivityForUserProfile(
                         requireActivity(),
-                        startLocation,
                         thread.userId
                     )
                 }

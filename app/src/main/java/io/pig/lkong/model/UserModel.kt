@@ -11,7 +11,7 @@ class UserModel(userProfileResp: UserProfileResp) {
 
     val uid: Long
     val name: String
-    val avatar: String?
+    val avatar: String
     val verify: String?
     val status: String?
     val followings: Long

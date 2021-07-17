@@ -9,8 +9,7 @@ import io.pig.lkong.util.LkongUtil
 class LkongSignInResp(
     val name: String = "",
     val uid: Long = 0,
-    val success: Boolean = true,
-    val authCookie: String = ""
+    val success: Boolean = true
 ) {
     val avatar = LkongUtil.generateAvatarUrl(uid)
 }

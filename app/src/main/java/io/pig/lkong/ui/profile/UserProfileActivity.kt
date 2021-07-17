@@ -1,19 +1,25 @@
 package io.pig.lkong.ui.profile
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityUserProfileBinding
+import io.pig.lkong.model.UserModel
+import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.common.getThemeKey
 
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserProfileBinding
+    private lateinit var userProfileViewModel: UserProfileViewModel
 
     private var uid: Long = INVALID_USER_ID
 
@@ -25,6 +31,14 @@ class UserProfileActivity : AppCompatActivity() {
         savedInstanceState?.apply {
             uid = savedInstanceState.getLong(DataContract.BUNDLE_USER_ID, INVALID_USER_ID)
         }
+
+        setUpToolbar(binding.toolbar)
+
+        userProfileViewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)
+        userProfileViewModel.user.observe(this) {
+            refresh(it)
+        }
+        userProfileViewModel.getUserProfile()
     }
 
     private fun setUpToolbar(toolbar: Toolbar) {
@@ -43,6 +57,59 @@ class UserProfileActivity : AppCompatActivity() {
             )
             actionBar.setHomeAsUpIndicator(drawable)
         }
+    }
+
+    private fun refresh(user: UserModel) {
+        // 设置头像
+        val avatarSize = resources.getDimensionPixelSize(R.dimen.size_avatar_user_profile)
+        ImageLoaderUtil.loadAvatar(
+            this,
+            binding.profileImageAvatar,
+            user.avatar,
+            avatarSize
+        )
+        binding.profileTextUserName.text = user.name
+        val statsTextSize = resources.getDimensionPixelSize(R.dimen.text_size_caption)
+        binding.profileTextFollowerCount.text = getUserStatsText(
+            user.followers,
+            getString(R.string.text_profile_header_followers),
+            statsTextSize
+        )
+        binding.profileTextFollowingCount.text = getUserStatsText(
+            user.followings,
+            getString(R.string.text_profile_header_following),
+            statsTextSize
+        )
+        binding.profileTextThreadCount.text = getUserStatsText(
+            user.threads,
+            getString(R.string.text_profile_header_threads),
+            statsTextSize
+        )
+        binding.profileTextPostCount.text = getUserStatsText(
+            user.posts,
+            getString(R.string.text_profile_header_posts),
+            statsTextSize
+        )
+    }
+
+    private fun getUserStatsText(
+        value: Long,
+        describeText: String,
+        describeSize: Int
+    ): CharSequence {
+        val valueString = value.toString()
+        val builder = SpannableStringBuilder()
+        builder.append(valueString).append("\n")
+        val start = builder.length
+        val end = start + describeText.length
+        builder.append(describeText)
+        builder.setSpan(
+            AbsoluteSizeSpan(describeSize),
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        return builder
     }
 
     companion object {

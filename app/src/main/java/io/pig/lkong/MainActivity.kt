@@ -83,8 +83,6 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
-        // 设置用户cookie
-        LkongServiceProvider.addAccount(userAccountMgr.getAuthObject())
 
         // 初始化配置
         initConfig()
@@ -170,6 +168,9 @@ class MainActivity : AppCompatActivity() {
             userEmailView.text = it.userEmail
             userNameView.text = it.userName
             ImageLoaderUtil.loadAvatar(this, userAvatarView, it.userAvatar)
+            userAvatarView.setOnClickListener { _ ->
+                AppNavigation.openActivityForUserProfile(this, it.userId)
+            }
         }
         addAccountProfile()
     }
