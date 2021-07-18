@@ -90,6 +90,11 @@ class UserProfileActivity : AppCompatActivity() {
             getString(R.string.text_profile_header_posts),
             statsTextSize
         )
+        binding.profileTextCoin.text = user.money.toString()
+        binding.profileTextDiamond.text = user.diamond.toString()
+        binding.profileTextTotalPunch.text = user.punchAllDay.toString()
+        binding.profileTextCurrentPunch.text = user.punchDay.toString()
+        binding.profileTextLongestPunch.text = user.punchHighestDay.toString()
     }
 
     private fun getUserStatsText(
