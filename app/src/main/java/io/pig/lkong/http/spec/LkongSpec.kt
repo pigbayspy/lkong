@@ -3,10 +3,7 @@ package io.pig.lkong.http.spec
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.LkongForumThreadResp
 import io.pig.lkong.http.data.LkongPostListResp
-import io.pig.lkong.http.data.req.ForumReq
-import io.pig.lkong.http.data.req.HotThreadReq
-import io.pig.lkong.http.data.req.SignReq
-import io.pig.lkong.http.data.req.UserProfileReq
+import io.pig.lkong.http.data.req.*
 import io.pig.lkong.http.data.resp.*
 import retrofit2.Response
 import retrofit2.http.Body
@@ -31,15 +28,18 @@ interface LkongSpec {
         @Query("mod") mod: String
     ): LkongPostListResp
 
-    @POST("/graphql")
+    @POST(RestApiConst.GRAPHQL)
     suspend fun signIn(@Body signReq: SignReq): Response<RespBase<SignResp>>
 
-    @POST("/graphql")
+    @POST(RestApiConst.GRAPHQL)
     suspend fun getForums(@Body forumReq: ForumReq): RespBase<ForumResp>
 
-    @POST("/graphql")
+    @POST(RestApiConst.GRAPHQL)
     suspend fun getHot(@Body hotReq: HotThreadReq): RespBase<HotThreadResp>
 
-    @POST("/graphql")
+    @POST(RestApiConst.GRAPHQL)
     suspend fun getUserProfile(@Body profileReq: UserProfileReq): RespBase<UserProfileResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getTimeline(@Body timelineReq: TimelineReq): RespBase<TimelineResp>
 }
