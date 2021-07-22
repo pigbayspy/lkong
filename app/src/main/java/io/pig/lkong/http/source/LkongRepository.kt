@@ -1,17 +1,12 @@
 package io.pig.lkong.http.source
 
-import io.pig.lkong.http.const.RestApiConst
-import io.pig.lkong.http.data.*
-import io.pig.lkong.http.data.req.ForumReq
-import io.pig.lkong.http.data.req.SignReq
-import io.pig.lkong.http.data.req.HotThreadReq
-import io.pig.lkong.http.data.req.UserProfileReq
-import io.pig.lkong.http.data.resp.ForumResp
-import io.pig.lkong.http.data.resp.RespBase
-import io.pig.lkong.http.data.resp.HotThreadResp
-import io.pig.lkong.http.data.resp.UserProfileResp
+import io.pig.lkong.http.data.LkongForumThreadResp
+import io.pig.lkong.http.data.LkongPostListReq
+import io.pig.lkong.http.data.LkongPostListResp
+import io.pig.lkong.http.data.LkongSignInResp
+import io.pig.lkong.http.data.req.*
+import io.pig.lkong.http.data.resp.*
 import io.pig.lkong.http.provider.LkongServiceProvider
-import io.pig.lkong.http.util.CookieUtil
 
 /**
  * @author yinhang
@@ -25,7 +20,7 @@ object LkongRepository {
         return lkongSpec.getFavorite()
     }
 
-    suspend fun getUserProfile():RespBase<UserProfileResp> {
+    suspend fun getUserProfile(): RespBase<UserProfileResp> {
         val req = UserProfileReq()
         return lkongSpec.getUserProfile(req)
     }
@@ -57,5 +52,10 @@ object LkongRepository {
             )
         }
         return LkongSignInResp(success = false)
+    }
+
+    suspend fun getTimeline(nextTime: Long): RespBase<TimelineResp> {
+        val req = TimelineReq(nextTime)
+        return lkongSpec.getTimeline(req)
     }
 }
