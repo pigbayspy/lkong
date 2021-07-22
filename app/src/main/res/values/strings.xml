@@ -18,6 +18,7 @@
     <string name="back_desc">后退</string>
     <string name="user_coin_desc">龙币</string>
     <string name="user_diamond_desc">龙晶</string>
+    <string name="timeline_thread_avatar_desc">头像</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>

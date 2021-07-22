@@ -15,6 +15,7 @@
     <!-- Regular -->
     <dimen name="text_size_caption">12sp</dimen>
     <dimen name="text_size_body">14sp</dimen>
+    <dimen name="text_size_body1">14sp</dimen><!-- Regular -->
 
     <!-- size -->
     <dimen name="size_avatar_default">40dp</dimen>
