@@ -83,6 +83,9 @@
     <string name="text_profile_header_posts">回复</string>
     <string name="text_profile_header_count_zero">0</string>
 
+    <!-- timeline -->
+    <string name="format_timeline_create_thread">发表新主题：%1$s</string>
+
     <!-- fragment -->
     <string name="tab_item_hot_thread">热门</string>
     <string name="tab_item_forum">板块</string>

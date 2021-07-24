@@ -1,12 +1,19 @@
 package io.pig.lkong.ui.adapter
 
 import android.content.Context
+import android.graphics.Typeface
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.TimelineModel
 import io.pig.lkong.ui.adapter.item.TimelineViewHolder
+import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.lkong.util.LkongUtil
+import io.pig.lkong.util.UiUtil
 import io.pig.widget.adapter.BaseRecycleViewAdapter
 
 /**
@@ -17,6 +24,8 @@ class TimelineAdapter(
     val context: Context,
     timelines: List<TimelineModel>
 ) : BaseRecycleViewAdapter<TimelineModel>(timelines) {
+
+    val avatarSize = UiUtil.getDefaultAvatarSize(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val isReply = (viewType == TYPE_REPLY)
@@ -54,7 +63,34 @@ class TimelineAdapter(
     }
 
     private fun bindThreadItem(holder: TimelineViewHolder, item: TimelineModel) {
+// 用户发布主题
 
+        // 用户发布主题
+        val mainPrefixSpannable = SpannableStringBuilder()
+        val createInfo: String =
+            context.getString(R.string.format_timeline_create_thread, item.subject)
+        mainPrefixSpannable.append(createInfo)
+//        mainPrefixSpannable.setSpan(
+//            ForegroundColorSpan(mTextColorSecondary),
+//            0,
+//            createInfo.length,
+//            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+//        )
+        mainPrefixSpannable.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            createInfo.length,
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+        mainPrefixSpannable.append('\n')
+        val mainContent = item.message
+        val mainSpannable = SpannableStringBuilder()
+        mainSpannable.append(mainPrefixSpannable).append(mainContent)
+
+        holder.messageText.text = mainSpannable
+        holder.authorText.text = item.userName
+        val avatarUrl = LkongUtil.generateAvatarUrl(item.userId)
+        ImageLoaderUtil.loadAvatar(context, holder.authorAvatar, avatarUrl, avatarSize)
     }
 
     private fun bindReplyItem(holder: TimelineViewHolder, item: TimelineModel) {
