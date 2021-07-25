@@ -85,6 +85,8 @@
 
     <!-- timeline -->
     <string name="format_timeline_create_thread">发表新主题：%1$s</string>
+    <string name="format_timeline_reply_to_reply">\@%1$s 回复了 %2$s</string>
+    <string name="format_timeline_reply_to_thread">\@%1$s 发表新主题:</string>
 
     <!-- fragment -->
     <string name="tab_item_hot_thread">热门</string>

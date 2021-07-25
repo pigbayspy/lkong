@@ -72,7 +72,7 @@
                 android:tag="background|secondary_text" />
 
             <TextView
-                android:id="@+id/recyclerview_item_timeline_secondary_message"
+                android:id="@+id/recycle_item_timeline_secondary_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -86,10 +86,10 @@
                 android:textSize="@dimen/text_size_subhead" />
 
             <TextView
-                android:id="@+id/recyclerview_item_timeline_third_message"
+                android:id="@+id/recycle_item_timeline_third_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/recyclerview_item_timeline_secondary_message"
+                android:layout_below="@+id/recycle_item_timeline_secondary_message"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginRight="16dp"

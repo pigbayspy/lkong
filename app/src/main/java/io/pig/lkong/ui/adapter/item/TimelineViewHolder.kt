@@ -11,7 +11,7 @@ import io.pig.lkong.R
  * @author yinhang
  * @since 2021/7/22
  */
-class TimelineViewHolder(
+open class TimelineViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
 
