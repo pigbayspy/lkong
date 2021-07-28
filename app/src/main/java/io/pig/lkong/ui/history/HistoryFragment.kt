@@ -2,11 +2,11 @@ package io.pig.lkong.ui.history
 
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentHistoryBinding
+import io.pig.lkong.model.BrowseHistoryModel
 
 class HistoryFragment : Fragment() {
 
@@ -27,10 +27,11 @@ class HistoryFragment : Fragment() {
         // 自定义 menu
         setHasOptionsMenu(true)
 
-        val textView: TextView = selfBinding.textSlideshow
-        historyViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
-        })
+        // 初始化
+        historyViewModel.histories.observe(this) {
+            this.refresh(it)
+        }
+        historyViewModel.getHistory()
         return root
     }
 
@@ -44,5 +45,9 @@ class HistoryFragment : Fragment() {
             // Todo
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun refresh(history: List<BrowseHistoryModel>) {
+
     }
 }

@@ -1,13 +1,18 @@
 package io.pig.lkong.ui.history
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import io.pig.lkong.model.BrowseHistoryModel
+import kotlinx.coroutines.launch
 
 class HistoryViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is slideshow Fragment"
+    val histories = MutableLiveData<List<BrowseHistoryModel>>()
+
+    fun getHistory() {
+        viewModelScope.launch {
+            
+        }
     }
-    val text: LiveData<String> = _text
 }
