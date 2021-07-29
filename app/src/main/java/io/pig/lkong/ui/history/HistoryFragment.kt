@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentHistoryBinding
 import io.pig.lkong.model.BrowseHistoryModel
+import io.pig.lkong.ui.adapter.HistoryAdapter
 
 class HistoryFragment : Fragment() {
 
     private lateinit var historyViewModel: HistoryViewModel
-    private lateinit var selfBinding: FragmentHistoryBinding
+    private lateinit var binding: FragmentHistoryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,14 +23,14 @@ class HistoryFragment : Fragment() {
         historyViewModel =
             ViewModelProvider(this).get(HistoryViewModel::class.java)
 
-        selfBinding = FragmentHistoryBinding.inflate(inflater, container, false)
-        val root: View = selfBinding.root
+        binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        val root: View = binding.root
 
         // 自定义 menu
         setHasOptionsMenu(true)
 
         // 初始化
-        historyViewModel.histories.observe(this) {
+        historyViewModel.histories.observe(viewLifecycleOwner) {
             this.refresh(it)
         }
         historyViewModel.getHistory()
@@ -48,6 +50,8 @@ class HistoryFragment : Fragment() {
     }
 
     private fun refresh(history: List<BrowseHistoryModel>) {
-
+        binding.recycleListHistory.layoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        binding.recycleListHistory.adapter = HistoryAdapter(requireContext(), history)
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recyclerview_item_browse_history_relative_layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="16dp"
+    android:background="?selectableItemBackground">
+
+    <TextView
+        android:id="@+id/recycle_item_browse_history_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:tag="text_color|primary_text,text_size|subheading"
+        android:textSize="@dimen/text_size_subhead" />
+
+    <TextView
+        android:id="@+id/recycle_item_browse_history_text_secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recycle_item_browse_history_text_title"
+        android:layout_toStartOf="@+id/recycle_item_browse_history_text_time"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:tag="text_color|secondary_text,text_size|caption"
+        android:textSize="@dimen/text_size_body1" />
+
+    <TextView
+        android:id="@+id/recycle_item_browse_history_text_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/recycle_item_browse_history_text_secondary"
+        android:layout_alignParentEnd="true"
+        android:gravity="end"
+        android:tag="text_color|secondary_text,text_size|caption"
+        android:textSize="@dimen/text_size_caption" />
+</RelativeLayout>
