@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentHistoryBinding
-import io.pig.lkong.model.BrowseHistoryModel
+import io.pig.lkong.model.HistoryModel
 import io.pig.lkong.ui.adapter.HistoryAdapter
 
 class HistoryFragment : Fragment() {
@@ -49,7 +49,7 @@ class HistoryFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun refresh(history: List<BrowseHistoryModel>) {
+    private fun refresh(history: List<HistoryModel>) {
         binding.recycleListHistory.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.recycleListHistory.adapter = HistoryAdapter(requireContext(), history)

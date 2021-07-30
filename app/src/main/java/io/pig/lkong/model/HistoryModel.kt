@@ -5,7 +5,7 @@ import android.os.Parcelable
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 import java.util.*
 
-class BrowseHistoryModel : BaseCollectionItem {
+class HistoryModel : BaseCollectionItem {
 
     val userId: Long
     val threadId: Long
@@ -66,12 +66,12 @@ class BrowseHistoryModel : BaseCollectionItem {
         dest.writeLong(lastReadTime.time)
     }
 
-    companion object CREATOR : Parcelable.Creator<BrowseHistoryModel> {
-        override fun createFromParcel(parcel: Parcel): BrowseHistoryModel {
-            return BrowseHistoryModel(parcel)
+    companion object CREATOR : Parcelable.Creator<HistoryModel> {
+        override fun createFromParcel(parcel: Parcel): HistoryModel {
+            return HistoryModel(parcel)
         }
 
-        override fun newArray(size: Int): Array<BrowseHistoryModel?> {
+        override fun newArray(size: Int): Array<HistoryModel?> {
             return arrayOfNulls(size)
         }
     }

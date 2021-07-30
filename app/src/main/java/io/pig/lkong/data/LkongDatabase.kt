@@ -1,6 +1,6 @@
 package io.pig.lkong.data
 
-import io.pig.lkong.model.BrowseHistoryModel
+import io.pig.lkong.model.HistoryModel
 
 /**
  * @author yinhang
@@ -8,13 +8,7 @@ import io.pig.lkong.model.BrowseHistoryModel
  */
 interface LkongDatabase {
 
-    fun init()
+    fun getHistory(uid: Long, start: Int): List<HistoryModel>
 
-    fun close()
-
-    fun getBrowseHistory(uid: Long, start: Int): List<BrowseHistoryModel>
-
-    fun getBrowseHistory(start: Int): List<BrowseHistoryModel>
-    
-    fun clearBrowserHistory(uid: Long)
+    fun clearHistory(uid: Long)
 }

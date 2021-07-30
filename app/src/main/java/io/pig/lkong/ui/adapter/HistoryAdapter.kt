@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
-import io.pig.lkong.model.BrowseHistoryModel
+import io.pig.lkong.model.HistoryModel
 import io.pig.lkong.ui.adapter.item.HistoryViewHolder
 import io.pig.lkong.util.DateUtil
 import io.pig.widget.adapter.BaseRecycleViewAdapter
@@ -16,8 +16,8 @@ import io.pig.widget.adapter.BaseRecycleViewAdapter
  */
 class HistoryAdapter(
     val context: Context,
-    histories: List<BrowseHistoryModel>
-) : BaseRecycleViewAdapter<BrowseHistoryModel>(histories) {
+    histories: List<HistoryModel>
+) : BaseRecycleViewAdapter<HistoryModel>(histories) {
 
     private val todayPrefix = context.getString(R.string.text_datetime_today)
 

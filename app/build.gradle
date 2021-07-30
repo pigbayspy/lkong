@@ -82,6 +82,10 @@ dependencies {
     implementation dependency.dialog
     implementation dependency.colorDialog
 
+    // room
+    implementation dependency.room
+    annotationProcessor dependency.roomProcessor
+
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
