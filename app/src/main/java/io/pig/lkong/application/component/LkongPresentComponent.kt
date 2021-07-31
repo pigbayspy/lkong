@@ -4,6 +4,7 @@ import dagger.Component
 import io.pig.lkong.MainActivity
 import io.pig.lkong.application.module.LkongModule
 import io.pig.lkong.application.module.UserAccountModule
+import io.pig.lkong.ui.history.HistoryFragment
 import io.pig.lkong.ui.post.list.PostListActivity
 import io.pig.lkong.ui.setting.SettingFragment
 import javax.inject.Singleton
@@ -21,4 +22,6 @@ interface LkongPresentComponent {
     fun inject(activity: PostListActivity)
 
     fun inject(fragment: SettingFragment)
+
+    fun inject(fragment: HistoryFragment)
 }

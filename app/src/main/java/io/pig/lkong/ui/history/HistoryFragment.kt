@@ -6,14 +6,24 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.R
+import io.pig.lkong.account.UserAccountManager
+import io.pig.lkong.application.LkongApplication
+import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.databinding.FragmentHistoryBinding
 import io.pig.lkong.model.HistoryModel
 import io.pig.lkong.ui.adapter.HistoryAdapter
+import javax.inject.Inject
 
 class HistoryFragment : Fragment() {
 
     private lateinit var historyViewModel: HistoryViewModel
     private lateinit var binding: FragmentHistoryBinding
+
+    @Inject
+    lateinit var database: LkongDatabase
+
+    @Inject
+    lateinit var userAccountManager: UserAccountManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +34,10 @@ class HistoryFragment : Fragment() {
             ViewModelProvider(this).get(HistoryViewModel::class.java)
 
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
+
+        // 依赖注入
+        injectThis()
+
         val root: View = binding.root
 
         // 自定义 menu
@@ -33,7 +47,8 @@ class HistoryFragment : Fragment() {
         historyViewModel.histories.observe(viewLifecycleOwner) {
             this.refresh(it)
         }
-        historyViewModel.getHistory()
+        val uid = userAccountManager.getCurrentUserAccount().userId
+        historyViewModel.getHistory(database, uid)
         return root
     }
 
@@ -53,5 +68,9 @@ class HistoryFragment : Fragment() {
         binding.recycleListHistory.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.recycleListHistory.adapter = HistoryAdapter(requireContext(), history)
+    }
+
+    private fun injectThis() {
+        LkongApplication.get(requireContext()).presentComponent().inject(this)
     }
 }
