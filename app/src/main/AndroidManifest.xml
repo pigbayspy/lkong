@@ -47,6 +47,20 @@
             android:name=".ui.post.list.PostListActivity"
             android:theme="@style/AppTheme.Translucent" />
         <activity android:name=".ui.setting.SettingActivity" />
+
+        <!-- service -->
+        <service
+            android:name=".account.service.LkongAuthenticateService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator" />
+        </service>
     </application>
 
 </manifest>
