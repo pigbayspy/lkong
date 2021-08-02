@@ -26,4 +26,8 @@ class MemoryCookieStore : CookieManager {
     override fun clear() {
         this.store.removeAll()
     }
+
+    override fun getAll(): List<Cookie> {
+        return this.store.getCookies()
+    }
 }

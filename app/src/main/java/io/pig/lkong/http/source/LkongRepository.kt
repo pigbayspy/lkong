@@ -1,5 +1,6 @@
 package io.pig.lkong.http.source
 
+import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.LkongForumThreadResp
 import io.pig.lkong.http.data.LkongPostListReq
 import io.pig.lkong.http.data.LkongPostListResp
@@ -7,6 +8,7 @@ import io.pig.lkong.http.data.LkongSignInResp
 import io.pig.lkong.http.data.req.*
 import io.pig.lkong.http.data.resp.*
 import io.pig.lkong.http.provider.LkongServiceProvider
+import io.pig.lkong.http.util.CookieUtil
 
 /**
  * @author yinhang
@@ -15,6 +17,8 @@ import io.pig.lkong.http.provider.LkongServiceProvider
 object LkongRepository {
 
     private val lkongSpec = LkongServiceProvider.lkongClient
+
+    private val lkongCookie = LkongServiceProvider.lkongCookie
 
     suspend fun getFavoriteThread(): LkongForumThreadResp {
         return lkongSpec.getFavorite()
@@ -45,10 +49,12 @@ object LkongRepository {
         val response = lkongSpec.signIn(signReq)
         val body = response.body()
         if (response.isSuccessful && body != null && body.data != null) {
+            val authCookie = getCookie("EGG_SESS")
             return LkongSignInResp(
                 body.data.login.name,
                 body.data.login.uid,
-                success = true
+                success = true,
+                authCookie
             )
         }
         return LkongSignInResp(success = false)
@@ -57,5 +63,18 @@ object LkongRepository {
     suspend fun getTimeline(nextTime: Long): RespBase<TimelineResp> {
         val req = TimelineReq(nextTime)
         return lkongSpec.getTimeline(req)
+    }
+
+    private fun getCookie(key: String): String {
+        for (cookie in lkongCookie.getAll()) {
+            if (cookie.name.equals(key, true)) {
+                if (CookieUtil.hasExpired(cookie)) {
+                    continue
+                }
+                return CookieUtil.encode(cookie)
+            }
+        }
+
+        return ""
     }
 }
