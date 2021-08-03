@@ -83,6 +83,8 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+        // 设置用户cookie
+        LkongServiceProvider.addAccount(userAccountMgr.getAuthObject())
 
         // 初始化配置
         initConfig()

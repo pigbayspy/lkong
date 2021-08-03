@@ -9,6 +9,7 @@ import android.os.HandlerThread
 import android.util.Log
 import io.pig.lkong.MainActivity
 import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AUTH
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AVATAR
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_ID
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_NAME
@@ -203,7 +204,8 @@ class UserAccountManager {
     private fun getAuthObject(account: UserAccount): LkongAuthObject {
         return LkongAuthObject(
             account.userId,
-            account.userName
+            account.userName,
+            account.authCookie
         )
     }
 
@@ -221,14 +223,19 @@ class UserAccountManager {
         val idStr = accountMgr.getUserData(account, KEY_ACCOUNT_USER_ID)
         val userName = accountMgr.getUserData(account, KEY_ACCOUNT_USER_NAME)
         val userAvatar = accountMgr.getUserData(account, KEY_ACCOUNT_USER_AVATAR)
+        val userAuth = accountMgr.getUserData(account, KEY_ACCOUNT_USER_AUTH)
         val id = idStr.toLong()
         val userEmail = account.name
+        if (userAuth.isNullOrEmpty()) {
+            return null
+        }
         return UserAccount(
             account,
             id,
             userName,
             userEmail,
-            userAvatar
+            userAvatar,
+            userAuth
         )
     }
 }

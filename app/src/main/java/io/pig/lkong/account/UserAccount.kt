@@ -1,6 +1,8 @@
 package io.pig.lkong.account
 
 import android.accounts.Account
+import io.pig.lkong.http.util.CookieUtil
+import okhttp3.Cookie
 import java.io.Serializable
 
 /**
@@ -14,5 +16,8 @@ class UserAccount(
     val userId: Long,
     val userName: String,
     val userEmail: String,
-    val userAvatar: String
-) : Serializable
+    val userAvatar: String,
+    cookie: String
+) : Serializable {
+    val authCookie: Cookie = CookieUtil.decode(cookie)
+}

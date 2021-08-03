@@ -19,6 +19,7 @@ import io.pig.lkong.account.commom.AccountAuthenticatorActivity
 import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
 import io.pig.lkong.account.const.AccountConst.AT_TYPE_FULL_ACCESS
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_TYPE
+import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AUTH
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_AVATAR
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_ID
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_USER_NAME
@@ -130,6 +131,7 @@ class SignInActivity : AccountAuthenticatorActivity() {
                     data.putString(KEY_ACCOUNT_USER_ID, signResult.uid.toString())
                     data.putString(KEY_ACCOUNT_USER_NAME, signResult.name)
                     data.putString(KEY_ACCOUNT_USER_AVATAR, signResult.avatar)
+                    data.putString(KEY_ACCOUNT_USER_AUTH, signResult.authCookie)
 
                     // 构建 intent
                     val intent = Intent()
@@ -217,16 +219,16 @@ class SignInActivity : AccountAuthenticatorActivity() {
             val userId = loginIntent.getStringExtra(KEY_ACCOUNT_USER_ID)
             val userName = loginIntent.getStringExtra(KEY_ACCOUNT_USER_NAME)
             val userAvatar = loginIntent.getStringExtra(KEY_ACCOUNT_USER_AVATAR)
+            val userAuth = loginIntent.getStringExtra(KEY_ACCOUNT_USER_AUTH)
             val userData = Bundle()
             userData.putString(KEY_ACCOUNT_USER_ID, userId)
             userData.putString(KEY_ACCOUNT_USER_NAME, userName)
             userData.putString(KEY_ACCOUNT_USER_AVATAR, userAvatar)
+            userData.putString(KEY_ACCOUNT_USER_AUTH, userAuth)
 
             // Creating the account on the device and setting the auth token we got
-            // (Not setting the auth token will cause another call to the server to authenticate the user)
-
-            // Creating the account on the device and setting the auth token we got
-            // (Not setting the auth token will cause another call to the server to authenticate the user)
+            // Not setting the auth token will cause
+            // another call to the server to authenticate the user
             val accounts = accountMgr.getAccountsByType(ACCOUNT_TYPE)
             var isExist = false
             for (existAccount in accounts) {
@@ -234,6 +236,7 @@ class SignInActivity : AccountAuthenticatorActivity() {
                     accountMgr.setUserData(account, KEY_ACCOUNT_USER_ID, userId)
                     accountMgr.setUserData(account, KEY_ACCOUNT_USER_NAME, userName)
                     accountMgr.setUserData(account, KEY_ACCOUNT_USER_AVATAR, userAvatar)
+                    accountMgr.setUserData(account, KEY_ACCOUNT_USER_AUTH, userAuth)
                     isExist = true
                     break
                 }
