@@ -1,6 +1,0 @@
-ext {
-    testing = [
-            "lkongAccount" : "469608745@qq.com",
-            "lkongPassword": "WODESHENGRI19970720"
-    ]
-}

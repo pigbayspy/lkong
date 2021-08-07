@@ -33,15 +33,17 @@ class TimelineAdapter(
     private val todayPrefix = context.getString(R.string.text_datetime_today)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val isReply = (viewType == TYPE_REPLY)
-        return if (isReply) {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_timeline, parent, false)
-            TimelineReplyHolder(view)
-        } else {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_timeline_thread, parent, false)
-            TimelineViewHolder(view)
+        return when (viewType) {
+            TYPE_QUOTE, TYPE_REPLY -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_timeline, parent, false)
+                TimelineReplyHolder(view)
+            }
+            else -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_timeline_thread, parent, false)
+                TimelineViewHolder(view)
+            }
         }
     }
 

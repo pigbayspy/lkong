@@ -44,6 +44,7 @@ object LkongServiceProvider {
     fun addAccount(auth: LkongAuthObject) {
         lkongCookie.clear()
         val cookies = listOf(auth.authCookie)
-        lkongCookie.saveFromResponse("".toHttpUrl(), cookies)
+        val host = RestApiConst.LKONG_HOST + RestApiConst.GRAPHQL
+        lkongCookie.saveFromResponse(host.toHttpUrl(), cookies)
     }
 }
