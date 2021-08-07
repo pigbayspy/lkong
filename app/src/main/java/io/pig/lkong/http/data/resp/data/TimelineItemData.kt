@@ -10,6 +10,6 @@ class TimelineItemData(
     val dateline: Long,
     val content: String,
     val pid: String,
-    val quote: TimelineQuoteData,
+    val quote: TimelineQuoteData?,
     val thread: TimelineThreadData
 )

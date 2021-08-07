@@ -49,32 +49,33 @@ class TimelineAdapter(
         super.onBindViewHolder(holder, position)
         val viewHolder = holder as TimelineViewHolder
         val item = getItem(position)
-        val isReply = (getItemViewType(position) == TYPE_REPLY)
-        if (isReply) {
-            bindReplyItem(viewHolder as TimelineReplyHolder, item)
-        } else {
-            bindThreadItem(viewHolder, item)
+        when (getItemViewType(position)) {
+            TYPE_QUOTE -> bindQuoteItem(viewHolder as TimelineReplyHolder, item)
+            TYPE_REPLY -> bindReplyItem(viewHolder as TimelineReplyHolder, item)
+            TYPE_THREAD -> bindThreadItem(viewHolder, item)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        return if (item.isQuote || !item.isThread) {
-            TYPE_REPLY
-        } else if (item.isThread) {
-            TYPE_THREAD
-        } else {
-            TYPE_THREAD
+        return when {
+            item.quoteInfo != null -> {
+                TYPE_QUOTE
+            }
+            item.threadInfo != null -> {
+                TYPE_THREAD
+            }
+            else -> {
+                TYPE_THREAD
+            }
         }
     }
 
     private fun bindThreadItem(holder: TimelineViewHolder, item: TimelineModel) {
-// 用户发布主题
-
         // 用户发布主题
         val mainPrefixSpannable = SpannableStringBuilder()
         val createInfo: String =
-            context.getString(R.string.format_timeline_create_thread, item.subject)
+            context.getString(R.string.format_timeline_create_thread, item.threadInfo!!.title)
         mainPrefixSpannable.append(createInfo)
         mainPrefixSpannable.setSpan(
             ForegroundColorSpan(textColorSecondary),
@@ -89,70 +90,84 @@ class TimelineAdapter(
             Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         )
         mainPrefixSpannable.append('\n')
-        val mainContent = item.message
+        val mainContent = item.content
         val mainSpannable = SpannableStringBuilder()
         mainSpannable.append(mainPrefixSpannable).append(mainContent)
 
         holder.messageText.text = mainSpannable
-        holder.authorText.text = item.userName
-        val avatarUrl = LkongUtil.generateAvatarUrl(item.userId)
+        holder.authorText.text = item.authorName
+        val avatarUrl = LkongUtil.generateAvatarUrl(item.authorId)
         ImageLoaderUtil.loadAvatar(context, holder.authorAvatar, avatarUrl, avatarSize)
+    }
+
+    private fun bindQuoteItem(holder: TimelineReplyHolder, item: TimelineModel) {
+        val mainPrefixSpannable = SpannableStringBuilder()
+        val quote = item.quoteInfo!!
+        holder.secondaryContainer.visibility = View.VISIBLE
+        val spanText = SpannableStringBuilder()
+        val secondaryText: String = context.getString(
+            R.string.format_timeline_reply_to_reply,
+            item.authorName,
+            quote.authorName
+        )
+        spanText.append(secondaryText)
+        if (quote.authorName.isNotEmpty()) {
+            val nameStart: Int = secondaryText.indexOf(quote.authorName)
+            val nameEnd: Int = nameStart + quote.authorName.length
+            spanText.setSpan(
+                StyleSpan(Typeface.BOLD),
+                nameStart,
+                nameEnd,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+        holder.secondaryMessageText.text = spanText
+        holder.thirdMessageText.text = quote.content
+        val mainContent = item.content
+        val mainSpannable = SpannableStringBuilder()
+        mainSpannable.append(mainPrefixSpannable).append(mainContent)
+        holder.messageText.text = mainSpannable
+
+        holder.authorText.text = item.authorName
+        holder.datelineText.text = DateUtil.formatDateByToday(item.dateline, todayPrefix)
+        val avatarUrl = LkongUtil.generateAvatarUrl(item.authorId)
+        ImageLoaderUtil.loadAvatar(
+            context,
+            holder.authorAvatar,
+            avatarUrl,
+            avatarSize
+        )
     }
 
     private fun bindReplyItem(holder: TimelineReplyHolder, item: TimelineModel) {
         val mainPrefixSpannable = SpannableStringBuilder()
-        val mainContent = if (item.isQuote) {
-            // 回复某一条回复
-            val quote = item.replyQuote!!
-            holder.secondaryContainer.visibility = View.VISIBLE
-            val spanText = SpannableStringBuilder()
-            val secondaryText: String = context.getString(
-                R.string.format_timeline_reply_to_reply,
-                quote.posterName,
-                item.subject
-            )
-            spanText.append(secondaryText)
-            if (quote.posterName.isNotEmpty()) {
-                val nameStart: Int = secondaryText.indexOf(quote.posterName)
-                val nameEnd: Int = nameStart + quote.posterName.length
-                spanText.setSpan(
-                    StyleSpan(Typeface.BOLD),
-                    nameStart,
-                    nameEnd,
-                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-                )
-            }
-            holder.secondaryMessageText.text = spanText
-            holder.thirdMessageText.text = quote.posterMessage
-            quote.message
-        } else {
-            // 回复某一主题
-            holder.secondaryContainer.visibility = View.VISIBLE
-            val spanText = SpannableStringBuilder()
-            val secondaryText: String =
-                context.getString(R.string.format_timeline_reply_to_thread, item.threadAuthor)
-            spanText.append(secondaryText)
-            if (item.threadAuthor.isNotEmpty()) {
-                val nameStart: Int = secondaryText.indexOf(item.threadAuthor)
-                val nameEnd: Int = nameStart + item.threadAuthor.length
-                spanText.setSpan(
-                    StyleSpan(Typeface.BOLD),
-                    nameStart,
-                    nameEnd,
-                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-                )
-            }
-            holder.secondaryMessageText.text = spanText
-            holder.thirdMessageText.text = item.subject
-            item.message
-        }
+
+        // 回复某一主题
+        holder.secondaryContainer.visibility = View.VISIBLE
+        val spanText = SpannableStringBuilder()
+        val threadAuthorName = item.replyInfo!!.authorName
+        val secondaryText: String =
+            context.getString(R.string.format_timeline_reply_to_thread, threadAuthorName)
+        spanText.append(secondaryText)
+        val nameStart: Int = secondaryText.indexOf(threadAuthorName)
+        val nameEnd: Int = nameStart + threadAuthorName.length
+        spanText.setSpan(
+            StyleSpan(Typeface.BOLD),
+            nameStart,
+            nameEnd,
+            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+        holder.secondaryMessageText.text = spanText
+        holder.thirdMessageText.text = item.replyInfo.title
+        val mainContent = item.content
+
         val mainSpannable = SpannableStringBuilder()
         mainSpannable.append(mainPrefixSpannable).append(mainContent)
         holder.messageText.text = mainSpannable
 
-        holder.authorText.text = item.userName
+        holder.authorText.text = item.authorName
         holder.datelineText.text = DateUtil.formatDateByToday(item.dateline, todayPrefix)
-        val avatarUrl = LkongUtil.generateAvatarUrl(item.userId)
+        val avatarUrl = LkongUtil.generateAvatarUrl(item.authorId)
         ImageLoaderUtil.loadAvatar(
             context,
             holder.authorAvatar,
@@ -162,6 +177,7 @@ class TimelineAdapter(
     }
 
     companion object {
+        const val TYPE_QUOTE = 2
         const val TYPE_REPLY = 1
         const val TYPE_THREAD = 0
     }

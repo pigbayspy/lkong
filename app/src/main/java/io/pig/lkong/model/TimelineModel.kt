@@ -12,53 +12,68 @@ import java.util.*
  */
 class TimelineModel : BaseCollectionItem {
 
-    val isQuote: Boolean
-    val userId: Long
-    val userName: String
+    val authorId: Long
+    val authorName: String
     val dateline: Date
-    val message: String
-    val isThread: Boolean
-    val tid: Long
-    val subject: String
-    val threadAuthor: String
-    val threadAuthorId: Long
-    val threadReplyCount: Int
-    val id: String
-    private val sortKey: Long
-    val sortKeyDate: Date
-    val replyQuote: ReplyQuote?
+    val content: String
+    val threadId: Long
+    val replyInfo: ReplyInfo?
+    val threadInfo: ThreadInfo?
+    val quoteInfo: QuoteInfo?
 
     private constructor(parcel: Parcel) {
-        isQuote = parcel.readByte().toInt() != 0
-        userId = parcel.readLong()
-        userName = parcel.readString() ?: ""
+        this.authorId = parcel.readLong()
+        this.authorName = parcel.readString() ?: ""
         val tmpDateline: Long = parcel.readLong()
-        dateline = if (tmpDateline == -1L) null else Date(tmpDateline)
-        message = parcel.readString() ?: ""
-        isThread = parcel.readByte().toInt() != 0
-        tid = parcel.readLong()
-        subject = parcel.readString() ?: ""
-        threadAuthor = parcel.readString() ?: ""
-        threadAuthorId = parcel.readLong()
-        threadReplyCount = parcel.readInt()
-        id = parcel.readString() ?: ""
-        sortKey = parcel.readLong()
-        val tmpSortKeyDate: Long = parcel.readLong()
-        sortKeyDate = if (tmpSortKeyDate == -1L) {
+        this.dateline = if (tmpDateline == -1L) {
             Date()
         } else {
-            Date(tmpSortKeyDate)
+            Date(tmpDateline)
         }
-        replyQuote = parcel.readParcelable(ReplyQuote::class.java.classLoader)
+        this.content = parcel.readString() ?: ""
+        this.threadId = parcel.readLong()
+        this.replyInfo = parcel.readParcelable(ReplyInfo::class.java.classLoader)
+        this.threadInfo = parcel.readParcelable(ThreadInfo::class.java.classLoader)
+        this.quoteInfo = parcel.readParcelable(QuoteInfo::class.java.classLoader)
     }
 
     constructor(timeline: TimelineItemData) {
-        this.tid = timeline.thread.tid
+        this.authorId = timeline.authorid
+        this.authorName = timeline.author.name
+        this.dateline = Date(timeline.dateline)
+        this.content = timeline.content
+        this.threadId = timeline.thread.tid
+        if (timeline.quote != null) {
+            this.quoteInfo = QuoteInfo(
+                timeline.quote.author.name,
+                timeline.quote.author.uid,
+                timeline.quote.content
+            )
+        } else {
+            this.quoteInfo = null
+        }
+        if (timeline.thread.author != null) {
+            this.replyInfo = ReplyInfo(
+                timeline.thread.title!!,
+                timeline.thread.author.name,
+                timeline.thread.author.uid
+            )
+        } else {
+            this.replyInfo = null
+        }
+        if (timeline.thread.title != null) {
+            this.threadInfo = ThreadInfo(
+                timeline.thread.replies ?: 0,
+                timeline.thread.title ?: "",
+                timeline.thread.forumName ?: ""
+            )
+        } else {
+            this.threadInfo = null
+        }
     }
 
-
     override fun getSortKey(): Long {
-        return sortKey
+        return 0
     }
 
     override fun describeContents(): Int {
@@ -66,46 +81,31 @@ class TimelineModel : BaseCollectionItem {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeByte(if (isQuote) 1.toByte() else 0.toByte())
-        dest.writeLong(userId)
-        dest.writeString(userName)
+        dest.writeLong(authorId)
+        dest.writeString(authorName)
         dest.writeLong(dateline.time)
-        dest.writeString(message)
-        dest.writeByte(if (isThread) 1.toByte() else 0.toByte())
-        dest.writeLong(tid)
-        dest.writeString(subject)
-        dest.writeString(threadAuthor)
-        dest.writeLong(threadAuthorId)
-        dest.writeInt(threadReplyCount)
-        dest.writeString(id)
-        dest.writeLong(sortKey)
-        dest.writeLong(sortKeyDate.time)
-        dest.writeParcelable(replyQuote, 0)
+        dest.writeString(content)
+        dest.writeLong(threadId)
+        dest.writeParcelable(replyInfo, 0)
+        dest.writeParcelable(threadInfo, 0)
+        dest.writeParcelable(quoteInfo, 0)
     }
 
-    class ReplyQuote : Parcelable {
-        val posterName: String
-        val message: String
-        val posterMessage: String
-        val posterDatelineString: String
+    class ThreadInfo : Parcelable {
+        val replyCount: Int
+        val title: String
+        val forumName: String
 
-        private constructor(parcel: Parcel) {
-            posterName = parcel.readString() ?: ""
-            posterMessage = parcel.readString() ?: ""
-            posterDatelineString = parcel.readString() ?: ""
-            message = parcel.readString() ?: ""
+        constructor(replyCount: Int, title: String, forumName: String) {
+            this.replyCount = replyCount
+            this.title = title
+            this.forumName = forumName
         }
 
-        constructor(
-            posterName: String,
-            message: String,
-            posterMessage: String,
-            posterDatelineString: String
-        ) {
-            this.posterName = posterName
-            this.message = message
-            this.posterMessage = posterMessage
-            this.posterDatelineString = posterDatelineString
+        private constructor(parcel: Parcel) {
+            replyCount = parcel.readInt()
+            title = parcel.readString() ?: ""
+            forumName = parcel.readString() ?: ""
         }
 
         override fun describeContents(): Int {
@@ -113,18 +113,97 @@ class TimelineModel : BaseCollectionItem {
         }
 
         override fun writeToParcel(dest: Parcel, flags: Int) {
-            dest.writeString(posterName)
-            dest.writeString(posterMessage)
-            dest.writeString(posterDatelineString)
-            dest.writeString(message)
+            dest.writeInt(replyCount)
+            dest.writeString(title)
+            dest.writeString(forumName)
         }
 
-        companion object CREATOR : Parcelable.Creator<ReplyQuote> {
-            override fun createFromParcel(parcel: Parcel): ReplyQuote {
-                return ReplyQuote(parcel)
+        companion object CREATOR : Parcelable.Creator<ThreadInfo> {
+            override fun createFromParcel(parcel: Parcel): ThreadInfo {
+                return ThreadInfo(parcel)
             }
 
-            override fun newArray(size: Int): Array<ReplyQuote?> {
+            override fun newArray(size: Int): Array<ThreadInfo?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
+    class ReplyInfo : Parcelable {
+        val title: String
+        val authorName: String
+        val authorId: Long
+
+        constructor(title: String, authorName: String, authorId: Long) {
+            this.title = title
+            this.authorName = authorName
+            this.authorId = authorId
+        }
+
+        private constructor(parcel: Parcel) {
+            this.title = parcel.readString() ?: ""
+            this.authorName = parcel.readString() ?: ""
+            this.authorId = parcel.readLong()
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        override fun writeToParcel(dest: Parcel, flags: Int) {
+            dest.writeString(title)
+            dest.writeString(authorName)
+            dest.writeLong(authorId)
+        }
+
+        companion object CREATOR : Parcelable.Creator<ReplyInfo> {
+            override fun createFromParcel(parcel: Parcel): ReplyInfo {
+                return ReplyInfo(parcel)
+            }
+
+            override fun newArray(size: Int): Array<ReplyInfo?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
+    class QuoteInfo : Parcelable {
+        val authorName: String
+        val authorId: Long
+        val content: String
+
+        private constructor(parcel: Parcel) {
+            authorName = parcel.readString() ?: ""
+            authorId = parcel.readLong()
+            content = parcel.readString() ?: ""
+        }
+
+        constructor(
+            authorName: String,
+            authorId: Long,
+            content: String,
+        ) {
+            this.authorName = authorName
+            this.authorId = authorId
+            this.content = content
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        override fun writeToParcel(dest: Parcel, flags: Int) {
+            dest.writeString(authorName)
+            dest.writeLong(authorId)
+            dest.writeString(content)
+        }
+
+        companion object CREATOR : Parcelable.Creator<QuoteInfo> {
+            override fun createFromParcel(parcel: Parcel): QuoteInfo {
+                return QuoteInfo(parcel)
+            }
+
+            override fun newArray(size: Int): Array<QuoteInfo?> {
                 return arrayOfNulls(size)
             }
         }
