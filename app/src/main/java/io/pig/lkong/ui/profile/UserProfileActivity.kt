@@ -13,6 +13,7 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityUserProfileBinding
 import io.pig.lkong.model.UserModel
 import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.lkong.util.LkongUtil
 import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.common.getThemeKey
 
@@ -62,10 +63,11 @@ class UserProfileActivity : AppCompatActivity() {
     private fun refresh(user: UserModel) {
         // 设置头像
         val avatarSize = resources.getDimensionPixelSize(R.dimen.size_avatar_user_profile)
+        val avatarUrl = LkongUtil.generateAvatarUrl(user.uid, user.avatar)
         ImageLoaderUtil.loadAvatar(
             this,
             binding.profileImageAvatar,
-            user.avatar,
+            avatarUrl,
             avatarSize
         )
         binding.profileTextUserName.text = user.name

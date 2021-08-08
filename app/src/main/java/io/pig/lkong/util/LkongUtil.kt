@@ -27,6 +27,10 @@ object LkongUtil {
         )
     }
 
+    fun generateAvatarUrl(userId: Long, avatar: String): String {
+        return "https://image.lkong.com/avatar/$userId/$avatar"
+    }
+
     fun fidToForumIconUrl(fid: Long): String {
         val fidString = String.format("%1$06d", fid)
         return String.format(
