@@ -42,4 +42,8 @@ interface LkongSpec {
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getTimeline(@Body timelineReq: TimelineReq): RespBase<TimelineResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getCollections(@Body collectionReq: CollectionReq): RespBase<CollectionResp>
+
 }

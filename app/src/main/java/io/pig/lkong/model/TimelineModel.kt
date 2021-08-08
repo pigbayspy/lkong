@@ -69,7 +69,7 @@ class TimelineModel : BaseCollectionItem {
         if (timeline.thread.title != null) {
             this.threadInfo = ThreadInfo(
                 timeline.thread.replies ?: 0,
-                timeline.thread.title ?: "",
+                timeline.thread.title,
                 timeline.thread.forumName ?: ""
             )
         } else {

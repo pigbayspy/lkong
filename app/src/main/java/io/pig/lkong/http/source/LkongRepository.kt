@@ -1,6 +1,5 @@
 package io.pig.lkong.http.source
 
-import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.LkongForumThreadResp
 import io.pig.lkong.http.data.LkongPostListReq
 import io.pig.lkong.http.data.LkongPostListResp
@@ -58,6 +57,11 @@ object LkongRepository {
             )
         }
         return LkongSignInResp(success = false)
+    }
+
+    suspend fun getCollections(uid: Long): RespBase<CollectionResp> {
+        val req = CollectionReq(uid)
+        return lkongSpec.getCollections(req)
     }
 
     suspend fun getTimeline(nextTime: Long): RespBase<TimelineResp> {
