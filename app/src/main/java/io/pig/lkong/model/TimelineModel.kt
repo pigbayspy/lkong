@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.pig.lkong.http.data.resp.data.TimelineItemData
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
+import io.pig.lkong.util.LkongUtil
 import java.util.*
 
 /**
@@ -41,13 +42,17 @@ class TimelineModel : BaseCollectionItem {
         this.authorId = timeline.authorid
         this.authorName = timeline.author.name
         this.dateline = Date(timeline.dateline)
-        this.content = timeline.content
+        val contentModels = LkongUtil.parseTimelineContent(timeline.content)
+        this.content = findLastParagraph(contentModels)
         this.threadId = timeline.thread.tid
         if (timeline.quote != null) {
+            // 提取信息
+            val quoteContentModels = LkongUtil.parseTimelineContent(timeline.quote.content)
+            val quoteContent = findLastParagraph(quoteContentModels)
             this.quoteInfo = QuoteInfo(
                 timeline.quote.author.name,
                 timeline.quote.author.uid,
-                timeline.quote.content
+                quoteContent
             )
         } else {
             this.quoteInfo = null
@@ -70,6 +75,21 @@ class TimelineModel : BaseCollectionItem {
         } else {
             this.threadInfo = null
         }
+    }
+
+    private fun findLastParagraph(contents: List<TimelineContentModel>): String {
+        for (content in contents.reversed()) {
+            if (content.type == "paragraph") {
+                for (child in content.children.reversed()) {
+                    for ((key, value) in child) {
+                        if (key == "text") {
+                            return value as String
+                        }
+                    }
+                }
+            }
+        }
+        return ""
     }
 
     override fun getSortKey(): Long {

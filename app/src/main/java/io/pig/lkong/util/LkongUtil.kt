@@ -1,5 +1,10 @@
 package io.pig.lkong.util
 
+import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import io.pig.lkong.model.TimelineContentModel
+
 /**
  * 账户工具类
  *
@@ -7,6 +12,10 @@ package io.pig.lkong.util
  * @since 2021/05/18
  */
 object LkongUtil {
+
+    private val gson = Gson()
+
+    private val timelineContentType = object : TypeToken<List<TimelineContentModel>>() {}.type
 
     fun generateAvatarUrl(userId: Long): String {
         val uidString = String.format("%1$06d", userId)
@@ -26,5 +35,15 @@ object LkongUtil {
             fidString.substring(2, 4),
             fidString.substring(4, 6)
         )
+    }
+
+    fun parseTimelineContent(content: String): List<TimelineContentModel> {
+        try {
+            val result = gson.fromJson<List<TimelineContentModel>>(content, timelineContentType)
+            return result
+        } catch (e: Exception) {
+            Log.e("LkongUtil", "parse string [$content] error")
+            return emptyList()
+        }
     }
 }
