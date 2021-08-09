@@ -20,7 +20,6 @@ import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.databinding.ActivityMainBinding
 import io.pig.lkong.exception.SignInException
-import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION_VALUE
@@ -83,9 +82,6 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
-        // 设置用户cookie
-        LkongServiceProvider.addAccount(userAccountMgr.getAuthObject())
-
         // 初始化配置
         initConfig()
 

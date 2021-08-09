@@ -3,6 +3,8 @@ package io.pig.lkong.util
 import android.content.Context
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import io.pig.lkong.R
 
 /**
@@ -25,6 +27,21 @@ object ImageLoaderUtil {
     ) {
         Glide.with(context)
             .load(toSmallAvatar(avatarUrl))
+            .error(R.drawable.ic_placeholder_avatar)
+            .placeholder(R.drawable.ic_placeholder_avatar)
+            .override(avatarSize, avatarSize)
+            .circleCrop()
+            .into(target)
+    }
+
+    fun loadLkongAvatar(
+        context: Context, target: ImageView, avatarUrl: String, avatarSize: Int
+    ) {
+        val glideHeader = LazyHeaders.Builder()
+            .addHeader("Referer", "https://www.lkong.com/").build()
+        val avatarGlideUrl = GlideUrl(avatarUrl, glideHeader)
+        Glide.with(context)
+            .load(avatarGlideUrl)
             .error(R.drawable.ic_placeholder_avatar)
             .placeholder(R.drawable.ic_placeholder_avatar)
             .override(avatarSize, avatarSize)

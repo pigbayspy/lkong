@@ -1,11 +1,9 @@
 package io.pig.lkong.http.provider
 
-import io.pig.lkong.account.LkongAuthObject
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.cookie.CookieManager
 import io.pig.lkong.http.cookie.impl.MemoryCookieStore
 import io.pig.lkong.http.spec.LkongSpec
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -39,12 +37,5 @@ object LkongServiceProvider {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         lkongClient = retrofit.create(LkongSpec::class.java)
-    }
-
-    fun addAccount(auth: LkongAuthObject) {
-        lkongCookie.clear()
-        val cookies = listOf(auth.authCookie)
-        val host = RestApiConst.LKONG_HOST + RestApiConst.GRAPHQL
-        lkongCookie.saveFromResponse(host.toHttpUrl(), cookies)
     }
 }

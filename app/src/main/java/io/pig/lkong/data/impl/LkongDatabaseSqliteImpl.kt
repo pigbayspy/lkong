@@ -5,6 +5,7 @@ import androidx.room.Room
 import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.data.db.HistoryDatabase
 import io.pig.lkong.model.HistoryModel
+import java.util.*
 
 /**
  * @author yinhang
@@ -31,7 +32,7 @@ class LkongDatabaseSqliteImpl(context: Context) : LkongDatabase {
                 forumTitle = it.forumTitle,
                 authorId = it.authorId,
                 authorName = it.authorName,
-                lastReadTime = it.lastReadTime
+                lastReadTime = Date(it.lastReadTime)
             )
         }
         return result

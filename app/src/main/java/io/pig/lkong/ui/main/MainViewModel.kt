@@ -2,10 +2,8 @@ package io.pig.lkong.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.pig.lkong.account.UserAccount
 import io.pig.lkong.account.UserAccountManager
-import kotlinx.coroutines.launch
 
 /**
  * @author yinhang

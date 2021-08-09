@@ -21,7 +21,6 @@ import io.pig.lkong.ui.forum.follow.FollowForumsFragment
 import io.pig.lkong.ui.thread.digest.DigestThreadFragment
 import io.pig.lkong.ui.thread.hot.HotThreadFragment
 import io.pig.lkong.ui.timeline.TimeLineFragment
-import io.pig.ui.common.getPrimaryColor
 
 class HomeFragment : Fragment() {
 

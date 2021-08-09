@@ -80,7 +80,7 @@ dependencies {
 
     // room
     implementation dependency.room
-    annotationProcessor dependency.roomProcessor
+    kapt dependency.roomProcessor
 
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'

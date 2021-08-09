@@ -3,7 +3,6 @@ package io.pig.lkong.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
 /**
  * @author yinhang
@@ -30,5 +29,5 @@ data class HistoryEntity(
     @ColumnInfo(name = "author_name")
     val authorName: String,
     @ColumnInfo(name = "last_read_time")
-    val lastReadTime: Date
+    val lastReadTime: Long
 )

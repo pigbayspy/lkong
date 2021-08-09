@@ -2,7 +2,6 @@ package io.pig.lkong.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import io.pig.lkong.http.data.LkongPostListResp
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 import java.util.*
 

@@ -64,7 +64,7 @@ class UserProfileActivity : AppCompatActivity() {
         // 设置头像
         val avatarSize = resources.getDimensionPixelSize(R.dimen.size_avatar_user_profile)
         val avatarUrl = LkongUtil.generateAvatarUrl(user.uid, user.avatar)
-        ImageLoaderUtil.loadAvatar(
+        ImageLoaderUtil.loadLkongAvatar(
             this,
             binding.profileImageAvatar,
             avatarUrl,
