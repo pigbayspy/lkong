@@ -29,11 +29,12 @@ class UserProfileActivity : AppCompatActivity() {
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
 
         // 获取参数
-        savedInstanceState?.apply {
+        savedInstanceState?.let {
             uid = savedInstanceState.getLong(DataContract.BUNDLE_USER_ID, INVALID_USER_ID)
         }
 
         setUpToolbar(binding.toolbar)
+        setContentView(binding.root)
 
         userProfileViewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)
         userProfileViewModel.user.observe(this) {
