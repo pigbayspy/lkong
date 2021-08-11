@@ -26,6 +26,7 @@ class UserModel(userProfileResp: UserProfileResp) {
     val punchAllDay: Int
     val punchDay: Int
     val punchHighestDay: Int
+    val dateline: Long
 
     init {
         this.uid = userProfileResp.user.uid
@@ -46,5 +47,6 @@ class UserModel(userProfileResp: UserProfileResp) {
         this.punchAllDay = userProfileResp.userPunch.punchallday
         this.punchDay = userProfileResp.userPunch.punchday
         this.punchHighestDay = userProfileResp.userPunch.punchhighestday
+        this.dateline = userProfileResp.user.dateline
     }
 }

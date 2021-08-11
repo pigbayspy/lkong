@@ -9,5 +9,6 @@ class UserRespData(
     val name: String,
     val avatar: String?,
     val verify: String?,
-    val status: String?
+    val status: String?,
+    val dateline: Long
 )

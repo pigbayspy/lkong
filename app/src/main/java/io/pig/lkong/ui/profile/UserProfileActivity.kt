@@ -12,6 +12,7 @@ import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityUserProfileBinding
 import io.pig.lkong.model.UserModel
+import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.LkongUtil
 import io.pig.lkong.util.ThemeUtil
@@ -22,7 +23,7 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserProfileBinding
     private lateinit var userProfileViewModel: UserProfileViewModel
 
-    private var uid: Long = INVALID_USER_ID
+    private var uid = INVALID_USER_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +99,7 @@ class UserProfileActivity : AppCompatActivity() {
         binding.profileTextTotalPunch.text = user.punchAllDay.toString()
         binding.profileTextCurrentPunch.text = user.punchDay.toString()
         binding.profileTextLongestPunch.text = user.punchHighestDay.toString()
+        binding.profileTextRegistTime.text = DateUtil.formatDateByTimestamp(user.dateline)
     }
 
     private fun getUserStatsText(

@@ -22,6 +22,7 @@ class UserProfileReq {
                     info
                 }
                 status
+                dateline
             }
             userCount(uid: 0) {
                 followings

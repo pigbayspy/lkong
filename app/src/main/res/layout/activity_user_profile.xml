@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarlayout"
+        android:id="@+id/user_profile_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:tag="background|primary_color"
@@ -315,40 +315,6 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toStartOf="@id/activity_profile_textview_last_punch"
-                            android:gravity="center_vertical"
-                            android:minHeight="48dp"
-                            android:tag="text_color|primary_text"
-                            android:text="@string/text_last_punch_time"
-                            android:textSize="@dimen/text_size_body2" />
-
-                        <TextView
-                            android:id="@+id/activity_profile_textview_last_punch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:gravity="center_vertical"
-                            android:minHeight="48dp"
-                            android:tag="text_color|secondary_text" />
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:alpha="0.2"
-                        android:tag="background|secondary_text" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:layout_toStartOf="@id/profile_text_current_punch"
                             android:gravity="center_vertical"
                             android:minHeight="48dp"
@@ -453,7 +419,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toStartOf="@id/profile_text_registration_time"
+                            android:layout_toStartOf="@id/profile_text_regist_time"
                             android:gravity="center_vertical"
                             android:minHeight="48dp"
                             android:tag="text_color|primary_text"
@@ -461,7 +427,7 @@
                             android:textSize="@dimen/text_size_body2" />
 
                         <TextView
-                            android:id="@+id/profile_text_registration_time"
+                            android:id="@+id/profile_text_regist_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
