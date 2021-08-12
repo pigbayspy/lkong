@@ -34,7 +34,6 @@ class UserProfileActivity : AppCompatActivity() {
             uid = savedInstanceState.getLong(DataContract.BUNDLE_USER_ID, INVALID_USER_ID)
         }
 
-        setUpToolbar(binding.toolbar)
         setContentView(binding.root)
 
         userProfileViewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)

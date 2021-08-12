@@ -106,18 +106,6 @@
                         android:textSize="20sp" />
                 </LinearLayout>
             </RelativeLayout>
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:contentInsetEnd="0dp"
-                app:contentInsetLeft="72dp"
-                app:contentInsetStart="72dp"
-                app:elevation="@dimen/toolbar_elevation"
-                app:layout_collapseMode="pin"
-                app:popupTheme="?toolbar_popup_theme"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -132,7 +120,7 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/fragment_user_detail_cardview_introduction"
+                android:id="@+id/profile_card_introduction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp"
@@ -141,7 +129,7 @@
                 app:contentPadding="0dp">
 
                 <TextView
-                    android:id="@+id/fragment_user_detail_textview_introduction"
+                    android:id="@+id/profile_text_introduction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
@@ -152,7 +140,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/fragment_user_detail_cardview_else"
+                android:id="@+id/profile_card_else"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp"
