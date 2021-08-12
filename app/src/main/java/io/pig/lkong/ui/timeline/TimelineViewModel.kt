@@ -13,13 +13,29 @@ import kotlinx.coroutines.launch
  */
 class TimelineViewModel : ViewModel() {
 
-    val timelines = MutableLiveData<List<TimelineModel>>()
+    private var time = System.currentTimeMillis()
+
+    val timelines = MutableLiveData<List<TimelineModel>>(emptyList())
 
     fun getTimeline() {
         viewModelScope.launch {
-            val time = System.currentTimeMillis()
             val respData = LkongRepository.getTimeline(time)
             if (respData.data != null) {
+                time = respData.data.feeds.nextTime
+                val timelineModels = respData.data.feeds.data.map {
+                    TimelineModel(it)
+                }
+                timelines.value = timelines.value!! + timelineModels
+            }
+        }
+    }
+
+    fun refresh() {
+        this.time = System.currentTimeMillis()
+        viewModelScope.launch {
+            val respData = LkongRepository.getTimeline(time)
+            if (respData.data != null) {
+                time = respData.data.feeds.nextTime
                 val timelineModels = respData.data.feeds.data.map {
                     TimelineModel(it)
                 }
