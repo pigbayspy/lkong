@@ -17,8 +17,6 @@ import io.pig.lkong.preference.Prefs
 import io.pig.lkong.ui.adapter.MainTabFragmentAdapter
 import io.pig.lkong.ui.adapter.item.FragmentItem
 import io.pig.lkong.ui.forum.ForumsFragment
-import io.pig.lkong.ui.forum.follow.FollowForumsFragment
-import io.pig.lkong.ui.thread.digest.DigestThreadFragment
 import io.pig.lkong.ui.thread.hot.HotThreadFragment
 import io.pig.lkong.ui.timeline.TimeLineFragment
 
@@ -86,19 +84,12 @@ class HomeFragment : Fragment() {
     private fun setupViewPager() {
         val activity = requireActivity() as MainActivity
         val forumsFragment = ForumsFragment.newInstance()
-        val followForumsFragment = FollowForumsFragment.newInstance()
         val timelineFragment = TimeLineFragment.newInstance()
         val hotThreadFragment = HotThreadFragment.newInstance()
-        val digestThreadFragment = DigestThreadFragment.newInstance()
         val forumsItem = FragmentItem(
             forumsFragment,
             getString(R.string.tab_item_forum),
             R.drawable.ic_tab_forums
-        )
-        val followForumsItem = FragmentItem(
-            followForumsFragment,
-            getString(R.string.tab_item_follow_forum),
-            R.drawable.ic_tab_stared
         )
         val timeLineItem = FragmentItem(
             timelineFragment,
@@ -110,16 +101,11 @@ class HomeFragment : Fragment() {
             getString(R.string.tab_item_hot_thread),
             R.drawable.ic_tab_whatshot
         )
-        val digestThreadItem = FragmentItem(
-            digestThreadFragment,
-            getString(R.string.tab_item_digest_thread),
-            R.drawable.ic_tab_digest
-        )
         val fragments = if (forumsFirst.get()) {
-            listOf(forumsItem, followForumsItem, timeLineItem)
+            listOf(forumsItem, timeLineItem)
         } else {
-            listOf(timeLineItem, followForumsItem, forumsItem)
-        } + listOf(hotThreadItem, digestThreadItem)
+            listOf(timeLineItem, forumsItem)
+        } + hotThreadItem
 
         val fragmentAdapter = MainTabFragmentAdapter(childFragmentManager, fragments)
         pages.adapter = fragmentAdapter

@@ -65,7 +65,7 @@ class TimelineAdapter(
                 TYPE_QUOTE
             }
             item.threadInfo != null -> {
-                TYPE_THREAD
+                TYPE_REPLY
             }
             else -> {
                 TYPE_THREAD
@@ -77,7 +77,7 @@ class TimelineAdapter(
         // 用户发布主题
         val mainPrefixSpannable = SpannableStringBuilder()
         val createInfo: String =
-            context.getString(R.string.format_timeline_create_thread, item.threadInfo!!.title)
+            context.getString(R.string.format_timeline_thread, item.threadInfo!!.title)
         mainPrefixSpannable.append(createInfo)
         mainPrefixSpannable.setSpan(
             ForegroundColorSpan(textColorSecondary),
@@ -108,7 +108,7 @@ class TimelineAdapter(
         holder.secondaryContainer.visibility = View.VISIBLE
         val spanText = SpannableStringBuilder()
         val secondaryText: String = context.getString(
-            R.string.format_timeline_reply_to_reply,
+            R.string.format_timeline_quote,
             item.authorName,
             quote.authorName
         )
@@ -149,7 +149,7 @@ class TimelineAdapter(
         val spanText = SpannableStringBuilder()
         val threadAuthorName = item.replyInfo!!.authorName
         val secondaryText: String =
-            context.getString(R.string.format_timeline_reply_to_thread, threadAuthorName)
+            context.getString(R.string.format_timeline_reply, threadAuthorName)
         spanText.append(secondaryText)
         val nameStart: Int = secondaryText.indexOf(threadAuthorName)
         val nameEnd: Int = nameStart + threadAuthorName.length
