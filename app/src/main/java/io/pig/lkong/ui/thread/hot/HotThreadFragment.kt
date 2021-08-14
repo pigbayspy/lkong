@@ -26,10 +26,18 @@ class HotThreadFragment : Fragment() {
         hotThreadViewModel = ViewModelProvider(this).get(HotThreadViewModel::class.java)
         binding = FragmentHotThreadBinding.inflate(inflater, container, false)
         val root = binding.root
-        hotThreadViewModel.hotThreads.observe(viewLifecycleOwner) {
-            refreshHotThread(it)
+        hotThreadViewModel.apply {
+            hotThreads.observe(viewLifecycleOwner) {
+                refreshHotThread(it)
+            }
+            loading.observe(viewLifecycleOwner) {
+                refreshLoading(it)
+            }
         }
         hotThreadViewModel.getHotThreads()
+        root.setOnRefreshListener {
+            hotThreadViewModel.refresh()
+        }
         return root
     }
 
@@ -38,6 +46,10 @@ class HotThreadFragment : Fragment() {
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.recycleListHotThread.adapter =
             HotThreadAdapter(requireActivity(), hotThreads)
+    }
+
+    private fun refreshLoading(loading: Boolean) {
+        binding.root.isRefreshing = loading
     }
 
     companion object {

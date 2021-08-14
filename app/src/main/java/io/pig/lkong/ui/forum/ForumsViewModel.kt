@@ -15,25 +15,25 @@ import kotlinx.coroutines.launch
 class ForumsViewModel : ViewModel() {
 
     val forums = MutableLiveData<List<ForumModel>>(emptyList())
-    val loading = MutableLiveData(true)
+    val loading = MutableLiveData(false)
 
     fun refresh() {
-        loading.value = true
-        forums.value = emptyList()
         getForums()
     }
 
     fun getForums() {
+        forums.value = emptyList()
+        loading.value = true
         viewModelScope.launch {
             try {
                 val forumResp = LkongRepository.getForums()
                 val forumData = forumResp.data?.forums ?: emptyList()
                 val forumList = forumData.map { ForumModel(it) }
                 forums.value = forumList
-                loading.value = false
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong network fail", e)
             }
+            loading.value = false
         }
     }
 

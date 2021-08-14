@@ -15,21 +15,28 @@ import kotlinx.coroutines.launch
 class HotThreadViewModel : ViewModel() {
 
     val hotThreads = MutableLiveData<List<HotThreadModel>>(emptyList())
+    val loading = MutableLiveData(false)
 
     fun getHotThreads() {
+        loading.value = true
+        hotThreads.value = emptyList()
         viewModelScope.launch {
             try {
                 val respBase = LkongRepository.getHot()
-                val hotThreadData = respBase.data?.hots?: emptyList()
+                val hotThreadData = respBase.data?.hots ?: emptyList()
                 val threads = hotThreadData.map {
                     HotThreadModel(it.tid, it.title)
                 }
                 hotThreads.value = threads
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong Network Request Fail", e)
-                hotThreads.value = emptyList()
             }
+            loading.value = false
         }
+    }
+
+    fun refresh() {
+        getHotThreads()
     }
 
     companion object {

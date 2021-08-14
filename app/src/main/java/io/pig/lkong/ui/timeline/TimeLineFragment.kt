@@ -27,10 +27,18 @@ class TimeLineFragment : Fragment() {
         timelineViewModel = ViewModelProvider(this).get(TimelineViewModel::class.java)
         binding = FragmentTimeLineBinding.inflate(inflater, container, false)
         val root = binding.root
-        timelineViewModel.timelines.observe(viewLifecycleOwner) {
-            refreshTimeline(it)
+        timelineViewModel.apply {
+            timelines.observe(viewLifecycleOwner) {
+                refreshTimeline(it)
+            }
+            loading.observe(viewLifecycleOwner) {
+                refreshLoading(it)
+            }
         }
         timelineViewModel.getTimeline()
+        root.setOnRefreshListener {
+            timelineViewModel.refresh()
+        }
         return root
     }
 
@@ -39,6 +47,10 @@ class TimeLineFragment : Fragment() {
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.recycleListTimeline.adapter =
             TimelineAdapter(requireContext(), getThemeKey(), timelines)
+    }
+
+    private fun refreshLoading(loading: Boolean) {
+        binding.root.isRefreshing = loading
     }
 
     companion object {
