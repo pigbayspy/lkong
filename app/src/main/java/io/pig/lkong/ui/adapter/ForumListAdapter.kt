@@ -10,7 +10,7 @@ import io.pig.lkong.model.ForumModel
 import io.pig.lkong.ui.adapter.item.ForumViewHolder
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.NumberFormatUtil
-import io.pig.widget.adapter.BaseRecycleViewAdapter
+import io.pig.widget.adapter.FixedViewAdapter
 
 /**
  * @author yinhang
@@ -20,7 +20,7 @@ class ForumListAdapter(
     val context: Context,
     private val showInGrid: Boolean,
     forums: List<ForumModel>
-) : BaseRecycleViewAdapter<ForumModel>(forums) {
+) : FixedViewAdapter<ForumModel>(forums) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layout = if (showInGrid) {

@@ -9,7 +9,7 @@ import io.pig.lkong.model.HotThreadModel
 import io.pig.lkong.ui.adapter.item.HotThreadViewHolder
 import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.TextDrawable
-import io.pig.widget.adapter.BaseRecycleViewAdapter
+import io.pig.widget.adapter.FixedViewAdapter
 
 /**
  * @author yinhang
@@ -18,7 +18,7 @@ import io.pig.widget.adapter.BaseRecycleViewAdapter
 class HotThreadAdapter(
     val context: Context,
     hotThreads: List<HotThreadModel>
-) : BaseRecycleViewAdapter<HotThreadModel>(hotThreads) {
+) : FixedViewAdapter<HotThreadModel>(hotThreads) {
 
     private val accentColor = ThemeUtil.accentColor(context)
 
