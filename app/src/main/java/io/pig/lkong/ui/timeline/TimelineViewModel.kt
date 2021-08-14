@@ -26,7 +26,7 @@ class TimelineViewModel : ViewModel() {
                 val respData = LkongRepository.getTimeline(time)
                 if (respData.data != null) {
                     time = respData.data.feeds.nextTime
-                    val timelineModels = respData.data.feeds.data.map {
+                    val timelineModels = respData.data.feeds.data.filterNotNull().map {
                         TimelineModel(it)
                     }
                     timelines.value = timelines.value!! + timelineModels
@@ -47,7 +47,7 @@ class TimelineViewModel : ViewModel() {
                 val respData = LkongRepository.getTimeline(time)
                 if (respData.data != null) {
                     time = respData.data.feeds.nextTime
-                    val timelineModels = respData.data.feeds.data.map {
+                    val timelineModels = respData.data.feeds.data.filterNotNull().map {
                         TimelineModel(it)
                     }
                     timelines.value = timelineModels

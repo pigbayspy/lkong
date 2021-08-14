@@ -6,5 +6,5 @@ package io.pig.lkong.http.data.resp.data
  */
 class TimelineRespData(
     val nextTime: Long,
-    val data: List<TimelineItemData>
+    val data: List<TimelineItemData?>
 )

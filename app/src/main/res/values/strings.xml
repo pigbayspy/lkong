@@ -33,7 +33,7 @@
     <string name="menu_gallery">我的收藏</string>
     <string name="menu_history">浏览历史</string>
     <string name="menu_setting">设置</string>
-    <string name="text_recycle_empty_text">这里什么都没有</string>
+    <string name="text_recycle_empty_text">这里什么都没有~ 刷新试试？</string>
     <string name="text_datetime_today">今天</string>
     <string name="text_user_all_activities_title">所有动态</string>
     <string name="text_user_digest_title">精华</string>

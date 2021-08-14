@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.databinding.FragmentTimeLineBinding
 import io.pig.lkong.model.TimelineModel
@@ -16,7 +17,6 @@ import io.pig.ui.common.getThemeKey
  * 时间线
  */
 class TimeLineFragment : Fragment() {
-
     private lateinit var timelineViewModel: TimelineViewModel
     private lateinit var binding: FragmentTimeLineBinding
 
@@ -39,6 +39,27 @@ class TimeLineFragment : Fragment() {
         root.setOnRefreshListener {
             timelineViewModel.refresh()
         }
+        binding.recycleListTimeline.apply {
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                private var isLoadingMore = false
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutMgr = layoutManager as StaggeredGridLayoutManager
+                    val into = layoutMgr.findLastCompletelyVisibleItemPositions(null)
+                    val lastPos = into.maxOrNull() ?: 1
+
+                    if (!isLoadingMore && dy > 0 && layoutMgr.itemCount - lastPos <= TO_LAST_LEFT) {
+                        // load more
+                        isLoadingMore = true
+                        timelineViewModel.getTimeline()
+                        isLoadingMore = false
+                    }
+                }
+            })
+        }
+
         return root
     }
 
@@ -54,6 +75,9 @@ class TimeLineFragment : Fragment() {
     }
 
     companion object {
+
+        private const val TO_LAST_LEFT = 5
+
         fun newInstance() = TimeLineFragment()
     }
 }
