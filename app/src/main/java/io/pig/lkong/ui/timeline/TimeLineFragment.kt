@@ -42,19 +42,15 @@ class TimeLineFragment : Fragment() {
         binding.recycleListTimeline.apply {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-                private var isLoadingMore = false
-
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val layoutMgr = layoutManager as StaggeredGridLayoutManager
                     val into = layoutMgr.findLastCompletelyVisibleItemPositions(null)
                     val lastPos = into.maxOrNull() ?: 1
 
-                    if (!isLoadingMore && dy > 0 && layoutMgr.itemCount - lastPos <= TO_LAST_LEFT) {
+                    if (dy > 0 && layoutMgr.itemCount - lastPos <= TO_LAST_LEFT) {
                         // load more
-                        isLoadingMore = true
                         timelineViewModel.getTimeline()
-                        isLoadingMore = false
                     }
                 }
             })

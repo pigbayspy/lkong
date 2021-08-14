@@ -15,11 +15,16 @@ import kotlinx.coroutines.launch
 class TimelineViewModel : ViewModel() {
 
     private var time = System.currentTimeMillis()
+    private var isLoadMore = false
 
     val timelines = MutableLiveData<List<TimelineModel>>(emptyList())
     val loading = MutableLiveData(false)
 
     fun getTimeline() {
+        if (isLoadMore) {
+            return
+        }
+        isLoadMore = true
         loading.value = true
         viewModelScope.launch {
             try {
@@ -29,34 +34,26 @@ class TimelineViewModel : ViewModel() {
                     val timelineModels = respData.data.feeds.data.filterNotNull().map {
                         TimelineModel(it)
                     }
-                    timelines.value = timelines.value!! + timelineModels
+                    timelines.value = timelines.value.let {
+                        if (it == null) {
+                            timelineModels
+                        } else {
+                            it + timelineModels
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong Network Request Fail", e)
             }
+            isLoadMore = false
             loading.value = false
         }
     }
 
     fun refresh() {
-        timelines.value = emptyList()
-        loading.value = true
         this.time = System.currentTimeMillis()
-        viewModelScope.launch {
-            try {
-                val respData = LkongRepository.getTimeline(time)
-                if (respData.data != null) {
-                    time = respData.data.feeds.nextTime
-                    val timelineModels = respData.data.feeds.data.filterNotNull().map {
-                        TimelineModel(it)
-                    }
-                    timelines.value = timelineModels
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Lkong Network Request Fail", e)
-            }
-            loading.value = false
-        }
+        this.timelines.value = null
+        getTimeline()
     }
 
     companion object {
