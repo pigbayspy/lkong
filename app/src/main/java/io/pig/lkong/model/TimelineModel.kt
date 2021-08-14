@@ -17,6 +17,7 @@ class TimelineModel : BaseCollectionItem {
     val authorName: String
     val authorAvatar: String?
     val dateline: Date
+    val pid: String
     val content: String
     val threadId: Long
     val replyInfo: ReplyInfo?
@@ -33,6 +34,7 @@ class TimelineModel : BaseCollectionItem {
         } else {
             Date(tmpDateline)
         }
+        this.pid = parcel.readString() ?: ""
         this.content = parcel.readString() ?: ""
         this.threadId = parcel.readLong()
         this.replyInfo = parcel.readParcelable(ReplyInfo::class.java.classLoader)
@@ -45,6 +47,7 @@ class TimelineModel : BaseCollectionItem {
         this.authorName = timeline.author.name
         this.authorAvatar = timeline.author.avatar
         this.dateline = Date(timeline.dateline)
+        this.pid = timeline.pid
         val contentModels = LkongUtil.parseTimelineContent(timeline.content)
         this.content = findLastParagraph(contentModels)
         this.threadId = timeline.thread.tid
@@ -108,6 +111,7 @@ class TimelineModel : BaseCollectionItem {
         dest.writeString(authorName)
         dest.writeString(authorAvatar)
         dest.writeLong(dateline.time)
+        dest.writeString(pid)
         dest.writeString(content)
         dest.writeLong(threadId)
         dest.writeParcelable(replyInfo, 0)

@@ -13,20 +13,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.TimelineModel
+import io.pig.lkong.ui.adapter.differ.TimelineDiffer
 import io.pig.lkong.ui.adapter.item.TimelineReplyHolder
 import io.pig.lkong.ui.adapter.item.TimelineViewHolder
-import io.pig.lkong.util.*
-import io.pig.widget.adapter.BaseRecycleViewAdapter
+import io.pig.lkong.util.DateUtil
+import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.lkong.util.ThemeUtil
+import io.pig.lkong.util.UiUtil
+import io.pig.widget.adapter.MutableViewAdapter
 
 /**
  * @author yinhang
  * @since 2021/7/22
  */
 class TimelineAdapter(
-    val context: Context,
-    val themeKey: String,
-    timelines: List<TimelineModel>
-) : BaseRecycleViewAdapter<TimelineModel>(timelines) {
+    private val context: Context,
+    themeKey: String,
+) : MutableViewAdapter<TimelineModel>(TimelineDiffer()) {
 
     private val avatarSize = UiUtil.getDefaultAvatarSize(context)
     private val textColorSecondary = ThemeUtil.textColorPrimary(context, themeKey)

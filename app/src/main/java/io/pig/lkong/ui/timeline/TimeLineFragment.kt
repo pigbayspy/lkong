@@ -20,6 +20,10 @@ class TimeLineFragment : Fragment() {
     private lateinit var timelineViewModel: TimelineViewModel
     private lateinit var binding: FragmentTimeLineBinding
 
+    private val layoutMgr = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+
+    private val listAdapter by lazy { TimelineAdapter(requireContext(), getThemeKey()) }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,11 +44,12 @@ class TimeLineFragment : Fragment() {
             timelineViewModel.refresh()
         }
         binding.recycleListTimeline.apply {
+            layoutManager = layoutMgr
+            adapter = listAdapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    val layoutMgr = layoutManager as StaggeredGridLayoutManager
                     val into = layoutMgr.findLastCompletelyVisibleItemPositions(null)
                     val lastPos = into.maxOrNull() ?: 1
 
@@ -60,10 +65,7 @@ class TimeLineFragment : Fragment() {
     }
 
     private fun refreshTimeline(timelines: List<TimelineModel>) {
-        binding.recycleListTimeline.layoutManager =
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        binding.recycleListTimeline.adapter =
-            TimelineAdapter(requireContext(), getThemeKey(), timelines)
+        listAdapter.submitList(timelines)
     }
 
     private fun refreshLoading(loading: Boolean) {
