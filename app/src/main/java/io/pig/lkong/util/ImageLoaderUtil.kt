@@ -14,8 +14,15 @@ import io.pig.lkong.R
 object ImageLoaderUtil {
 
     fun loadLkongAvatar(
-        context: Context, target: ImageView, uid: Long, avatar: String, avatarSize: Int
+        context: Context, target: ImageView, uid: Long, avatar: String?, avatarSize: Int
     ) {
+        if (avatar.isNullOrEmpty()) {
+            Glide.with(context)
+                .load(R.drawable.ic_placeholder_avatar)
+                .circleCrop()
+                .into(target)
+            return
+        }
         val avatarUrl = LkongUtil.generateAvatarUrl(uid, avatar)
         val glideHeader = LazyHeaders.Builder()
             .addHeader("Referer", "https://www.lkong.com/").build()

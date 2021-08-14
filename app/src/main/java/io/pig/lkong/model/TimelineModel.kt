@@ -15,7 +15,7 @@ class TimelineModel : BaseCollectionItem {
 
     val authorId: Long
     val authorName: String
-    val authorAvatar:String
+    val authorAvatar: String?
     val dateline: Date
     val content: String
     val threadId: Long
@@ -26,7 +26,7 @@ class TimelineModel : BaseCollectionItem {
     private constructor(parcel: Parcel) {
         this.authorId = parcel.readLong()
         this.authorName = parcel.readString() ?: ""
-        this.authorAvatar = parcel.readString()?:""
+        this.authorAvatar = parcel.readString() ?: ""
         val tmpDateline: Long = parcel.readLong()
         this.dateline = if (tmpDateline == -1L) {
             Date()

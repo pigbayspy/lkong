@@ -7,5 +7,5 @@ package io.pig.lkong.http.data.resp.data
 class AuthorData(
     val uid: Long,
     val name: String,
-    val avatar: String
+    val avatar: String?
 )
