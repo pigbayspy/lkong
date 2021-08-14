@@ -12,7 +12,6 @@ import io.pig.lkong.model.ThreadModel
 import io.pig.lkong.ui.adapter.item.ThreadViewHolder
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 import io.pig.lkong.util.DateUtil
-import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.ThemeUtil
 import io.pig.lkong.util.UiUtil
 import io.pig.widget.adapter.BaseRecycleViewAdapter
@@ -72,12 +71,6 @@ class ThreadListAdapter(
         viewHolder.threadDatetimeView.text = DateUtil.formatDateByToday(
             threadModel.dateline!!,
             todayPrefix
-        )
-        ImageLoaderUtil.loadAvatar(
-            context,
-            viewHolder.avatarView,
-            threadModel.userIcon,
-            avatarSize
         )
     }
 }

@@ -42,7 +42,7 @@ class ForumListAdapter(
         val viewHolder = holder as ForumViewHolder
         val forum = getItem(position)
         viewHolder.forumTitleText.text = forum.name
-        if (!showInGrid && viewHolder.forumSecondaryText != null) {
+        if (!showInGrid) {
             val num = NumberFormatUtil.numberToTenKiloString(
                 forum.num,
                 context.getString(R.string.format_unit_ten_kilo),

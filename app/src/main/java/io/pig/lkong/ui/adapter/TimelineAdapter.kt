@@ -65,10 +65,10 @@ class TimelineAdapter(
                 TYPE_QUOTE
             }
             item.threadInfo != null -> {
-                TYPE_REPLY
+                TYPE_THREAD
             }
             else -> {
-                TYPE_THREAD
+                TYPE_REPLY
             }
         }
     }
@@ -98,8 +98,10 @@ class TimelineAdapter(
 
         holder.messageText.text = mainSpannable
         holder.authorText.text = item.authorName
-        val avatarUrl = LkongUtil.generateAvatarUrl(item.authorId)
-        ImageLoaderUtil.loadAvatar(context, holder.authorAvatar, avatarUrl, avatarSize)
+        ImageLoaderUtil.loadLkongAvatar(
+            context, holder.authorAvatar, item.authorId,
+            item.authorAvatar, avatarSize
+        )
     }
 
     private fun bindQuoteItem(holder: TimelineReplyHolder, item: TimelineModel) {
@@ -132,11 +134,11 @@ class TimelineAdapter(
 
         holder.authorText.text = item.authorName
         holder.datelineText.text = DateUtil.formatDateByToday(item.dateline, todayPrefix)
-        val avatarUrl = LkongUtil.generateAvatarUrl(item.authorId)
-        ImageLoaderUtil.loadAvatar(
+        ImageLoaderUtil.loadLkongAvatar(
             context,
             holder.authorAvatar,
-            avatarUrl,
+            item.authorId,
+            item.authorAvatar,
             avatarSize
         )
     }
@@ -169,11 +171,11 @@ class TimelineAdapter(
 
         holder.authorText.text = item.authorName
         holder.datelineText.text = DateUtil.formatDateByToday(item.dateline, todayPrefix)
-        val avatarUrl = LkongUtil.generateAvatarUrl(item.authorId)
-        ImageLoaderUtil.loadAvatar(
+        ImageLoaderUtil.loadLkongAvatar(
             context,
             holder.authorAvatar,
-            avatarUrl,
+            item.authorId,
+            item.authorAvatar,
             avatarSize
         )
     }

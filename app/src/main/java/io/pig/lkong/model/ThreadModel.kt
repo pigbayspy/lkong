@@ -20,7 +20,6 @@ class ThreadModel : BaseCollectionItem {
     private val sortKeyTime: Date?
 
     val userName: String
-    val userIcon: String
     val userId: Long
 
     val dateline: Date?
@@ -36,7 +35,6 @@ class ThreadModel : BaseCollectionItem {
         this.sortKeyTime = Date(this.sortKey * 1000L)
         // 用户信息
         this.userName = itemResp.username
-        this.userIcon = LkongUtil.generateAvatarUrl(itemResp.uid)
         this.userId = itemResp.uid
         this.closed = itemResp.closed
         this.dateline = DateUtil.parse(itemResp.dateline)
@@ -67,7 +65,6 @@ class ThreadModel : BaseCollectionItem {
         dest.writeInt(replyCount)
         dest.writeString(id)
         dest.writeLong(fid)
-        dest.writeString(userIcon)
     }
 
     private constructor(parcel: Parcel) {
@@ -84,7 +81,6 @@ class ThreadModel : BaseCollectionItem {
         this.replyCount = parcel.readInt()
         this.id = parcel.readString()!!
         this.fid = parcel.readLong()
-        this.userIcon = parcel.readString()!!
     }
 
     fun idNum(): Long {

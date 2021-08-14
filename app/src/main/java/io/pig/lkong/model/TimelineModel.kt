@@ -15,6 +15,7 @@ class TimelineModel : BaseCollectionItem {
 
     val authorId: Long
     val authorName: String
+    val authorAvatar:String
     val dateline: Date
     val content: String
     val threadId: Long
@@ -25,6 +26,7 @@ class TimelineModel : BaseCollectionItem {
     private constructor(parcel: Parcel) {
         this.authorId = parcel.readLong()
         this.authorName = parcel.readString() ?: ""
+        this.authorAvatar = parcel.readString()?:""
         val tmpDateline: Long = parcel.readLong()
         this.dateline = if (tmpDateline == -1L) {
             Date()
@@ -41,6 +43,7 @@ class TimelineModel : BaseCollectionItem {
     constructor(timeline: TimelineItemData) {
         this.authorId = timeline.authorid
         this.authorName = timeline.author.name
+        this.authorAvatar = timeline.author.avatar
         this.dateline = Date(timeline.dateline)
         val contentModels = LkongUtil.parseTimelineContent(timeline.content)
         this.content = findLastParagraph(contentModels)
@@ -57,23 +60,23 @@ class TimelineModel : BaseCollectionItem {
         } else {
             this.quoteInfo = null
         }
-        if (timeline.thread.author != null) {
-            this.replyInfo = ReplyInfo(
-                timeline.thread.title!!,
-                timeline.thread.author.name,
-                timeline.thread.author.uid
-            )
-        } else {
-            this.replyInfo = null
-        }
-        if (timeline.thread.title != null) {
+        if (timeline.thread.replies != null) {
             this.threadInfo = ThreadInfo(
-                timeline.thread.replies ?: 0,
+                timeline.thread.replies,
                 timeline.thread.title,
                 timeline.thread.forumName ?: ""
             )
         } else {
             this.threadInfo = null
+        }
+        if (timeline.thread.author != null) {
+            this.replyInfo = ReplyInfo(
+                timeline.thread.title,
+                timeline.thread.author.name,
+                timeline.thread.author.uid
+            )
+        } else {
+            this.replyInfo = null
         }
     }
 
@@ -103,6 +106,7 @@ class TimelineModel : BaseCollectionItem {
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeLong(authorId)
         dest.writeString(authorName)
+        dest.writeString(authorAvatar)
         dest.writeLong(dateline.time)
         dest.writeString(content)
         dest.writeLong(threadId)

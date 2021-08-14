@@ -9,7 +9,6 @@ import io.pig.lkong.R
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.ui.adapter.item.PostViewHolder
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
-import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.UiUtil
 import io.pig.widget.adapter.BaseRecycleViewAdapter
 
@@ -47,6 +46,5 @@ class PostListAdapter(
         if (post.authorId == userId) {
             viewHolder.editButton.visibility = View.VISIBLE
         }
-        ImageLoaderUtil.loadAvatar(context, viewHolder.avatarImage, post.authorAvatar, avatarSize)
     }
 }

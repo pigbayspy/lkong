@@ -9,12 +9,11 @@ class ForumReq {
     val query = """
         query GetMe {
             ... on Query {
-                commonNavbars {
-                    type
+                forums {
                     name
                     fid
-                    num
-                    link
+                    avatar
+                    todayPostNum
                 }
             }
         }

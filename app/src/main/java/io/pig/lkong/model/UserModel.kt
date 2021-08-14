@@ -1,7 +1,6 @@
 package io.pig.lkong.model
 
 import io.pig.lkong.http.data.resp.UserProfileResp
-import io.pig.lkong.util.LkongUtil
 
 /**
  * @author yinhang
@@ -31,7 +30,7 @@ class UserModel(userProfileResp: UserProfileResp) {
     init {
         this.uid = userProfileResp.user.uid
         this.name = userProfileResp.user.name
-        this.avatar = userProfileResp.user.avatar ?: LkongUtil.generateAvatarUrl(uid)
+        this.avatar = userProfileResp.user.avatar
         this.verify = userProfileResp.user.verify
         this.status = userProfileResp.user.status
         // other

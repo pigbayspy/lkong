@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.currentAccount.observe(this) {
             userEmailView.text = it.userEmail
             userNameView.text = it.userName
-            ImageLoaderUtil.loadAvatar(this, userAvatarView, it.userAvatar)
+            ImageLoaderUtil.loadLkongAvatar(this, userAvatarView, it.userId, it.userAvatar)
             userAvatarView.setOnClickListener { _ ->
                 AppNavigation.openActivityForUserProfile(this, it.userId)
             }

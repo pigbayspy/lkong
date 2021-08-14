@@ -6,5 +6,6 @@ package io.pig.lkong.http.data.resp.data
  */
 data class SignRespData(
     val uid: Long,
-    val name: String
+    val name: String,
+    val avatar: String
 )

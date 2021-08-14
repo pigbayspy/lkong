@@ -53,7 +53,8 @@ object LkongRepository {
                 body.data.login.name,
                 body.data.login.uid,
                 success = true,
-                authCookie
+                authCookie,
+                body.data.login.avatar
             )
         }
         return LkongSignInResp(success = false)

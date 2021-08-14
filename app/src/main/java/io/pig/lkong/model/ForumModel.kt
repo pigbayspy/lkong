@@ -26,8 +26,8 @@ class ForumModel : BaseCollectionItem {
     constructor(data: ForumRespData) {
         this.fid = data.fid
         this.name = data.name
-        this.icon = LkongUtil.fidToForumIconUrl(data.fid)
-        this.num = data.num
+        this.icon = LkongUtil.generateForumAvatarUrl(data.fid, data.avatar)
+        this.num = data.todayPostNum
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

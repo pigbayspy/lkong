@@ -13,30 +13,10 @@ import io.pig.lkong.R
  */
 object ImageLoaderUtil {
 
-    fun loadAvatar(context: Context, target: ImageView, avatarUrl: String) {
-        Glide.with(context)
-            .load(toSmallAvatar(avatarUrl))
-            .error(R.drawable.ic_placeholder_avatar)
-            .placeholder(R.drawable.ic_placeholder_avatar)
-            .circleCrop()
-            .into(target)
-    }
-
-    fun loadAvatar(
-        context: Context, target: ImageView, avatarUrl: String, avatarSize: Int
-    ) {
-        Glide.with(context)
-            .load(toSmallAvatar(avatarUrl))
-            .error(R.drawable.ic_placeholder_avatar)
-            .placeholder(R.drawable.ic_placeholder_avatar)
-            .override(avatarSize, avatarSize)
-            .circleCrop()
-            .into(target)
-    }
-
     fun loadLkongAvatar(
-        context: Context, target: ImageView, avatarUrl: String, avatarSize: Int
+        context: Context, target: ImageView, uid: Long, avatar: String, avatarSize: Int
     ) {
+        val avatarUrl = LkongUtil.generateAvatarUrl(uid, avatar)
         val glideHeader = LazyHeaders.Builder()
             .addHeader("Referer", "https://www.lkong.com/").build()
         val avatarGlideUrl = GlideUrl(avatarUrl, glideHeader)
@@ -49,19 +29,29 @@ object ImageLoaderUtil {
             .into(target)
     }
 
-    fun loadForumIcon(context: Context, target: ImageView, iconUrl: String) {
+    fun loadLkongAvatar(
+        context: Context, target: ImageView, uid: Long, avatar: String
+    ) {
+        val avatarUrl = LkongUtil.generateAvatarUrl(uid, avatar)
+        val glideHeader = LazyHeaders.Builder()
+            .addHeader("Referer", "https://www.lkong.com/").build()
+        val avatarGlideUrl = GlideUrl(avatarUrl, glideHeader)
         Glide.with(context)
-            .load(iconUrl)
-            .placeholder(R.drawable.ic_forum_loading)
-            .error(R.drawable.ic_forum_error)
+            .load(avatarGlideUrl)
+            .error(R.drawable.ic_placeholder_avatar)
+            .placeholder(R.drawable.ic_placeholder_avatar)
+            .circleCrop()
             .into(target)
     }
 
-    private fun toSmallAvatar(url: String): String {
-        return if (!NetworkUtil.isWifiConnect())
-            url.replace(
-                "middle",
-                "small"
-            ) else url
+    fun loadForumIcon(context: Context, target: ImageView, iconUrl: String) {
+        val glideHeader = LazyHeaders.Builder()
+            .addHeader("Referer", "https://www.lkong.com/").build()
+        val avatarGlideUrl = GlideUrl(iconUrl, glideHeader)
+        Glide.with(context)
+            .load(avatarGlideUrl)
+            .placeholder(R.drawable.ic_forum_loading)
+            .error(R.drawable.ic_forum_error)
+            .into(target)
     }
 }

@@ -7,7 +7,7 @@ package io.pig.lkong.http.data.resp.data
 class UserRespData(
     val uid: Long,
     val name: String,
-    val avatar: String?,
+    val avatar: String,
     val verify: String?,
     val status: String?,
     val dateline: Long
