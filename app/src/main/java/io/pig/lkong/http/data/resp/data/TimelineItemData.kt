@@ -12,4 +12,25 @@ class TimelineItemData(
     val pid: String,
     val quote: TimelineQuoteData?,
     val thread: TimelineThreadData
-)
+) {
+    data class AuthorData(
+        val uid: Long,
+        val name: String,
+        val avatar: String?
+    )
+
+    data class TimelineQuoteData(
+        val pid: String,
+        val content: String,
+        val author: AuthorData
+    )
+
+    class TimelineThreadData(
+        val tid: Long,
+        val title: String,
+        val replies: Int?,
+        val fid: Int?,
+        val forumName: String?,
+        val author: AuthorData?
+    )
+}

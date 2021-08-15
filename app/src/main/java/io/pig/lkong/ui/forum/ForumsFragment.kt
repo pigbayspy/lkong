@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import io.pig.lkong.R
 import io.pig.lkong.databinding.FragmentForumsBinding
 import io.pig.lkong.model.ForumModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.BoolPrefs
 import io.pig.lkong.preference.PrefConst.FORUMS_IN_GRID
 import io.pig.lkong.preference.PrefConst.FORUMS_IN_GRID_VALUE
@@ -22,6 +23,10 @@ import io.pig.lkong.ui.adapter.ForumListAdapter
  * @author yinhang
  */
 class ForumsFragment : Fragment() {
+
+    private val clickListener: (forum: ForumModel) -> Unit = {
+        AppNavigation.openForumContentActivity(requireContext(), it)
+    }
 
     private lateinit var showInGridPrefs: BoolPrefs
     private lateinit var binding: FragmentForumsBinding
@@ -71,7 +76,7 @@ class ForumsFragment : Fragment() {
     private fun refreshForumList(forums: List<ForumModel>) {
         binding.recycleListForum.layoutManager = getLayoutManager()
         binding.recycleListForum.adapter =
-            ForumListAdapter(requireActivity(), showInGridPrefs.get(), forums)
+            ForumListAdapter(requireActivity(), showInGridPrefs.get(), clickListener, forums)
     }
 
     private fun refreshLoading(loading: Boolean) {

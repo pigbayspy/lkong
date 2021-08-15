@@ -26,9 +26,11 @@
         android:theme="@style/Theme.Lkong"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.forum.content.ForumThreadActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.profile.UserProfileActivity"
             android:theme="@style/Theme.Lkong.NoActionBar" />
-
         <activity
             android:name=".ui.activity.SignInActivity"
             android:label="@string/title_activity_sign_in"
@@ -37,18 +39,18 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Lkong.NoActionBar">
+            android:theme="@style/Theme.Lkong.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.post.list.PostListActivity"
             android:theme="@style/AppTheme.Translucent" />
-        <activity android:name=".ui.setting.SettingActivity" />
-
-        <!-- service -->
+        <activity android:name=".ui.setting.SettingActivity" /> <!-- service -->
         <service
             android:name=".account.service.LkongAuthenticateService"
             android:enabled="true"

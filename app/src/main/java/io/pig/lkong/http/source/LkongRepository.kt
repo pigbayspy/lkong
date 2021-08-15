@@ -70,6 +70,11 @@ object LkongRepository {
         return lkongSpec.getTimeline(req)
     }
 
+    suspend fun getForumThread(forum: Long, page: Int): RespBase<ForumThreadResp> {
+        val req = ForumThreadReq(forum, page)
+        return lkongSpec.getForumThreads(req)
+    }
+
     private fun getCookie(key: String): String {
         for (cookie in lkongCookie.getAll()) {
             if (cookie.name.equals(key, true)) {

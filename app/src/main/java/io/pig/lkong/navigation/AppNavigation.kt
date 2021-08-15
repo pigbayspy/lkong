@@ -11,7 +11,9 @@ import io.pig.lkong.R
 import io.pig.lkong.account.const.AccountConst
 import io.pig.lkong.application.const.AppConst
 import io.pig.lkong.application.const.DataContract
+import io.pig.lkong.model.ForumModel
 import io.pig.lkong.sync.SyncUtil
+import io.pig.lkong.ui.forum.content.ForumThreadActivity
 import io.pig.lkong.ui.post.list.PostListActivity
 import io.pig.lkong.ui.profile.UserProfileActivity
 
@@ -47,6 +49,16 @@ object AppNavigation {
     fun openActivityForUserProfile(context: Activity, uid: Long) {
         val intent = Intent(context, UserProfileActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_USER_ID, uid)
+        context.startActivity(intent)
+    }
+
+    fun openForumContentActivity(
+        context: Context,
+        forum: ForumModel
+    ) {
+        val intent = Intent(context, ForumThreadActivity::class.java)
+        intent.putExtra(DataContract.BUNDLE_FORUM_ID, forum.fid)
+        intent.putExtra(DataContract.BUNDLE_FORUM_NAME, forum.name)
         context.startActivity(intent)
     }
 

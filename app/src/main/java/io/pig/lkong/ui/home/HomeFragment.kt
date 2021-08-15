@@ -67,6 +67,8 @@ class HomeFragment : Fragment() {
         // 初始化 tab
         tabs = inflater.inflate(R.layout.layout_tab, container, false) as TabLayout
         pages = binding.fragmentContentMainPager
+        // 设置缓存
+        pages.offscreenPageLimit = 2
         tabs.setupWithViewPager(pages)
         setupViewPager()
     }

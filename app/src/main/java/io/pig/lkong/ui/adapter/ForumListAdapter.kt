@@ -17,8 +17,9 @@ import io.pig.widget.adapter.FixedViewAdapter
  * @since 2021/7/10
  */
 class ForumListAdapter(
-    val context: Context,
+    private val context: Context,
     private val showInGrid: Boolean,
+    private val clickListener: (forum: ForumModel) -> Unit,
     forums: List<ForumModel>
 ) : FixedViewAdapter<ForumModel>(forums) {
 
@@ -53,5 +54,12 @@ class ForumListAdapter(
             viewHolder.forumSecondaryText.text = secondaryInfo
         }
         ImageLoaderUtil.loadForumIcon(context, viewHolder.forumIconImage, forum.icon)
+        viewHolder.itemView.setOnClickListener {
+            clickListener.invoke(forum)
+        }
+    }
+
+    interface ForumClickListener {
+        fun onClick(forum: ForumModel)
     }
 }

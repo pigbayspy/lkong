@@ -1,7 +1,7 @@
 package io.pig.widget.adapter
 
 import androidx.recyclerview.widget.RecyclerView
-import io.pig.widget.listener.RecycleViewOnItemClickListener
+import io.pig.widget.listener.RecycleViewClickListener
 import io.pig.widget.listener.RecycleViewOnItemLongClickListener
 
 /**
@@ -12,7 +12,7 @@ abstract class BaseRecycleViewAdapter<T>(
     private var items: List<T>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var clickListener: RecycleViewOnItemClickListener? = null
+    private var clickListener: RecycleViewClickListener? = null
     private var longClickListener: RecycleViewOnItemLongClickListener? = null
 
     fun addAll(newItems: List<T>) {
