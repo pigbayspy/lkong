@@ -7,7 +7,7 @@ import io.pig.lkong.model.TimelineModel
  * @author yinhang
  * @since 2021/8/14
  */
-class TimelineDiffer : DiffUtil.ItemCallback<TimelineModel>() {
+object TimelineDiffer : DiffUtil.ItemCallback<TimelineModel>() {
 
     override fun areItemsTheSame(oldItem: TimelineModel, newItem: TimelineModel): Boolean {
         return oldItem.pid == newItem.pid

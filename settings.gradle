@@ -1,2 +1,3 @@
 rootProject.name = "龙空"
 include ':app'
+include ':common-ui'

@@ -224,4 +224,10 @@
     <string name="format_unit_ten_kilo">万</string>
     <string name="format_forum_item_summary">今日 %s</string>
 
+    <!-- forum threads -->
+    <string-array name="thread_list_type_arrays">
+        <item>默认</item>
+        <item>精华</item>
+    </string-array>
+
 </resources>

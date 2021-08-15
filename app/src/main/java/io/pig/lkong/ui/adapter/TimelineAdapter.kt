@@ -29,7 +29,7 @@ import io.pig.widget.adapter.MutableViewAdapter
 class TimelineAdapter(
     private val context: Context,
     themeKey: String,
-) : MutableViewAdapter<TimelineModel>(TimelineDiffer()) {
+) : MutableViewAdapter<TimelineModel>(TimelineDiffer) {
 
     private val avatarSize = UiUtil.getDefaultAvatarSize(context)
     private val textColorSecondary = ThemeUtil.textColorPrimary(context, themeKey)
@@ -165,7 +165,15 @@ class TimelineAdapter(
             Spannable.SPAN_INCLUSIVE_EXCLUSIVE
         )
         holder.secondaryMessageText.text = spanText
-        holder.thirdMessageText.text = item.replyInfo.title
+        val replyTitle = SpannableStringBuilder()
+        replyTitle.append(item.replyInfo.title)
+        replyTitle.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            item.replyInfo.title.length,
+            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+        holder.thirdMessageText.text = replyTitle
         val mainContent = item.content
 
         val mainSpannable = SpannableStringBuilder()

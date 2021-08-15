@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.listener.ForumThreadModel
+import io.pig.lkong.ui.adapter.differ.ForumThreadDiffer
 import io.pig.lkong.ui.adapter.item.ThreadViewHolder
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.UiUtil
-import io.pig.widget.adapter.FixedViewAdapter
+import io.pig.widget.adapter.MutableViewAdapter
 
 /**
  * @author yinhang
@@ -21,8 +22,7 @@ import io.pig.widget.adapter.FixedViewAdapter
 class ForumThreadAdapter(
     private val context: Context,
     private val listener: OnThreadClickListener,
-    forumThreads: List<ForumThreadModel>
-) : FixedViewAdapter<ForumThreadModel>(forumThreads) {
+) : MutableViewAdapter<ForumThreadModel>(ForumThreadDiffer) {
 
     private val todayPrefix: String = context.getString(R.string.text_datetime_today)
     private val avatarSize = UiUtil.getDefaultAvatarSize(context)

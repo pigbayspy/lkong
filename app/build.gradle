@@ -45,15 +45,18 @@ dependencies {
     implementation dependency.ktx
     implementation dependency.appcomcat
     implementation dependency.material
+    implementation dependency.legacy
     implementation dependency.constraintlayout
     implementation dependency.livedata
     implementation dependency.viewmodel
     implementation dependency.navigationFragment
     implementation dependency.navigationUi
 
+    // ui
+    implementation project(":common-ui")
+
     // 依赖注入
     implementation dependency.dagger
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt dependency.daggerKapt
 
     implementation dependency.preference
