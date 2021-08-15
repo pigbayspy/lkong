@@ -10,21 +10,28 @@ import io.pig.lkong.model.FavoriteThreadModel
 import io.pig.lkong.ui.adapter.item.ThreadViewHolder
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 import io.pig.lkong.util.DateUtil
-import io.pig.widget.adapter.BaseRecycleViewAdapter
+import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.lkong.util.UiUtil
+import io.pig.widget.adapter.FixedViewAdapter
 
 /**
- * 帖子列表适配器
- *
  * @author yinhang
- * @since 2021/6/8
+ * @since 2021/8/15
  */
-class ThreadListAdapter(
-    val context: Context,
+class FavoriteAdapter(
+    private val context: Context,
     private val listener: OnThreadClickListener,
     threads: List<FavoriteThreadModel>
-) : BaseRecycleViewAdapter<FavoriteThreadModel>(threads) {
+) :
+    FixedViewAdapter<FavoriteThreadModel>(threads) {
 
-    private val todayPrefix: String = context.getString(R.string.text_datetime_today)
+    private val todayPrefix: String
+    private val avatarSize: Int
+
+    init {
+        this.todayPrefix = context.getString(R.string.text_datetime_today)
+        this.avatarSize = UiUtil.getDefaultAvatarSize(context)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_thread, parent, false)
@@ -49,6 +56,13 @@ class ThreadListAdapter(
         viewHolder.threadDatetimeText.text = DateUtil.formatDateByToday(
             threadModel.dateline,
             todayPrefix
+        )
+        ImageLoaderUtil.loadLkongAvatar(
+            context,
+            viewHolder.avatarImage,
+            threadModel.authorId,
+            threadModel.authorAvatar,
+            avatarSize
         )
     }
 }

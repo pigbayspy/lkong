@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/fragment_gallery"
-        android:name="io.pig.lkong.ui.gallery.GalleryFragment"
+        android:name="io.pig.lkong.ui.favorite.FavoriteFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_gallery">
+        tools:layout="@layout/fragment_favorite">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"

@@ -1,4 +1,4 @@
-package io.pig.lkong.ui.gallery
+package io.pig.lkong.ui.favorite
 
 import android.os.Bundle
 import android.view.*
@@ -6,33 +6,37 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.R
-import io.pig.lkong.databinding.FragmentGalleryBinding
-import io.pig.lkong.model.ThreadModel
+import io.pig.lkong.account.UserAccountManager
+import io.pig.lkong.application.LkongApplication
+import io.pig.lkong.databinding.FragmentFavoriteBinding
+import io.pig.lkong.model.FavoriteThreadModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.PrefConst.AVATAR_DOWNLOAD_POLICY
 import io.pig.lkong.preference.PrefConst.AVATAR_DOWNLOAD_POLICY_VALUE
 import io.pig.lkong.preference.Prefs
 import io.pig.lkong.preference.StringPrefs
-import io.pig.lkong.rx.event.AbstractEvent
-import io.pig.lkong.rx.event.FavoriteChangeEvent
-import io.pig.lkong.ui.adapter.ThreadListAdapter
+import io.pig.lkong.ui.adapter.FavoriteAdapter
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
-import io.pig.lkong.ui.common.Eventable
+import io.pig.lkong.ui.common.Injectable
+import javax.inject.Inject
 
 
-class GalleryFragment : Eventable, Fragment() {
+class FavoriteFragment : Fragment(), Injectable {
 
-    private lateinit var galleryViewModel: GalleryViewModel
-    private lateinit var selfBinding: FragmentGalleryBinding
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var binding: FragmentFavoriteBinding
     private lateinit var avatarDownloadPolicy: StringPrefs
 
-    private var needReload = false
+    @Inject
+    lateinit var userAccountMgr: UserAccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 载入设置
         avatarDownloadPolicy =
             Prefs.getStringPrefs(AVATAR_DOWNLOAD_POLICY, AVATAR_DOWNLOAD_POLICY_VALUE)
+        // 自动注入
+        injectThis()
         // 自定义的menu
         setHasOptionsMenu(true)
     }
@@ -42,17 +46,17 @@ class GalleryFragment : Eventable, Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        galleryViewModel =
-            ViewModelProvider(this).get(GalleryViewModel::class.java)
+        favoriteViewModel =
+            ViewModelProvider(this).get(FavoriteViewModel::class.java)
 
-        selfBinding = FragmentGalleryBinding.inflate(inflater, container, false)
-        val root = selfBinding.root
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        val root = binding.root
         // 初始化监听器
-        galleryViewModel.threadList.observe(viewLifecycleOwner, {
+        favoriteViewModel.threadList.observe(viewLifecycleOwner, {
             refreshThreadList(it)
         })
         // 初始化数据
-        galleryViewModel.getThreads()
+        favoriteViewModel.getThreads(userAccountMgr.getCurrentUserAccount().userId)
         return root
     }
 
@@ -69,29 +73,11 @@ class GalleryFragment : Eventable, Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val v = view
-        if (v != null) {
-            v.isFocusableInTouchMode = true
-            v.requestFocus()
-        }
+    override fun injectThis() {
+        LkongApplication.get(requireContext()).presentComponent().inject(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (needReload) {
-            needReload = false
-        }
-    }
-
-    override fun onEvent(event: AbstractEvent) {
-        if (event is FavoriteChangeEvent) {
-            needReload = true
-        }
-    }
-
-    private fun refreshThreadList(threads: List<ThreadModel>) {
+    private fun refreshThreadList(threads: List<FavoriteThreadModel>) {
         val listener = object : OnThreadClickListener {
             private fun checkInvalid(pos: Int): Boolean {
                 if (pos < 0 && pos >= threads.size) {
@@ -105,7 +91,7 @@ class GalleryFragment : Eventable, Fragment() {
                     val thread = threads[pos]
                     AppNavigation.openActivityForPostListByThreadId(
                         requireContext(),
-                        thread.idNum()
+                        thread.fid
                     )
                 }
             }
@@ -117,14 +103,14 @@ class GalleryFragment : Eventable, Fragment() {
                     view.getLocationOnScreen(startLocation)
                     AppNavigation.openActivityForUserProfile(
                         requireActivity(),
-                        thread.userId
+                        thread.authorId
                     )
                 }
             }
         }
-        selfBinding.recycleListGallery.layoutManager =
+        binding.recycleListGallery.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        selfBinding.recycleListGallery.adapter =
-            ThreadListAdapter(requireActivity(), listener, threads)
+        binding.recycleListGallery.adapter =
+            FavoriteAdapter(requireActivity(), listener, threads)
     }
 }

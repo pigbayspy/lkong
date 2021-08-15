@@ -1,9 +1,8 @@
 package io.pig.lkong.http.source
 
-import io.pig.lkong.http.data.LkongForumThreadResp
 import io.pig.lkong.http.data.LkongPostListReq
 import io.pig.lkong.http.data.LkongPostListResp
-import io.pig.lkong.http.data.LkongSignInResp
+import io.pig.lkong.http.data.resp.SignInResp
 import io.pig.lkong.http.data.req.*
 import io.pig.lkong.http.data.resp.*
 import io.pig.lkong.http.provider.LkongServiceProvider
@@ -19,8 +18,9 @@ object LkongRepository {
 
     private val lkongCookie = LkongServiceProvider.lkongCookie
 
-    suspend fun getFavoriteThread(): LkongForumThreadResp {
-        return lkongSpec.getFavorite()
+    suspend fun getFavorites(uid: Long): RespBase<FavoriteResp> {
+        val req = FavoriteReq(uid)
+        return lkongSpec.getFavorite(req)
     }
 
     suspend fun getUserProfile(): RespBase<UserProfileResp> {
@@ -43,13 +43,13 @@ object LkongRepository {
         return lkongSpec.getForums(forumReq)
     }
 
-    suspend fun signIn(email: String, password: String): LkongSignInResp {
+    suspend fun signIn(email: String, password: String): SignInResp {
         val signReq = SignReq(email, password)
         val response = lkongSpec.signIn(signReq)
         val body = response.body()
         if (response.isSuccessful && body != null && body.data != null) {
             val authCookie = getCookie("EGG_SESS")
-            return LkongSignInResp(
+            return SignInResp(
                 body.data.login.name,
                 body.data.login.uid,
                 success = true,
@@ -57,7 +57,7 @@ object LkongRepository {
                 body.data.login.avatar
             )
         }
-        return LkongSignInResp(success = false)
+        return SignInResp(success = false)
     }
 
     suspend fun getCollections(uid: Long): RespBase<CollectionResp> {

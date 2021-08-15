@@ -16,23 +16,25 @@ class ThreadViewHolder(
     private val listener: OnThreadClickListener
 ) : RecyclerView.ViewHolder(itemView) {
 
-    val avatarView: ImageView
-    val threadTitleView: TextView
-    val threadUserNameView: TextView
-    val threadReplyCountView: TextView
-    val threadDatetimeView: TextView
+    val avatarImage: ImageView
+    val threadTitleText: TextView
+    val threadAuthorNameText: TextView
+    val threadRepliesText: TextView
+    val threadDatetimeText: TextView
 
     init {
-        this.threadTitleView = itemView.findViewById(R.id.item_thread_text_title)
-        this.avatarView = itemView.findViewById(R.id.item_thread_image_icon)
-        this.threadUserNameView = itemView.findViewById(R.id.item_thread_text_username)
-        this.threadReplyCountView = itemView.findViewById(R.id.item_thread_text_reply_count)
-        this.threadDatetimeView = itemView.findViewById(R.id.item_thread_text_datetime)
-        avatarView.setOnClickListener {
-            listener.onProfileAreaClick(it, adapterPosition, 0)
+        itemView.apply {
+            threadTitleText = findViewById(R.id.item_thread_text_title)
+            avatarImage = findViewById(R.id.item_thread_image_icon)
+            threadAuthorNameText = findViewById(R.id.item_thread_text_username)
+            threadRepliesText = findViewById(R.id.item_thread_text_reply_count)
+            threadDatetimeText = findViewById(R.id.item_thread_text_datetime)
+            setOnClickListener {
+                listener.onItemThreadClick(it, adapterPosition)
+            }
         }
-        itemView.setOnClickListener {
-            listener.onItemThreadClick(it, adapterPosition)
+        this.avatarImage.setOnClickListener {
+            listener.onProfileAreaClick(it, adapterPosition, 0)
         }
     }
 }

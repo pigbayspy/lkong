@@ -1,7 +1,6 @@
 package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.const.RestApiConst
-import io.pig.lkong.http.data.LkongForumThreadResp
 import io.pig.lkong.http.data.LkongPostListResp
 import io.pig.lkong.http.data.req.*
 import io.pig.lkong.http.data.resp.*
@@ -19,8 +18,8 @@ import retrofit2.http.Query
  */
 interface LkongSpec {
 
-    @GET(RestApiConst.GET_FAVORITE_URL)
-    suspend fun getFavorite(): LkongForumThreadResp
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getFavorite(@Body favoriteReq: FavoriteReq): RespBase<FavoriteResp>
 
     @GET(RestApiConst.BASE_API)
     suspend fun getPostList(

@@ -12,8 +12,6 @@ import java.util.*
 class PostModel : BaseCollectionItem {
 
     private val fid: Long
-    private val sortKey: Long
-    private val sortKeyTime: Date
     private val dateline: Date
     private val message: String
     private val authorName: String
@@ -37,9 +35,6 @@ class PostModel : BaseCollectionItem {
 
     private constructor(parcel: Parcel) {
         fid = parcel.readLong()
-        sortKey = parcel.readLong()
-        val tmpSortKeyTime: Long = parcel.readLong()
-        sortKeyTime = if (tmpSortKeyTime == -1L) Date() else Date(tmpSortKeyTime)
         val tmpDateline: Long = parcel.readLong()
         dateline = if (tmpDateline == -1L) Date() else Date(tmpDateline)
         message = parcel.readString()!!
@@ -62,18 +57,12 @@ class PostModel : BaseCollectionItem {
         author = parcel.readParcelable(PostAuthorModel::class.java.classLoader)!!
     }
 
-    override fun getSortKey(): Long {
-        return sortKey
-    }
-
     override fun describeContents(): Int {
         return 0
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeLong(fid)
-        dest.writeLong(sortKey)
-        dest.writeLong(sortKeyTime.time)
         dest.writeLong(dateline.time)
         dest.writeString(message)
         dest.writeString(authorName)

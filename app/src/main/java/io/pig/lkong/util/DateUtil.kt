@@ -27,6 +27,15 @@ object DateUtil {
         return fullFormat.format(date)
     }
 
+    fun formatDateByToday(dateline: Long, todayPrefix: String): String {
+        val date = Date(dateline)
+        return if (DateUtils.isToday(dateline)) {
+            todayPrefix + shortFormat.format(date)
+        } else {
+            fullFormat.format(date)
+        }
+    }
+
     fun formatDateByTimestamp(dateline: Long): String {
         val date = Date(dateline)
         return format.format(date)

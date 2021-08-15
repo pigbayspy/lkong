@@ -13,9 +13,10 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityPostListBinding
 import io.pig.lkong.ui.adapter.PostListAdapter
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
+import io.pig.lkong.ui.common.Injectable
 import javax.inject.Inject
 
-class PostListActivity : AppCompatActivity() {
+class PostListActivity : AppCompatActivity(), Injectable {
 
     private lateinit var binding: ActivityPostListBinding
     private lateinit var postListViewModel: PostListViewModel
@@ -54,7 +55,7 @@ class PostListActivity : AppCompatActivity() {
         initRecycleView()
     }
 
-    private fun injectThis() {
+    override fun injectThis() {
         LkongApplication.get(this).presentComponent().inject(this)
     }
 

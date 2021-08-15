@@ -24,10 +24,6 @@ class HotThreadModel : BaseCollectionItem {
         this.title = title
     }
 
-    override fun getSortKey(): Long {
-        return 0
-    }
-
     override fun describeContents(): Int {
         return 0
     }

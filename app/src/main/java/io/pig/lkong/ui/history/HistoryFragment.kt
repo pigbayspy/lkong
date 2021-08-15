@@ -12,9 +12,10 @@ import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.databinding.FragmentHistoryBinding
 import io.pig.lkong.model.HistoryModel
 import io.pig.lkong.ui.adapter.HistoryAdapter
+import io.pig.lkong.ui.common.Injectable
 import javax.inject.Inject
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(), Injectable {
 
     private lateinit var historyViewModel: HistoryViewModel
     private lateinit var binding: FragmentHistoryBinding
@@ -70,7 +71,7 @@ class HistoryFragment : Fragment() {
         binding.recycleListHistory.adapter = HistoryAdapter(requireContext(), history)
     }
 
-    private fun injectThis() {
+    override fun injectThis() {
         LkongApplication.get(requireContext()).presentComponent().inject(this)
     }
 }

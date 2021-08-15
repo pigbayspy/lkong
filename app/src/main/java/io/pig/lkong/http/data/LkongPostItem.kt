@@ -6,7 +6,6 @@ package io.pig.lkong.http.data
  */
 data class LkongPostItem(
     val fid: Long,
-    val sortkey: Long,
     val dateline: String,
     val message: String,
     val author: String,

@@ -37,10 +37,6 @@ class ForumModel : BaseCollectionItem {
         dest.writeLong(num)
     }
 
-    override fun getSortKey(): Long {
-        return 0
-    }
-
     override fun describeContents(): Int {
         return 0
     }

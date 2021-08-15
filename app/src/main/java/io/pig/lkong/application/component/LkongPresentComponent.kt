@@ -4,6 +4,7 @@ import dagger.Component
 import io.pig.lkong.MainActivity
 import io.pig.lkong.application.module.LkongModule
 import io.pig.lkong.application.module.UserAccountModule
+import io.pig.lkong.ui.favorite.FavoriteFragment
 import io.pig.lkong.ui.history.HistoryFragment
 import io.pig.lkong.ui.post.list.PostListActivity
 import io.pig.lkong.ui.setting.SettingFragment
@@ -24,4 +25,6 @@ interface LkongPresentComponent {
     fun inject(fragment: SettingFragment)
 
     fun inject(fragment: HistoryFragment)
+
+    fun inject(fragment: FavoriteFragment)
 }

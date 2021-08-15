@@ -52,7 +52,7 @@ class TimelineViewModel : ViewModel() {
 
     fun refresh() {
         this.time = System.currentTimeMillis()
-        this.timelines.value = null
+        this.timelines.value = emptyList()
         getTimeline()
     }
 

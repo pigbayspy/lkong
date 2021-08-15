@@ -98,10 +98,6 @@ class TimelineModel : BaseCollectionItem {
         return ""
     }
 
-    override fun getSortKey(): Long {
-        return 0
-    }
-
     override fun describeContents(): Int {
         return 0
     }

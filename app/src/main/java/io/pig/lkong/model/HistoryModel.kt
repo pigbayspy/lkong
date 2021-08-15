@@ -45,11 +45,6 @@ class HistoryModel : BaseCollectionItem {
         lastReadTime = if (tmpLastReadTime == -1L) Date() else Date(tmpLastReadTime)
     }
 
-
-    override fun getSortKey(): Long {
-        return lastReadTime.time
-    }
-
     override fun describeContents(): Int {
         return 0
     }

@@ -29,6 +29,7 @@ import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.AccountChangeEvent
 import io.pig.lkong.sync.SyncUtil
 import io.pig.lkong.theme.ThemeConfig
+import io.pig.lkong.ui.common.Injectable
 import io.pig.lkong.ui.main.MainViewModel
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.TextSizeUtil
@@ -37,7 +38,7 @@ import io.pig.ui.common.processToolbar
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Injectable {
 
     companion object {
         val Running = AtomicBoolean(false)
@@ -152,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun injectThis() {
+    override fun injectThis() {
         LkongApplication.get(this).presentComponent().inject(this)
     }
 

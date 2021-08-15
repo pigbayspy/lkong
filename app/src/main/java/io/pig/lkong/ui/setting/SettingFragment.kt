@@ -14,10 +14,11 @@ import io.pig.lkong.preference.PrefConst
 import io.pig.lkong.rx.RxEventBus
 import io.pig.lkong.rx.event.ScreenOrientationSettingsChangeEvent
 import io.pig.lkong.sync.SyncUtil
+import io.pig.lkong.ui.common.Injectable
 import javax.inject.Inject
 
 
-class SettingFragment : PreferenceFragmentCompat() {
+class SettingFragment : PreferenceFragmentCompat(), Injectable {
 
     private lateinit var viewModel: SettingViewModel
 
@@ -91,7 +92,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         )
     }
 
-    private fun injectThis() {
+    override fun injectThis() {
         LkongApplication.get(requireContext()).presentComponent().inject(this)
     }
 
