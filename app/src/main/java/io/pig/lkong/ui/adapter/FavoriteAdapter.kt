@@ -35,19 +35,16 @@ class FavoriteAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_thread, parent, false)
-        return ThreadViewHolder(view, listener)
+        return ThreadViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewHolder = holder as ThreadViewHolder
-        val threadModel: FavoriteThreadModel = getItem(position)
-        bindThreadModel(viewHolder, threadModel)
+        bindThreadModel(viewHolder, position)
     }
 
-    private fun bindThreadModel(
-        viewHolder: ThreadViewHolder,
-        threadModel: FavoriteThreadModel
-    ) {
+    private fun bindThreadModel(viewHolder: ThreadViewHolder, position: Int) {
+        val threadModel = getItem(position)
         val spannableTitle = SpannableStringBuilder()
         spannableTitle.append(threadModel.title)
         viewHolder.threadTitleText.text = spannableTitle
@@ -64,5 +61,11 @@ class FavoriteAdapter(
             threadModel.authorAvatar,
             avatarSize
         )
+        viewHolder.itemView.setOnClickListener {
+            listener.onItemThreadClick(it, threadModel.tid)
+        }
+        viewHolder.avatarImage.setOnClickListener {
+            listener.onProfileAreaClick(it, threadModel.authorId)
+        }
     }
 }

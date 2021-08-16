@@ -29,16 +29,16 @@ class ForumThreadAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_thread, parent, false)
-        return ThreadViewHolder(view, listener)
+        return ThreadViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewHolder = holder as ThreadViewHolder
-        val threadModel = getItem(position)
-        bindThreadModel(viewHolder, threadModel)
+        bindThreadModel(viewHolder, position)
     }
 
-    private fun bindThreadModel(holder: ThreadViewHolder, thread: ForumThreadModel) {
+    private fun bindThreadModel(holder: ThreadViewHolder, position: Int) {
+        val thread = getItem(position)
         val spannableTitle = SpannableStringBuilder()
         spannableTitle.append(thread.title)
         holder.threadTitleText.text = spannableTitle
@@ -55,5 +55,12 @@ class ForumThreadAdapter(
             thread.authorAvatar,
             avatarSize
         )
+        // 设置点击事件
+        holder.avatarImage.setOnClickListener {
+            listener.onProfileAreaClick(it, thread.authorId)
+        }
+        holder.threadTitleText.setOnClickListener {
+            listener.onItemThreadClick(it, thread.tid)
+        }
     }
 }

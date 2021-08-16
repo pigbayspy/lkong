@@ -5,8 +5,6 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
@@ -14,8 +12,6 @@ import io.pig.lkong.databinding.ActivityUserProfileBinding
 import io.pig.lkong.model.UserModel
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
-import io.pig.lkong.util.ThemeUtil
-import io.pig.ui.common.getThemeKey
 
 class UserProfileActivity : AppCompatActivity() {
 
@@ -40,24 +36,6 @@ class UserProfileActivity : AppCompatActivity() {
             refresh(it)
         }
         userProfileViewModel.getUserProfile()
-    }
-
-    private fun setUpToolbar(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            val drawable = ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.ic_arrow_backward,
-                null
-            )!!
-            ThemeUtil.setTint(
-                drawable,
-                ThemeUtil.textColorPrimaryInverse(this, getThemeKey())
-            )
-            actionBar.setHomeAsUpIndicator(drawable)
-        }
     }
 
     private fun refresh(user: UserModel) {

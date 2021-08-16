@@ -13,7 +13,6 @@ import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
  */
 class ThreadViewHolder(
     itemView: View,
-    private val listener: OnThreadClickListener
 ) : RecyclerView.ViewHolder(itemView) {
 
     val avatarImage: ImageView
@@ -29,12 +28,6 @@ class ThreadViewHolder(
             threadAuthorNameText = findViewById(R.id.item_thread_text_username)
             threadRepliesText = findViewById(R.id.item_thread_text_reply_count)
             threadDatetimeText = findViewById(R.id.item_thread_text_datetime)
-            setOnClickListener {
-                listener.onItemThreadClick(it, adapterPosition)
-            }
-        }
-        this.avatarImage.setOnClickListener {
-            listener.onProfileAreaClick(it, adapterPosition, 0)
         }
     }
 }

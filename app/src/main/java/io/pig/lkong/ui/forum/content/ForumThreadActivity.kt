@@ -13,24 +13,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
+import io.pig.common.ui.adapter.Bookends
 import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityForumThreadBinding
 import io.pig.lkong.model.listener.ForumThreadModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.ForumThreadAdapter
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 import io.pig.ui.common.isActivityDestroyed
-import io.pig.common.ui.adapter.Bookends
 
 class ForumThreadActivity : AppCompatActivity() {
 
     private val listener = object : OnThreadClickListener {
-        override fun onItemThreadClick(view: View, pos: Int) {
-            TODO("Not yet implemented")
+        override fun onItemThreadClick(view: View, tid: Long) {
+            AppNavigation.openActivityForPostListByThreadId(this@ForumThreadActivity, tid)
         }
 
-        override fun onProfileAreaClick(view: View, pos: Int, uid: Long) {
-            TODO("Not yet implemented")
+        override fun onProfileAreaClick(view: View, uid: Long) {
+            AppNavigation.openActivityForUserProfile(this@ForumThreadActivity, uid)
         }
     }
 

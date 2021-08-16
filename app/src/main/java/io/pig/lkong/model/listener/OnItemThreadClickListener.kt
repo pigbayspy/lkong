@@ -7,5 +7,5 @@ import android.view.View
  * @since 2021/6/13
  */
 interface OnItemThreadClickListener {
-    fun onItemThreadClick(view: View, pos: Int)
+    fun onItemThreadClick(view: View, tid: Long)
 }

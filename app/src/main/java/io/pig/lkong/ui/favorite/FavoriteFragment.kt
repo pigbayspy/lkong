@@ -23,6 +23,16 @@ import javax.inject.Inject
 
 class FavoriteFragment : Fragment(), Injectable {
 
+    private val listener = object : OnThreadClickListener {
+        override fun onItemThreadClick(view: View, tid: Long) {
+            AppNavigation.openActivityForPostListByThreadId(requireContext(), tid)
+        }
+
+        override fun onProfileAreaClick(view: View, uid: Long) {
+            AppNavigation.openActivityForUserProfile(requireActivity(), uid)
+        }
+    }
+
     private lateinit var favoriteViewModel: FavoriteViewModel
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var avatarDownloadPolicy: StringPrefs
@@ -78,36 +88,6 @@ class FavoriteFragment : Fragment(), Injectable {
     }
 
     private fun refreshThreadList(threads: List<FavoriteThreadModel>) {
-        val listener = object : OnThreadClickListener {
-            private fun checkInvalid(pos: Int): Boolean {
-                if (pos < 0 && pos >= threads.size) {
-                    return true
-                }
-                return false
-            }
-
-            override fun onItemThreadClick(view: View, pos: Int) {
-                if (checkInvalid(pos)) {
-                    val thread = threads[pos]
-                    AppNavigation.openActivityForPostListByThreadId(
-                        requireContext(),
-                        thread.fid
-                    )
-                }
-            }
-
-            override fun onProfileAreaClick(view: View, pos: Int, uid: Long) {
-                if (checkInvalid(pos)) {
-                    val thread = threads[pos]
-                    val startLocation = intArrayOf(view.width / 2, 0)
-                    view.getLocationOnScreen(startLocation)
-                    AppNavigation.openActivityForUserProfile(
-                        requireActivity(),
-                        thread.authorId
-                    )
-                }
-            }
-        }
         binding.recycleListGallery.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.recycleListGallery.adapter =
