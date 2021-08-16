@@ -25,13 +25,8 @@ class FavoriteAdapter(
 ) :
     FixedViewAdapter<FavoriteThreadModel>(threads) {
 
-    private val todayPrefix: String
-    private val avatarSize: Int
-
-    init {
-        this.todayPrefix = context.getString(R.string.text_datetime_today)
-        this.avatarSize = UiUtil.getDefaultAvatarSize(context)
-    }
+    private val todayPrefix: String = context.getString(R.string.text_datetime_today)
+    private val avatarSize: Int = UiUtil.getDefaultAvatarSize(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_thread, parent, false)

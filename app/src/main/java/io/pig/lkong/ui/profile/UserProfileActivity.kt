@@ -25,9 +25,7 @@ class UserProfileActivity : AppCompatActivity() {
         binding = ActivityUserProfileBinding.inflate(layoutInflater)
 
         // 获取参数
-        savedInstanceState?.let {
-            uid = savedInstanceState.getLong(DataContract.BUNDLE_USER_ID, INVALID_USER_ID)
-        }
+        uid = intent.getLongExtra(DataContract.BUNDLE_USER_ID, INVALID_USER_ID)
 
         setContentView(binding.root)
 
@@ -35,7 +33,7 @@ class UserProfileActivity : AppCompatActivity() {
         userProfileViewModel.user.observe(this) {
             refresh(it)
         }
-        userProfileViewModel.getUserProfile()
+        userProfileViewModel.getUserProfile(uid)
     }
 
     private fun refresh(user: UserModel) {

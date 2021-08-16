@@ -5,7 +5,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
-import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 
 /**
  * @author yinhang

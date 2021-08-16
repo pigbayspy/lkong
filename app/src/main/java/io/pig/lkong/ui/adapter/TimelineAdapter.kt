@@ -16,6 +16,7 @@ import io.pig.lkong.model.TimelineModel
 import io.pig.lkong.ui.adapter.differ.TimelineDiffer
 import io.pig.lkong.ui.adapter.item.TimelineReplyHolder
 import io.pig.lkong.ui.adapter.item.TimelineViewHolder
+import io.pig.lkong.ui.adapter.listener.OnTimelineClickListener
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.ThemeUtil
@@ -28,6 +29,7 @@ import io.pig.widget.adapter.MutableViewAdapter
  */
 class TimelineAdapter(
     private val context: Context,
+    private val listener: OnTimelineClickListener,
     themeKey: String,
 ) : MutableViewAdapter<TimelineModel>(TimelineDiffer) {
 
@@ -105,6 +107,9 @@ class TimelineAdapter(
             context, holder.authorAvatar, item.authorId,
             item.authorAvatar, avatarSize
         )
+        holder.authorAvatar.setOnClickListener {
+            listener.onProfileAreaClick(it, item.authorId)
+        }
     }
 
     private fun bindQuoteItem(holder: TimelineReplyHolder, item: TimelineModel) {
@@ -144,6 +149,9 @@ class TimelineAdapter(
             item.authorAvatar,
             avatarSize
         )
+        holder.authorAvatar.setOnClickListener {
+            listener.onProfileAreaClick(it, item.authorId)
+        }
     }
 
     private fun bindReplyItem(holder: TimelineReplyHolder, item: TimelineModel) {
@@ -189,6 +197,9 @@ class TimelineAdapter(
             item.authorAvatar,
             avatarSize
         )
+        holder.authorAvatar.setOnClickListener {
+            listener.onProfileAreaClick(it, item.authorId)
+        }
     }
 
     companion object {

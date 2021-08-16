@@ -23,8 +23,8 @@ object LkongRepository {
         return lkongSpec.getFavorite(req)
     }
 
-    suspend fun getUserProfile(): RespBase<UserProfileResp> {
-        val req = UserProfileReq()
+    suspend fun getUserProfile(uid: Long): RespBase<UserProfileResp> {
+        val req = UserProfileReq(uid)
         return lkongSpec.getUserProfile(req)
     }
 

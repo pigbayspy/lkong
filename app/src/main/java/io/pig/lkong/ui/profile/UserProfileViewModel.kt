@@ -15,9 +15,9 @@ class UserProfileViewModel : ViewModel() {
 
     val user = MutableLiveData<UserModel>()
 
-    fun getUserProfile() {
+    fun getUserProfile(uid: Long) {
         viewModelScope.launch {
-            val respBase = LkongRepository.getUserProfile()
+            val respBase = LkongRepository.getUserProfile(uid)
             if (respBase.data != null) {
                 val userProfile = respBase.data
                 val userModel = UserModel(userProfile)

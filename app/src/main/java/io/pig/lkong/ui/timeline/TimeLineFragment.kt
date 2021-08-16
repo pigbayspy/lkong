@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.databinding.FragmentTimeLineBinding
 import io.pig.lkong.model.TimelineModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.TimelineAdapter
+import io.pig.lkong.ui.adapter.listener.OnTimelineClickListener
 import io.pig.ui.common.getThemeKey
 
 /**
@@ -22,7 +24,17 @@ class TimeLineFragment : Fragment() {
 
     private val layoutMgr = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
 
-    private val listAdapter by lazy { TimelineAdapter(requireContext(), getThemeKey()) }
+    private val listener = object : OnTimelineClickListener {
+        override fun onItemTimelineClick(view: View, timeline: TimelineModel) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onProfileAreaClick(view: View, uid: Long) {
+            AppNavigation.openActivityForUserProfile(requireActivity(), uid)
+        }
+    }
+
+    private val listAdapter by lazy { TimelineAdapter(requireContext(), listener, getThemeKey()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
