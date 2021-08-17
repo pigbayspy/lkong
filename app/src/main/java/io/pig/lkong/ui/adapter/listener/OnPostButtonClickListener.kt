@@ -1,6 +1,7 @@
 package io.pig.lkong.ui.adapter.listener
 
 import android.view.View
+import io.pig.lkong.model.PostModel
 
 /**
  * @author yinhang
@@ -10,9 +11,9 @@ interface OnPostButtonClickListener {
 
     fun onPostTextLongClick(view: View, position: Int)
     fun onRateClick(view: View, position: Int)
-    fun onRateTextClick(view: View, position: Int)
+    fun onRateTextClick(view: View, rates: List<PostModel.PostRate>)
     fun onShareClick(view: View, position: Int)
     fun onReplyClick(view: View, position: Int)
     fun onEditClick(view: View, position: Int)
-    fun onProfileImageClick(view: View, position: Int)
+    fun onProfileImageClick(view: View, uid: Long)
 }

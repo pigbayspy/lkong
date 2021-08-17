@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
-import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
 import io.pig.widget.PostItemView
 
 /**
@@ -14,8 +13,7 @@ import io.pig.widget.PostItemView
  * @since 2021/6/28
  */
 class PostViewHolder(
-    itemView: View,
-    private val listener: OnPostButtonClickListener
+    itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
 
     val postItem: PostItemView
@@ -32,14 +30,5 @@ class PostViewHolder(
         rateButton = itemView.findViewById(R.id.recycle_item_post_button_rate)
         shareButton = itemView.findViewById(R.id.recycle_item_post_button_share)
         editButton = itemView.findViewById(R.id.recycle_item_post_button_edit)
-        avatarImage.setOnClickListener {
-            listener.onProfileImageClick(it, adapterPosition)
-        }
-        rateButton.setOnClickListener {
-            listener.onRateClick(it, adapterPosition)
-        }
-        shareButton.setOnClickListener {
-            listener.onShareClick(it, adapterPosition)
-        }
     }
 }

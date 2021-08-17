@@ -9,8 +9,9 @@ import io.pig.lkong.R
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.ui.adapter.item.PostViewHolder
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
+import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.UiUtil
-import io.pig.widget.adapter.BaseRecycleViewAdapter
+import io.pig.widget.adapter.FixedViewAdapter
 
 /**
  * @author yinhang
@@ -21,30 +22,43 @@ class PostListAdapter(
     val userId: Long,
     private val listener: OnPostButtonClickListener,
     postList: List<PostModel>
-) : BaseRecycleViewAdapter<PostModel>(postList) {
+) : FixedViewAdapter<PostModel>(postList) {
 
     private val avatarSize: Int = UiUtil.getDefaultAvatarSize(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_post, parent, false)
-        return PostViewHolder(v, listener)
+        return PostViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         val viewHolder = holder as PostViewHolder
         val post = getItem(position)
-        viewHolder.postItem.postId = post.pid
-        viewHolder.postItem.identityTag = post.pid.toString()
-        viewHolder.postItem.setPostDisplayCache(post.postDisplayCache!!)
-        viewHolder.postItem.ordinalText = post.ordinal.toString()
-        if (post.rateScore != 0) {
-            viewHolder.rateText.visibility = View.VISIBLE
-            viewHolder.rateText.text = post.rateScore.toString()
+        if (post.rateSum != 0) {
+            viewHolder.rateText.apply {
+                visibility = View.VISIBLE
+                text = context.getString(R.string.format_post_rate_summary, post.rateSum)
+                setOnClickListener {
+                    listener.onRateTextClick(viewHolder.itemView, post.rates)
+                }
+            }
         }
         if (post.authorId == userId) {
             viewHolder.editButton.visibility = View.VISIBLE
+        }
+        ImageLoaderUtil.loadLkongAvatar(
+            context,
+            viewHolder.avatarImage,
+            post.authorId,
+            post.authorAvatar,
+            avatarSize
+        )
+
+        // add listener
+        viewHolder.avatarImage.setOnClickListener {
+            listener.onProfileImageClick(viewHolder.itemView, post.authorId)
         }
     }
 }

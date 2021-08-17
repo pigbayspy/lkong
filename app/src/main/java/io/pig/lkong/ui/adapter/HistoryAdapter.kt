@@ -8,7 +8,7 @@ import io.pig.lkong.R
 import io.pig.lkong.model.HistoryModel
 import io.pig.lkong.ui.adapter.item.HistoryViewHolder
 import io.pig.lkong.util.DateUtil
-import io.pig.widget.adapter.BaseRecycleViewAdapter
+import io.pig.widget.adapter.FixedViewAdapter
 
 /**
  * @author yinhang
@@ -17,7 +17,7 @@ import io.pig.widget.adapter.BaseRecycleViewAdapter
 class HistoryAdapter(
     val context: Context,
     histories: List<HistoryModel>
-) : BaseRecycleViewAdapter<HistoryModel>(histories) {
+) : FixedViewAdapter<HistoryModel>(histories) {
 
     private val todayPrefix = context.getString(R.string.text_datetime_today)
 

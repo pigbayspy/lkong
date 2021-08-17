@@ -229,5 +229,7 @@
         <item>默认</item>
         <item>精华</item>
     </string-array>
+    <string name="dialog_title_rate">评分</string>
+    <string name="format_post_rate_summary">+ %d</string>
 
 </resources>

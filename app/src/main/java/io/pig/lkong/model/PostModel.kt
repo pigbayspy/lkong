@@ -20,6 +20,8 @@ class PostModel : BaseCollectionItem {
     val tid: Long
     val status: String
     val ordinal: Int
+    val rates: List<PostRate>
+    val rateSum: Int
 
     constructor(item: PostRespPostData) {
         this.dateline = item.dateline
@@ -31,6 +33,10 @@ class PostModel : BaseCollectionItem {
         this.tid = item.tid
         this.status = item.status
         this.ordinal = item.lou
+        this.rates = item.rate?.map {
+            PostRate(it)
+        } ?: emptyList()
+        this.rateSum = this.rates.map { it.num }.sum()
     }
 
     private constructor(parcel: Parcel) {
@@ -43,6 +49,9 @@ class PostModel : BaseCollectionItem {
         tid = parcel.readLong()
         status = parcel.readString() ?: ""
         ordinal = parcel.readInt()
+        rates = mutableListOf()
+        parcel.readTypedList(rates, PostRate.CREATOR)
+        rateSum = parcel.readInt()
     }
 
     override fun describeContents(): Int {
@@ -59,6 +68,8 @@ class PostModel : BaseCollectionItem {
         dest.writeLong(tid)
         dest.writeString(status)
         dest.writeInt(ordinal)
+        dest.writeTypedList(rates)
+        dest.writeInt(rateSum)
     }
 
     companion object CREATOR : Parcelable.Creator<PostModel> {
@@ -71,4 +82,55 @@ class PostModel : BaseCollectionItem {
         }
     }
 
+    class PostRate : BaseCollectionItem {
+
+        val dateline: Long
+        val id: String
+        val num: Int
+        val reason: String
+        val userId: Long
+        val userName: String
+
+        constructor(item: PostRespPostData.PostRate) {
+            this.dateline = item.dateline
+            this.id = item.id
+            this.num = item.num
+            this.reason = item.reason
+            this.userId = item.user.uid
+            this.userName = item.user.name
+        }
+
+        private constructor(parcel: Parcel) {
+            this.dateline = parcel.readLong()
+            this.id = parcel.readString() ?: ""
+            this.num = parcel.readInt()
+            this.reason = parcel.readString() ?: ""
+            this.userId = parcel.readLong()
+            this.userName = parcel.readString() ?: ""
+        }
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeLong(dateline)
+            parcel.writeString(id)
+            parcel.writeInt(num)
+            parcel.writeString(reason)
+            parcel.writeLong(userId)
+            parcel.writeString(userName)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<PostRate> {
+            override fun createFromParcel(parcel: Parcel): PostRate {
+                return PostRate(parcel)
+            }
+
+            override fun newArray(size: Int): Array<PostRate?> {
+                return arrayOfNulls(size)
+            }
+        }
+
+    }
 }
