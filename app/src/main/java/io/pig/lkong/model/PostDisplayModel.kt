@@ -12,5 +12,4 @@ class PostDisplayModel(
     val importantSpans: List<Any>,
     val textLayout: DynamicLayout? = null,
     val authorLayout: StaticLayout? = null
-) {
-}
+)

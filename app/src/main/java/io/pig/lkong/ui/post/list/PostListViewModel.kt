@@ -23,10 +23,13 @@ class PostListViewModel : ViewModel() {
     fun getPost(thread: Long, page: Int) {
         viewModelScope.launch {
             try {
-                val result = LkongRepository.getPostList(thread, page)
+                val result = LkongRepository.getThreadPost(thread, page)
+                val postModelList = result.data?.posts?.map {
+                    PostModel(it)
+                } ?: emptyList()
+                postList.value = postModelList
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong Network Request Fail", e)
-                postList.value = null
             }
         }
     }

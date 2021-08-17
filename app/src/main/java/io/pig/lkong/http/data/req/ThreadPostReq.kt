@@ -25,6 +25,8 @@ class ThreadPostReq(tid:Long, page:Int) {
         }
         posts(tid:${'$'}tid, page:${'$'}page) {
             lou
+            pid
+            tid
             rate {
                 dateline
                 id

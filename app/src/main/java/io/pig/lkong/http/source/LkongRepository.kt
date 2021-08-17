@@ -1,8 +1,5 @@
 package io.pig.lkong.http.source
 
-import io.pig.lkong.http.data.LkongPostListReq
-import io.pig.lkong.http.data.LkongPostListResp
-import io.pig.lkong.http.data.resp.SignInResp
 import io.pig.lkong.http.data.req.*
 import io.pig.lkong.http.data.resp.*
 import io.pig.lkong.http.provider.LkongServiceProvider
@@ -33,9 +30,9 @@ object LkongRepository {
         return lkongSpec.getHot(req)
     }
 
-    suspend fun getPostList(thread: Long, page: Int): LkongPostListResp {
-        val postListReq = LkongPostListReq(thread, page)
-        return lkongSpec.getPostList(postListReq.sars, postListReq.mod)
+    suspend fun getThreadPost(tid: Long, page: Int = 1): RespBase<ThreadPostResp> {
+        val threadPostReq = ThreadPostReq(tid, page)
+        return lkongSpec.getThreadPost(threadPostReq)
     }
 
     suspend fun getForums(): RespBase<ForumResp> {
