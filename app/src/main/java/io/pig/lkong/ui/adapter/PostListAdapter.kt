@@ -10,6 +10,7 @@ import io.pig.lkong.model.PostModel
 import io.pig.lkong.ui.adapter.item.PostViewHolder
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
 import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.lkong.util.SlateUtil
 import io.pig.lkong.util.UiUtil
 import io.pig.widget.adapter.FixedViewAdapter
 
@@ -55,6 +56,7 @@ class PostListAdapter(
             post.authorAvatar,
             avatarSize
         )
+        viewHolder.postItem.text = SlateUtil.slateToText(post.message)
 
         // add listener
         viewHolder.avatarImage.setOnClickListener {

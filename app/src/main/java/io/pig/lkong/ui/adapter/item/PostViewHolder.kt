@@ -16,7 +16,7 @@ class PostViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
 
-    val postItem: PostItemView
+    val postItem: TextView
     val avatarImage: ImageView
     val rateButton: ImageButton
     val rateText: TextView
