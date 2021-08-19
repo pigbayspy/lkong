@@ -12,11 +12,17 @@ import io.pig.lkong.R
  * @author yinhang
  * @since 2021/7/10
  */
-class BorderCircleView(
-    context: Context,
-    attributeSet: AttributeSet,
-    defStyleAttr: Int
-) : FrameLayout(context, attributeSet, defStyleAttr) {
+class BorderCircleView : FrameLayout {
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attr: AttributeSet) : super(context, attr)
+
+    constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attr,
+        defStyleAttr
+    )
 
     private val check: Drawable
     private val paint: Paint

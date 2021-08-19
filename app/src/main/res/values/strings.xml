@@ -34,7 +34,7 @@
     <string name="menu_history">浏览历史</string>
     <string name="menu_setting">设置</string>
     <string name="text_recycle_empty_text">这里什么都没有~ 刷新试试？</string>
-    <string name="text_datetime_today">今天</string>
+    <string name="text_datetime_today">今天&#160;</string>
     <string name="text_user_all_activities_title">所有动态</string>
     <string name="text_user_digest_title">精华</string>
     <string name="text_user_wealth_title">财富</string>
@@ -173,6 +173,7 @@
     <string name="setting_category_author_title">关于作者</string>
 
     <!-- theme setting -->
+    <string name="setting_theme_select">确认</string>
     <string name="setting_theme_base_theme">基本</string>
     <string name="setting_theme_dark_theme_summary">使用暗色主题</string>
     <string name="setting_theme_dark_theme">暗色主题</string>

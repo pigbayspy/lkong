@@ -50,7 +50,6 @@
         <activity
             android:name=".ui.post.list.PostListActivity"
             android:theme="@style/AppTheme.Translucent" />
-        <activity android:name=".ui.setting.SettingActivity" /> <!-- service -->
         <service
             android:name=".account.service.LkongAuthenticateService"
             android:enabled="true"

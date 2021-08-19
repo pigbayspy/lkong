@@ -1,12 +1,12 @@
 package io.pig.lkong.ui.setting
 
-import android.graphics.Color
 import android.graphics.Color.*
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.color.ColorPalette
 import com.afollestad.materialdialogs.color.colorChooser
 import io.pig.lkong.R
 import io.pig.lkong.theme.ThemeConfig
@@ -18,7 +18,9 @@ import io.pig.ui.common.getThemeKey
 
 class ThemeSettingFragment : PreferenceFragmentCompat() {
 
-    private lateinit var themeKey: String
+    private val themeKey: String by lazy {
+        requireActivity().getThemeKey()
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_theme_setting, rootKey)
@@ -27,51 +29,57 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
 
     private fun invalidateSettings() {
         val attachActivity = requireActivity()
-        val colors = intArrayOf(RED, GREEN, BLUE)
-        themeKey = attachActivity.getThemeKey()
-        val primaryColorPref: Preference = findPreference("primary_color")!!
-        // primaryColorPref.setColor(ThemeUtil.primaryColor(attachActivity, themeKey), Color.BLACK)
+        val config = ThemeConfig(requireContext(), themeKey)
+        val primaryColorPref: ColorPreference = findPreference("primary_color")!!
+        primaryColorPref.setColor(ThemeUtil.primaryColor(attachActivity, themeKey), BLACK)
         primaryColorPref.setOnPreferenceClickListener {
-            MaterialDialog(attachActivity).show {
+            MaterialDialog(attachActivity).apply {
                 title(R.string.setting_theme_primary_color)
                 colorChooser(
-                    colors,
+                    ColorPalette.Accent,
                     initialSelection = ThemeUtil.primaryColor(attachActivity, themeKey)
-                )
+                ) { _, color ->
+                    config.primaryColor(color)
+                }
+                positiveButton(R.string.setting_theme_select)
+                show()
             }
             return@setOnPreferenceClickListener true
         }
         val accentColorPref: ColorPreference = findPreference("accent_color")!!
-        accentColorPref.setColor(ThemeUtil.accentColor(attachActivity, themeKey), Color.BLACK)
+        accentColorPref.setColor(ThemeUtil.accentColor(attachActivity, themeKey), BLACK)
         accentColorPref.setOnPreferenceClickListener {
             MaterialDialog(attachActivity).show {
                 title(R.string.setting_theme_accent_color)
                 colorChooser(
-                    colors,
+                    ColorPalette.Accent,
                     initialSelection = ThemeUtil.accentColor(attachActivity, themeKey)
                 )
             }
             return@setOnPreferenceClickListener true
         }
-        val textColorPrimaryPref: Preference = findPreference("text_primary")!!
-        // textColorPrimaryPref.setColor(ThemeUtil.textColorPrimary(attachActivity, themeKey), BLACK)
+        val textColorPrimaryPref: ColorPreference = findPreference("text_primary")!!
+        textColorPrimaryPref.setColor(ThemeUtil.textColorPrimary(attachActivity, themeKey), BLACK)
         textColorPrimaryPref.setOnPreferenceClickListener {
             MaterialDialog(attachActivity).show {
                 title(R.string.setting_theme_primary_text_color)
                 colorChooser(
-                    colors,
+                    ColorPalette.Accent,
                     initialSelection = ThemeUtil.textColorPrimary(attachActivity, themeKey)
                 )
             }
             return@setOnPreferenceClickListener true
         }
-        val textColorSecondaryPref: Preference = findPreference("text_secondary")!!
-        // textColorSecondaryPref.setColor(ThemeUtil.textColorSecondary(attachActivity, themeKey), BLACK)
+        val textColorSecondaryPref: ColorPreference = findPreference("text_secondary")!!
+        textColorSecondaryPref.setColor(
+            ThemeUtil.textColorSecondary(attachActivity, themeKey),
+            BLACK
+        )
         textColorSecondaryPref.setOnPreferenceClickListener {
             MaterialDialog(attachActivity).show {
                 title(R.string.setting_theme_secondary_text_color)
                 colorChooser(
-                    colors,
+                    ColorPalette.Accent,
                     initialSelection = ThemeUtil.textColorSecondary(attachActivity, themeKey)
                 )
             }

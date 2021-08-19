@@ -3,7 +3,6 @@ package io.pig.lkong.ui.setting
 import android.content.ContentResolver
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import io.pig.lkong.R
@@ -19,8 +18,6 @@ import javax.inject.Inject
 
 
 class SettingFragment : PreferenceFragmentCompat(), Injectable {
-
-    private lateinit var viewModel: SettingViewModel
 
     @Inject
     lateinit var userAccountManager: UserAccountManager
@@ -63,7 +60,6 @@ class SettingFragment : PreferenceFragmentCompat(), Injectable {
         }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        viewModel = ViewModelProvider(this).get(SettingViewModel::class.java)
         setPreferencesFromResource(R.xml.preference_setting, rootKey)
         injectThis()
         setImagePolicySummary()
@@ -131,7 +127,10 @@ class SettingFragment : PreferenceFragmentCompat(), Injectable {
                 val themeSettingFragment = ThemeSettingFragment()
                 val fragmentManager = parentFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_setting, themeSettingFragment)
+                fragmentTransaction.replace(
+                    R.id.nav_host_fragment_content_main,
+                    themeSettingFragment
+                )
                 fragmentTransaction.commit()
                 return@OnPreferenceClickListener true
             }

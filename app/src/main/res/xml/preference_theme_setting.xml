@@ -2,17 +2,22 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_theme_setting">
-    <PreferenceCategory android:title="@string/setting_theme_base_theme">
+    <PreferenceCategory
+        android:title="@string/setting_theme_base_theme"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:defaultValue="false"
             android:key="dark_theme"
             android:persistent="true"
             android:summary="@string/setting_theme_dark_theme_summary"
             android:title="@string/setting_theme_dark_theme"
-            android:widgetLayout="@layout/layout_setting_theme_color_checkbox" />
+            android:widgetLayout="@layout/layout_setting_theme_color_checkbox"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_theme_colors">
+    <PreferenceCategory
+        android:title="@string/setting_theme_colors"
+        app:iconSpaceReserved="false">
         <io.pig.ui.common.ColorPreference
             android:key="primary_color"
             android:persistent="false"
@@ -42,30 +47,37 @@
             app:theme_key_pref_color="?theme_key" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_theme_system_ui_colors">
+    <PreferenceCategory
+        android:title="@string/setting_theme_system_ui_colors"
+        app:iconSpaceReserved="false">
         <SwitchPreference
             android:defaultValue="true"
             android:key="colored_status_bar"
             android:persistent="false"
             android:summary="@string/setting_theme_status_bar_color_summary"
-            android:title="@string/setting_theme_status_bar_color" />
+            android:title="@string/setting_theme_status_bar_color"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="colored_nav_bar"
             android:persistent="false"
             android:summary="@string/setting_theme_nav_bar_summary_color"
-            android:title="@string/setting_theme_nav_bar_color" />
+            android:title="@string/setting_theme_nav_bar_color"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_theme_light_ui_modes">
+    <PreferenceCategory
+        android:title="@string/setting_theme_light_ui_modes"
+        app:iconSpaceReserved="false">
         <ListPreference
             android:defaultValue="2"
             android:entries="@array/setting_theme_light_status_mode_entries"
             android:entryValues="@array/setting_theme_light_status_mode_values"
             android:key="light_status_bar_mode"
             android:persistent="true"
-            android:title="@string/setting_theme_light_status_bar_mode" />
+            android:title="@string/setting_theme_light_status_bar_mode"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="2"
@@ -73,24 +85,30 @@
             android:entryValues="@array/setting_theme_light_status_mode_values"
             android:key="light_toolbar_mode"
             android:persistent="true"
-            android:title="@string/setting_theme_light_toolbar_mode" />
+            android:title="@string/setting_theme_light_toolbar_mode"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/setting_theme_text_size">
+    <PreferenceCategory
+        android:title="@string/setting_theme_text_size"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="text_size|subheading"
             android:persistent="false"
             android:summary="@string/setting_theme_subheading_text_size_desc"
-            android:title="@string/setting_theme_subheading_text_size" />
+            android:title="@string/setting_theme_subheading_text_size"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="text_size|body"
             android:persistent="false"
             android:summary="@string/setting_theme_body_text_size_desc"
-            android:title="@string/setting_theme_body_text_size" />
+            android:title="@string/setting_theme_body_text_size"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:enabled="false"
-            android:summary="@string/setting_theme_other_text_size_note" />
+            android:summary="@string/setting_theme_other_text_size_note"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
