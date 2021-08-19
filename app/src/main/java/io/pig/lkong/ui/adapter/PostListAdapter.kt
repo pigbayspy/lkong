@@ -56,7 +56,12 @@ class PostListAdapter(
             post.authorAvatar,
             avatarSize
         )
-        viewHolder.postItem.text = SlateUtil.slateToText(post.message)
+        if (post.message.isNullOrBlank()) {
+            // Todo don't show status = "removed"
+            viewHolder.postItem.text = ""
+        } else {
+            viewHolder.postItem.text = SlateUtil.slateToText(post.message)
+        }
 
         // add listener
         viewHolder.avatarImage.setOnClickListener {

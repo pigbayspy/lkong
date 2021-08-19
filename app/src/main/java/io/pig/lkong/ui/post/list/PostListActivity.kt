@@ -111,10 +111,12 @@ class PostListActivity : AppCompatActivity(), Injectable {
     }
 
     private fun openContentDialog(post: PostModel) {
-        MaterialDialog(this).apply {
-            title(R.string.dialog_title_copy_content)
-            message(text = SlateUtil.slateToText(post.message))
-            show()
+        if (!post.message.isNullOrBlank()) {
+            MaterialDialog(this).apply {
+                title(R.string.dialog_title_copy_content)
+                message(text = SlateUtil.slateToText(post.message))
+                show()
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 class PostModel : BaseCollectionItem {
 
     val dateline: Long
-    val message: String
+    val message: String?
     val authorName: String
     val authorId: Long
     val authorAvatar: String

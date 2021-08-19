@@ -6,9 +6,9 @@ package io.pig.common.ui.slate
  */
 class SlateNode(
     val type: String? = null,
-    val text: String = "",
+    val text: String? = "",
     val id: Int? = null,
-    val bold: Boolean = false,
+    val bold: Boolean? = false,
     val url: String? = null,
     val children: List<SlateNode>? = null
 ) {
@@ -16,10 +16,10 @@ class SlateNode(
     override fun toString(): String {
         if (type.isNullOrBlank()) {
             // 默认类型为 "text"
-            if (bold) {
+            if (bold == true) {
                 return "<strong>${text}</strong>"
             }
-            return text
+            return text ?: ""
         }
         val child = buildString {
             children?.forEach {
