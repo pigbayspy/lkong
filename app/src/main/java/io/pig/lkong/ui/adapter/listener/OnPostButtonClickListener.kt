@@ -9,7 +9,7 @@ import io.pig.lkong.model.PostModel
  */
 interface OnPostButtonClickListener {
 
-    fun onPostTextLongClick(view: View, position: Int)
+    fun onPostTextLongClick(view: View, post: PostModel)
     fun onRateClick(view: View, position: Int)
     fun onRateTextClick(view: View, rates: List<PostModel.PostRate>)
     fun onShareClick(view: View, position: Int)

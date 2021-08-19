@@ -18,6 +18,7 @@ import io.pig.lkong.ui.adapter.PostListAdapter
 import io.pig.lkong.ui.adapter.PostRateAdapter
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
 import io.pig.lkong.ui.common.Injectable
+import io.pig.lkong.util.SlateUtil
 import javax.inject.Inject
 
 class PostListActivity : AppCompatActivity(), Injectable {
@@ -71,8 +72,8 @@ class PostListActivity : AppCompatActivity(), Injectable {
                     TODO("Not yet implemented")
                 }
 
-                override fun onPostTextLongClick(view: View, position: Int) {
-                    TODO("Not yet implemented")
+                override fun onPostTextLongClick(view: View, post: PostModel) {
+                    openContentDialog(post)
                 }
 
                 override fun onRateClick(view: View, position: Int) {
@@ -100,12 +101,19 @@ class PostListActivity : AppCompatActivity(), Injectable {
     }
 
     private fun openRateLogDialog(rates: List<PostModel.PostRate>) {
-        val rateListDialog = MaterialDialog(this)
         val adapter = PostRateAdapter(this, rates)
-        rateListDialog.apply {
+        MaterialDialog(this).apply {
             title(R.string.dialog_title_rate)
             customListAdapter(adapter)
             positiveButton(android.R.string.ok)
+            show()
+        }
+    }
+
+    private fun openContentDialog(post: PostModel) {
+        MaterialDialog(this).apply {
+            title(R.string.dialog_title_copy_content)
+            message(text = SlateUtil.slateToText(post.message))
             show()
         }
     }

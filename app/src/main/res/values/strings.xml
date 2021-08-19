@@ -231,5 +231,6 @@
     </string-array>
     <string name="dialog_title_rate">评分</string>
     <string name="format_post_rate_summary">+ %d</string>
+    <string name="dialog_title_copy_content">复制内容</string>
 
 </resources>

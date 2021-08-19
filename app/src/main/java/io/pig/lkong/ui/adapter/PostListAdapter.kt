@@ -62,5 +62,12 @@ class PostListAdapter(
         viewHolder.avatarImage.setOnClickListener {
             listener.onProfileImageClick(viewHolder.itemView, post.authorId)
         }
+        viewHolder.postItem.apply {
+            isLongClickable = true
+            setOnLongClickListener {
+                listener.onPostTextLongClick(viewHolder.itemView, post)
+                return@setOnLongClickListener false
+            }
+        }
     }
 }

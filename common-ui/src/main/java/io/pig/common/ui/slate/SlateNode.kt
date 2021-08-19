@@ -6,21 +6,26 @@ package io.pig.common.ui.slate
  */
 class SlateNode(
     val type: String? = null,
-    val text: String? = null,
+    val text: String = "",
     val id: Int? = null,
+    val bold: Boolean = false,
     val url: String? = null,
     val children: List<SlateNode>? = null
 ) {
 
     override fun toString(): String {
-        if (type.isNullOrEmpty()) {
-            return text ?: ""
+        if (type.isNullOrBlank()) {
+            // 默认类型为 "text"
+            if (bold) {
+                return "<strong>${text}</strong>"
+            }
+            return text
         }
-        val sb = StringBuilder()
-        children?.forEach {
-            sb.append(it.toString())
+        val child = buildString {
+            children?.forEach {
+                append(it.toString())
+            }
         }
-        val child = sb.toString()
         return when (type) {
             "quote" -> "<blockquote><p>${child}</p></blockquote>"
             "paragraph" -> "<p>${child}</p>"
