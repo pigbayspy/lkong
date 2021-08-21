@@ -19,7 +19,7 @@ class MemoryCookieStore : CookieManager {
 
     @Synchronized
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        this.store.add(url, cookies);
+        this.store.add(url, cookies)
     }
 
     @Synchronized

@@ -3,7 +3,6 @@ package io.pig.lkong.theme
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Resources
 import android.util.TypedValue
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
@@ -33,7 +32,7 @@ class ThemeConfig(val context: Context, val key: String) {
     }
 
     fun activityTheme(@StyleRes theme: Int): ThemeConfig {
-        val r: Resources = context.getResources()
+        val r = context.resources
         val name = r.getResourceName(theme)
         val defType = r.getResourceTypeName(theme)
         editor.putString(KEY_ACTIVITY_THEME, name)
@@ -119,7 +118,7 @@ class ThemeConfig(val context: Context, val key: String) {
     }
 
     private fun autoGeneratePrimaryDark(context: Context, key: String): Boolean {
-        return ThemeUtil.pref(context, key).getBoolean(KEY_AUTO_GENERATE_PRIMARY_DARK, true);
+        return ThemeUtil.pref(context, key).getBoolean(KEY_AUTO_GENERATE_PRIMARY_DARK, true)
     }
 
     companion object {
@@ -137,6 +136,6 @@ class ThemeConfig(val context: Context, val key: String) {
         private const val KEY_AUTO_GENERATE_PRIMARY_DARK = "auto_generate_primary_dark"
         private const val KEY_ACTIVITY_THEME = "activity_theme"
         private const val KEY_ACTIVITY_THEME_DEFAULT_TYPE = "activity_theme_default_ype"
-        private const val KEY_APPLY_PRIMARY_SUPPORT_TAB = "apply_primary_suppor_tab"
+        private const val KEY_APPLY_PRIMARY_SUPPORT_TAB = "apply_primary_support_tab"
     }
 }

@@ -6,9 +6,10 @@ import android.graphics.drawable.shapes.OvalShape
 import android.graphics.drawable.shapes.RectShape
 import android.graphics.drawable.shapes.RoundRectShape
 import java.util.*
+import kotlin.math.min
 
 /**
- * @author amulya
+ * @author yinhang
  * @datetime 14 Oct 2014, 3:53 PM
  */
 class TextDrawable private constructor(builder: Builder) : ShapeDrawable(builder.shape) {
@@ -43,9 +44,15 @@ class TextDrawable private constructor(builder: Builder) : ShapeDrawable(builder
         canvas.translate(r.left.toFloat(), r.top.toFloat())
 
         // draw text
-        val width = if (width < 0) r.width() else width
-        val height = if (height < 0) r.height() else height
-        val fontSize = if (fontSize < 0) Math.min(width, height) / 2 else fontSize
+        val width = if (width < 0) {
+            r.width()
+        } else width
+        val height = if (height < 0) {
+            r.height()
+        } else height
+        val fontSize = if (fontSize < 0) {
+            min(width, height) / 2
+        } else fontSize
         textPaint.textSize = fontSize.toFloat()
         canvas.drawText(
             text,
@@ -59,12 +66,16 @@ class TextDrawable private constructor(builder: Builder) : ShapeDrawable(builder
     private fun drawBorder(canvas: Canvas) {
         val rect = RectF(bounds)
         rect.inset((borderThickness / 2).toFloat(), (borderThickness / 2).toFloat())
-        if (shape is OvalShape) {
-            canvas.drawOval(rect, borderPaint)
-        } else if (shape is RoundRectShape) {
-            canvas.drawRoundRect(rect, radius, radius, borderPaint)
-        } else {
-            canvas.drawRect(rect, borderPaint)
+        when (shape) {
+            is OvalShape -> {
+                canvas.drawOval(rect, borderPaint)
+            }
+            is RoundRectShape -> {
+                canvas.drawRoundRect(rect, radius, radius, borderPaint)
+            }
+            else -> {
+                canvas.drawRect(rect, borderPaint)
+            }
         }
     }
 

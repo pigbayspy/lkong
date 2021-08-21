@@ -22,7 +22,7 @@ object ThemeUtil {
     private const val KEY_LIGHT_TOOLBAR_MODE = "light_toolbar_mode"
     private const val KEY_TEXT_COLOR_PRIMARY = "text_color_primary"
     private const val KEY_TEXT_COLOR_SECONDARY = "text_color_secondary"
-    private const val KEY_APPLY_PRIMARY_DARK_STATUS_BAR = "apply_primary_dark_statusbar"
+    private const val KEY_APPLY_PRIMARY_DARK_STATUS_BAR = "apply_primary_dark_status_bar"
     private const val KEY_APPLY_PRIMARY_NAV_BAR = "apply_primary_navbar"
     private const val KEY_TEXT_COLOR_PRIMARY_INVERSE = "text_color_primary_inverse"
 

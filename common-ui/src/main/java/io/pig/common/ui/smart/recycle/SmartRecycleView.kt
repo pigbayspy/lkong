@@ -206,14 +206,19 @@ open class SmartRecycleView : FrameLayout {
     private fun getLastVisibleItemPosition(layoutManager: RecyclerView.LayoutManager?): Int {
         var lastVisibleItemPosition = -1
         if (layoutManagerType == null) {
-            layoutManagerType = if (layoutManager is GridLayoutManager) {
-                LayoutManagerType.GRID
-            } else if (layoutManager is LinearLayoutManager) {
-                LayoutManagerType.LINEAR
-            } else if (layoutManager is StaggeredGridLayoutManager) {
-                LayoutManagerType.STAGGERED_GRID
-            } else {
-                throw RuntimeException("Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager")
+            layoutManagerType = when (layoutManager) {
+                is GridLayoutManager -> {
+                    LayoutManagerType.GRID
+                }
+                is LinearLayoutManager -> {
+                    LayoutManagerType.LINEAR
+                }
+                is StaggeredGridLayoutManager -> {
+                    LayoutManagerType.STAGGERED_GRID
+                }
+                else -> {
+                    throw RuntimeException("Unsupported LayoutManager used. Valid ones are LinearLayoutManager, GridLayoutManager and StaggeredGridLayoutManager")
+                }
             }
         }
         when (layoutManagerType) {
@@ -481,12 +486,15 @@ open class SmartRecycleView : FrameLayout {
      * Set the adapter to the recycler
      * Automatically hide the progressbar
      * Set the refresh to false
-     * If adapter is empty, then the emptyview is shown
+     * If adapter is empty, then the empty view is shown
      */
     var adapter: RecyclerView.Adapter<*>?
         get() = recyclerView.adapter
         set(adapter) {
-            setAdapterInternal(adapter, false, true)
+            setAdapterInternal(adapter,
+                compatibleWithPrevious = false,
+                removeAndRecycleExistingViews = true
+            )
         }
 
 

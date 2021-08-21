@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
-import io.pig.widget.PostItemView
 
 /**
  * @author yinhang

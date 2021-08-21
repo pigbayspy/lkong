@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import io.pig.lkong.R
+import kotlin.math.min
 
 /**
  * @author yinhang
@@ -57,7 +58,7 @@ class BorderCircleView : FrameLayout {
             val width = MeasureSpec.getSize(widthMeasureSpec)
             var height = width
             if (heightMode == MeasureSpec.AT_MOST) {
-                height = Math.min(height, MeasureSpec.getSize(heightMeasureSpec))
+                height = min(height, MeasureSpec.getSize(heightMeasureSpec))
             }
             setMeasuredDimension(width, height)
         } else {

@@ -25,7 +25,7 @@ interface CookieStore {
     fun getCookies(): List<Cookie>
 
     /**
-     * 移除指定httpurl cookie集合
+     * 移除指定 http url cookie集合
      */
     fun remove(httpUrl: HttpUrl, cookie: Cookie): Boolean
 

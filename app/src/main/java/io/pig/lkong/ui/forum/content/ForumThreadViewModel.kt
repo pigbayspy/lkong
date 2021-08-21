@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.pig.lkong.http.source.LkongRepository
 import io.pig.lkong.model.listener.ForumThreadModel
-import io.pig.lkong.ui.timeline.TimelineViewModel
 import kotlinx.coroutines.launch
 
 /**

@@ -19,7 +19,7 @@ class UserModel(userProfileResp: UserProfileResp) {
     val threads: Long
     val money: Long
     val diamond: Long
-    val vertyInfo: String?
+    val verityInfo: String?
     val level: String
     val isPunch: Boolean
     val punchAllDay: Int
@@ -40,7 +40,7 @@ class UserModel(userProfileResp: UserProfileResp) {
         this.threads = userProfileResp.userCount.threads
         this.money = userProfileResp.userCount.money
         this.diamond = userProfileResp.userCount.longjing
-        this.vertyInfo = userProfileResp.userCount.vertyInfo
+        this.verityInfo = userProfileResp.userCount.vertyInfo
         this.level = userProfileResp.userCount.level
         this.isPunch = userProfileResp.userPunch.isPunch
         this.punchAllDay = userProfileResp.userPunch.punchallday

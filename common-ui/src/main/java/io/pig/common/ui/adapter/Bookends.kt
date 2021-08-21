@@ -115,12 +115,16 @@ class Bookends(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position < mHeaders.size) {
-            HEADER_VIEW_TYPE + position
-        } else if (position < mHeaders.size + wrappedAdapter.itemCount) {
-            wrappedAdapter.getItemViewType(position - mHeaders.size)
-        } else {
-            FOOTER_VIEW_TYPE + position - mHeaders.size - wrappedAdapter.itemCount
+        return when {
+            position < mHeaders.size -> {
+                HEADER_VIEW_TYPE + position
+            }
+            position < mHeaders.size + wrappedAdapter.itemCount -> {
+                wrappedAdapter.getItemViewType(position - mHeaders.size)
+            }
+            else -> {
+                FOOTER_VIEW_TYPE + position - mHeaders.size - wrappedAdapter.itemCount
+            }
         }
     }
 
@@ -144,8 +148,6 @@ class Bookends(
 
     /**
      * Constructor.
-     *
-     * @param base the adapter to wrap
      */
     init {
         wrappedAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
