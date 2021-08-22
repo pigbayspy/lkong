@@ -20,7 +20,6 @@ class TimelineReq(nextTime: Long) {
             }
         }
         fragment MixPostComponent on MixPost {
-            authorid
             author {
                 uid
                 name
@@ -46,7 +45,6 @@ class TimelineReq(nextTime: Long) {
                 thread {
                     tid
                     title
-                    authorid
                     author {
                         uid
                         name

@@ -43,7 +43,7 @@ class TimelineModel : BaseCollectionItem {
     }
 
     constructor(timeline: TimelineItemData) {
-        this.authorId = timeline.authorid
+        this.authorId = timeline.author.uid
         this.authorName = timeline.author.name
         this.authorAvatar = timeline.author.avatar
         this.dateline = Date(timeline.dateline)
