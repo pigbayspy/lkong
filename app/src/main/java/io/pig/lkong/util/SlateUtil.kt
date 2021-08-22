@@ -25,4 +25,8 @@ object SlateUtil {
         }
         return Html.fromHtml(slateHtml, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
     }
+
+    fun slateToCleanText(slate: String): String {
+        return slateToText(slate).trim('\n')
+    }
 }

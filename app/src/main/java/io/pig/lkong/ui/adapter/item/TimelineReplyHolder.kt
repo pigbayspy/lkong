@@ -9,7 +9,8 @@ import io.pig.lkong.R
  * @author yinhang
  * @since 2021/7/25
  */
-class TimelineReplyHolder(itemView: View) : TimelineViewHolder(itemView) {
+class TimelineReplyHolder(itemView: View, themeKey: String) :
+    TimelineViewHolder(itemView, themeKey) {
 
     val secondaryContainer: RelativeLayout
     val secondaryMessageText: TextView

@@ -30,7 +30,7 @@ import io.pig.widget.adapter.MutableViewAdapter
 class TimelineAdapter(
     private val context: Context,
     private val listener: OnTimelineClickListener,
-    themeKey: String,
+    private val themeKey: String,
 ) : MutableViewAdapter<TimelineModel>(TimelineDiffer) {
 
     private val avatarSize = UiUtil.getDefaultAvatarSize(context)
@@ -42,12 +42,12 @@ class TimelineAdapter(
             TYPE_QUOTE, TYPE_REPLY -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_timeline, parent, false)
-                TimelineReplyHolder(view)
+                TimelineReplyHolder(view, themeKey)
             }
             else -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_timeline_thread, parent, false)
-                TimelineViewHolder(view)
+                TimelineViewHolder(view, themeKey)
             }
         }
     }

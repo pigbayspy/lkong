@@ -54,7 +54,9 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 colorChooser(
                     ColorPalette.Accent,
                     initialSelection = ThemeUtil.accentColor(attachActivity, themeKey)
-                )
+                ) { _, color ->
+                    config.accentColor(color)
+                }
             }
             return@setOnPreferenceClickListener true
         }
@@ -66,7 +68,9 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 colorChooser(
                     ColorPalette.Accent,
                     initialSelection = ThemeUtil.textColorPrimary(attachActivity, themeKey)
-                )
+                ) { _, color ->
+                    config.textColorPrimary(color)
+                }
             }
             return@setOnPreferenceClickListener true
         }
@@ -81,7 +85,9 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 colorChooser(
                     ColorPalette.Accent,
                     initialSelection = ThemeUtil.textColorSecondary(attachActivity, themeKey)
-                )
+                ) { _, color ->
+                    config.textColorSecondary(color)
+                }
             }
             return@setOnPreferenceClickListener true
         }
@@ -94,7 +100,7 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 return@OnPreferenceChangeListener true
             }
         val lightStatusMode: Preference =
-            findPreference("light_status_bar_mode")!!
+            findPreference(ThemeUtil.KEY_LIGHT_STATUS_BAR_MODE)!!
         val lightToolbarMode: Preference =
             findPreference("light_toolbar_mode")!!
         lightStatusMode.isEnabled = true
