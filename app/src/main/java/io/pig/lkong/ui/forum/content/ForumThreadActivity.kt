@@ -21,6 +21,7 @@ import io.pig.lkong.model.listener.ForumThreadModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.ForumThreadAdapter
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
+import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.ui.common.isActivityDestroyed
 
 class ForumThreadActivity : AppCompatActivity() {
@@ -50,22 +51,27 @@ class ForumThreadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityForumThreadBinding
     private lateinit var viewModel: ForumThreadViewModel
 
-    private var fid: Long = -1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(ForumThreadViewModel::class.java)
         binding = ActivityForumThreadBinding.inflate(layoutInflater)
 
+        val root = binding.root
+        setSupportActionBar(binding.forumThreadToolbar)
+
         // get param
-        fid = intent.getLongExtra(DataContract.BUNDLE_FORUM_ID, -1)
+        val fid = intent.getLongExtra(DataContract.BUNDLE_FORUM_ID, -1)
+        val avatar = intent.getStringExtra(DataContract.BUNDLE_FORUM_AVATAR) ?: ""
+
+        // set title
         val forumName = intent.getStringExtra(DataContract.BUNDLE_FORUM_NAME)
         if (!forumName.isNullOrBlank()) {
             title = forumName
         }
 
-        val root = binding.root
+        ImageLoaderUtil.loadForumAvatar(this, binding.forumAvatar, fid, avatar)
+
         setContentView(root)
 
         initRecycle()
@@ -84,7 +90,7 @@ class ForumThreadActivity : AppCompatActivity() {
     }
 
     private fun initRecycle() {
-        binding.activityForumThreadList.apply {
+        binding.threads.forumThreadList.apply {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
             adapter = wrapperAdapter
             itemAnimator = DefaultItemAnimator()
@@ -109,9 +115,13 @@ class ForumThreadActivity : AppCompatActivity() {
     }
 
     private fun initFab() {
+        binding.forumThreadFab.setOnClickListener {
+            // Todo
+        }
     }
 
     private fun initHeader() {
+        // bookend
         val headerView = layoutInflater.inflate(R.layout.layout_forum_header, binding.root, false)
         val typeSpinner =
             headerView.findViewById<Spinner>(R.id.layout_forum_header_spinner_list_type)

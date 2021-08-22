@@ -53,13 +53,9 @@ class ForumListAdapter(
             val secondaryInfo = context.getString(R.string.format_forum_item_summary, num)
             viewHolder.forumSecondaryText.text = secondaryInfo
         }
-        ImageLoaderUtil.loadForumIcon(context, viewHolder.forumIconImage, forum.icon)
+        ImageLoaderUtil.loadForumAvatar(context, viewHolder.forumIconImage, forum.fid, forum.avatar)
         viewHolder.itemView.setOnClickListener {
             clickListener.invoke(forum)
         }
-    }
-
-    interface ForumClickListener {
-        fun onClick(forum: ForumModel)
     }
 }

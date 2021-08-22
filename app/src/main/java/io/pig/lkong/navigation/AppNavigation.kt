@@ -59,6 +59,7 @@ object AppNavigation {
         val intent = Intent(context, ForumThreadActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_FORUM_ID, forum.fid)
         intent.putExtra(DataContract.BUNDLE_FORUM_NAME, forum.name)
+        intent.putExtra(DataContract.BUNDLE_FORUM_AVATAR, forum.avatar)
         context.startActivity(intent)
     }
 

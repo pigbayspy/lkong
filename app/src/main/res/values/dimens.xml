@@ -47,5 +47,6 @@
 
     <!-- elevation -->
     <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
 
 </resources>

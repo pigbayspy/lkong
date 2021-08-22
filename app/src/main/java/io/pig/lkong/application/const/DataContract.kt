@@ -16,5 +16,6 @@ object DataContract {
 
     const val BUNDLE_FORUM_ID = "bundle_forum_id"
     const val BUNDLE_FORUM_NAME = "bundle_forum_name"
+    const val BUNDLE_FORUM_AVATAR = "bundle_forum_avatar"
     const val BUNDLE_FORUM_DESCRIPTION = "bundle_forum_description"
 }

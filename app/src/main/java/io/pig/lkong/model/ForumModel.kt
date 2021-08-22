@@ -4,7 +4,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.pig.lkong.http.data.resp.data.ForumRespData
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
-import io.pig.lkong.util.LkongUtil
 
 /**
  * @author yinhang
@@ -13,27 +12,27 @@ import io.pig.lkong.util.LkongUtil
 class ForumModel : BaseCollectionItem {
     val fid: Long
     val name: String
-    val icon: String
+    val avatar: String
     val num: Long
 
     private constructor(parcel: Parcel) {
         fid = parcel.readLong()
         name = parcel.readString() ?: ""
-        icon = parcel.readString() ?: ""
+        avatar = parcel.readString() ?: ""
         num = parcel.readLong()
     }
 
     constructor(data: ForumRespData) {
         this.fid = data.fid
         this.name = data.name
-        this.icon = LkongUtil.generateForumAvatarUrl(data.fid, data.avatar)
+        this.avatar = data.avatar
         this.num = data.todayPostNum
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeLong(fid)
         dest.writeString(name)
-        dest.writeString(icon)
+        dest.writeString(avatar)
         dest.writeLong(num)
     }
 

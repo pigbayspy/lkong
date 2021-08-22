@@ -51,6 +51,18 @@ object ImageLoaderUtil {
             .into(target)
     }
 
+    fun loadForumAvatar(context: Context, target: ImageView, fid: Long, avatar: String) {
+        val avatarUrl = LkongUtil.generateForumAvatarUrl(fid, avatar)
+        val glideHeader = LazyHeaders.Builder()
+            .addHeader("Referer", "https://www.lkong.com/").build()
+        val avatarGlideUrl = GlideUrl(avatarUrl, glideHeader)
+        Glide.with(context)
+            .load(avatarGlideUrl)
+            .placeholder(R.drawable.ic_forum_loading)
+            .error(R.drawable.ic_forum_error)
+            .into(target)
+    }
+
     fun loadForumIcon(context: Context, target: ImageView, iconUrl: String) {
         val glideHeader = LazyHeaders.Builder()
             .addHeader("Referer", "https://www.lkong.com/").build()

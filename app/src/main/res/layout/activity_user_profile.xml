@@ -120,26 +120,6 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/profile_card_introduction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="@dimen/default_card_elevation"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="0dp">
-
-                <TextView
-                    android:id="@+id/profile_text_introduction"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:tag="text_color|primary_text"
-                    android:textSize="@dimen/text_size_subhead" />
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
                 android:id="@+id/profile_card_else"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
