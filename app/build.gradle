@@ -83,6 +83,7 @@ dependencies {
 
     // room
     implementation dependency.room
+    implementation dependency.roomKtx
     kapt dependency.roomProcessor
 
     // test

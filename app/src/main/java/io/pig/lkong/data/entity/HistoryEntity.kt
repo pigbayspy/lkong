@@ -10,8 +10,8 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class HistoryEntity(
-    @PrimaryKey
-    val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     @ColumnInfo(name = "user_id")
     val userId: Long,
     @ColumnInfo(name = "thread_id")

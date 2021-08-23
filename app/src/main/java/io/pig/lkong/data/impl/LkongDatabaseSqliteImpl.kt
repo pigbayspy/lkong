@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.data.db.HistoryDatabase
+import io.pig.lkong.data.entity.HistoryEntity
 import io.pig.lkong.model.HistoryModel
 import java.util.*
 
@@ -20,7 +21,7 @@ class LkongDatabaseSqliteImpl(context: Context) : LkongDatabase {
 
     private val dao = db.historyDao()
 
-    override fun getHistory(uid: Long, start: Int): List<HistoryModel> {
+    override suspend fun getHistory(uid: Long, start: Int): List<HistoryModel> {
         val entities = dao.queryByUserIdAndTime(uid, start)
         val result = entities.map {
             HistoryModel(
@@ -38,7 +39,31 @@ class LkongDatabaseSqliteImpl(context: Context) : LkongDatabase {
         return result
     }
 
-    override fun clearHistory(uid: Long) {
+    override suspend fun clearHistory(uid: Long) {
         dao.deleteByUser(uid)
+    }
+
+    override suspend fun saveBrowseHistory(
+        userId: Long,
+        threadId: Long,
+        threadTitle: String,
+        forumId: Long,
+        forumTitle: String,
+        postId: Long,
+        authorId: Long,
+        authorName: String
+    ) {
+        val entity = HistoryEntity(
+            userId = userId,
+            threadId = threadId,
+            threadTitle = threadTitle,
+            forumId = forumId,
+            forumTitle = forumTitle,
+            postId = postId,
+            authorId = authorId,
+            authorName = authorName,
+            lastReadTime = System.currentTimeMillis()
+        )
+        dao.insert(entity)
     }
 }

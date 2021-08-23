@@ -13,11 +13,11 @@ import io.pig.lkong.data.entity.HistoryEntity
 interface HistoryDao {
 
     @Query("SELECT * FROM HistoryEntity WHERE user_id = :userId LIMIT 20 OFFSET :start")
-    fun queryByUserIdAndTime(userId: Long, start: Int): List<HistoryEntity>
+    suspend fun queryByUserIdAndTime(userId: Long, start: Int): List<HistoryEntity>
 
     @Insert
-    fun insert(history: HistoryEntity)
+    suspend fun insert(history: HistoryEntity)
 
     @Query("DELETE FROM HistoryEntity WHERE user_id = :userId")
-    fun deleteByUser(userId: Long)
+    suspend fun deleteByUser(userId: Long)
 }

@@ -8,7 +8,18 @@ import io.pig.lkong.model.HistoryModel
  */
 interface LkongDatabase {
 
-    fun getHistory(uid: Long, start: Int): List<HistoryModel>
+    suspend fun getHistory(uid: Long, start: Int): List<HistoryModel>
 
-    fun clearHistory(uid: Long)
+    suspend fun clearHistory(uid: Long)
+
+    suspend fun saveBrowseHistory(
+        userId: Long,
+        threadId: Long,
+        threadTitle: String,
+        forumId: Long,
+        forumTitle: String,
+        postId: Long,
+        authorId: Long,
+        authorName: String
+    )
 }

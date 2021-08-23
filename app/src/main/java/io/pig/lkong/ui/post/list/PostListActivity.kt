@@ -11,6 +11,7 @@ import io.pig.lkong.R
 import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.application.const.DataContract
+import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.databinding.ActivityPostListBinding
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.navigation.AppNavigation
@@ -28,6 +29,9 @@ class PostListActivity : AppCompatActivity(), Injectable {
 
     @Inject
     lateinit var userAccountManager: UserAccountManager
+
+    @Inject
+    lateinit var lkongDataBase: LkongDatabase
 
     private var threadId = -1L
     private var targetPostId = -1L
@@ -98,6 +102,12 @@ class PostListActivity : AppCompatActivity(), Injectable {
             binding.recycleListPost.adapter = adapter
         }
         postListViewModel.getPost(threadId, currentPage)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val userId = userAccountManager.getCurrentUserAccount().userId
+        postListViewModel.saveHistory(lkongDataBase, userId)
     }
 
     private fun openRateLogDialog(rates: List<PostModel.PostRate>) {

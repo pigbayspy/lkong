@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.http.source.LkongRepository
 import io.pig.lkong.model.PostModel
 import kotlinx.coroutines.launch
@@ -31,6 +32,21 @@ class PostListViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong Network Request Fail", e)
             }
+        }
+    }
+
+    fun saveHistory(lkongDataBase: LkongDatabase, userId: Long) {
+        viewModelScope.launch {
+            lkongDataBase.saveBrowseHistory(
+                userId = userId,
+                threadId = 0,
+                threadTitle = "",
+                forumId = -1,
+                forumTitle = "",
+                postId = 0,
+                authorId = 0,
+                authorName = ""
+            )
         }
     }
 }

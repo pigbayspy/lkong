@@ -59,6 +59,7 @@ ext {
 
             // room
             room              : "androidx.room:room-runtime:$roomVersion",
+            roomKtx           : "androidx.room:room-ktx:$roomVersion",
             roomProcessor     : "androidx.room:room-compiler:$roomVersion"
     ]
 }
