@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.pig.lkong.data.LkongDatabase
+import io.pig.lkong.http.data.resp.data.PostRespThreadData
 import io.pig.lkong.http.source.LkongRepository
 import io.pig.lkong.model.PostModel
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class PostListViewModel : ViewModel() {
     }
 
     val postList = MutableLiveData<List<PostModel>>()
+    private val threadInfo = MutableLiveData<PostRespThreadData>()
 
     fun getPost(thread: Long, page: Int) {
         viewModelScope.launch {
@@ -29,23 +31,26 @@ class PostListViewModel : ViewModel() {
                     PostModel(it)
                 } ?: emptyList()
                 postList.value = postModelList
+                threadInfo.value = result.data?.thread
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong Network Request Fail", e)
             }
         }
     }
 
-    fun saveHistory(lkongDataBase: LkongDatabase, userId: Long) {
+    fun saveHistory(lkongDataBase: LkongDatabase, userId: Long, postPos: Int) {
+        val thread = threadInfo.value!!
+        val pid = postList.value!![postPos].pid
         viewModelScope.launch {
             lkongDataBase.saveBrowseHistory(
                 userId = userId,
-                threadId = 0,
-                threadTitle = "",
-                forumId = -1,
-                forumTitle = "",
-                postId = 0,
-                authorId = 0,
-                authorName = ""
+                threadId = thread.tid,
+                threadTitle = thread.title,
+                forumId = thread.forum.fid,
+                forumTitle = thread.forum.name,
+                postId = pid,
+                authorId = thread.author.uid,
+                authorName = thread.author.name
             )
         }
     }

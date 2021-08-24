@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.databinding.FragmentTimeLineBinding
 import io.pig.lkong.model.TimelineModel
 import io.pig.lkong.navigation.AppNavigation
@@ -21,8 +21,6 @@ import io.pig.ui.common.getThemeKey
 class TimeLineFragment : Fragment() {
     private lateinit var timelineViewModel: TimelineViewModel
     private lateinit var binding: FragmentTimeLineBinding
-
-    private val layoutMgr = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
 
     private val listener = object : OnTimelineClickListener {
         override fun onItemTimelineClick(view: View, timeline: TimelineModel) {
@@ -55,6 +53,7 @@ class TimeLineFragment : Fragment() {
         root.setOnRefreshListener {
             timelineViewModel.refresh()
         }
+        val layoutMgr = LinearLayoutManager(requireContext())
         binding.recycleListTimeline.apply {
             layoutManager = layoutMgr
             adapter = listAdapter
@@ -62,9 +61,7 @@ class TimeLineFragment : Fragment() {
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    val into = layoutMgr.findLastCompletelyVisibleItemPositions(null)
-                    val lastPos = into.maxOrNull() ?: 1
-
+                    val lastPos = layoutMgr.findLastCompletelyVisibleItemPosition()
                     if (dy > 0 && layoutMgr.itemCount - lastPos <= TO_LAST_LEFT) {
                         // load more
                         timelineViewModel.getTimeline()

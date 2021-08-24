@@ -10,6 +10,11 @@ class ThreadPostReq(tid:Long, page:Int) {
     fragment indexThreadComponent on Query {
         thread(tid: ${'$'}tid) {
             title
+            tid
+            forum {
+                fid
+                name
+            }
             replies
             views
             status

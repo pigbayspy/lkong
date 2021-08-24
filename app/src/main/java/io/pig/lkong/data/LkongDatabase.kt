@@ -18,7 +18,7 @@ interface LkongDatabase {
         threadTitle: String,
         forumId: Long,
         forumTitle: String,
-        postId: Long,
+        postId: String,
         authorId: Long,
         authorName: String
     )

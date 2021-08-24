@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
 import io.pig.lkong.R
@@ -98,7 +98,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
             }
             val adapter = PostListAdapter(this, userId, listener, it)
             binding.recycleListPost.layoutManager =
-                StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+                LinearLayoutManager(this)
             binding.recycleListPost.adapter = adapter
         }
         postListViewModel.getPost(threadId, currentPage)
@@ -107,7 +107,11 @@ class PostListActivity : AppCompatActivity(), Injectable {
     override fun onStop() {
         super.onStop()
         val userId = userAccountManager.getCurrentUserAccount().userId
-        postListViewModel.saveHistory(lkongDataBase, userId)
+        // get middle item
+        val layoutMgr = binding.recycleListPost.layoutManager as LinearLayoutManager
+        val middlePos =
+            (layoutMgr.findFirstVisibleItemPosition() + layoutMgr.findLastVisibleItemPosition()) / 2
+        postListViewModel.saveHistory(lkongDataBase, userId, middlePos)
     }
 
     private fun openRateLogDialog(rates: List<PostModel.PostRate>) {

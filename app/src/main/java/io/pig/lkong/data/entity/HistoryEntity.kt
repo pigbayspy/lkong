@@ -21,7 +21,7 @@ data class HistoryEntity(
     @ColumnInfo(name = "forum_id")
     val forumId: Long,
     @ColumnInfo(name = "post_id")
-    val postId: Long,
+    val postId: String,
     @ColumnInfo(name = "forum_title")
     val forumTitle: String,
     @ColumnInfo(name = "author_id")

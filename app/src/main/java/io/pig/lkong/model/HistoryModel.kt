@@ -11,7 +11,7 @@ class HistoryModel : BaseCollectionItem {
     val threadId: Long
     val threadTitle: String
     val forumId: Long
-    val postId: Long
+    val postId: String
     val forumTitle: String
     val authorId: Long
     val authorName: String
@@ -19,7 +19,7 @@ class HistoryModel : BaseCollectionItem {
 
     constructor(
         userId: Long, threadId: Long, threadTitle: String, forumId: Long,
-        postId: Long, forumTitle: String, authorId: Long, authorName: String, lastReadTime: Date
+        postId: String, forumTitle: String, authorId: Long, authorName: String, lastReadTime: Date
     ) {
         this.userId = userId
         this.threadId = threadId
@@ -37,7 +37,7 @@ class HistoryModel : BaseCollectionItem {
         threadId = parcel.readLong()
         threadTitle = parcel.readString() ?: ""
         forumId = parcel.readLong()
-        postId = parcel.readLong()
+        postId = parcel.readString() ?: ""
         forumTitle = parcel.readString() ?: ""
         authorId = parcel.readLong()
         authorName = parcel.readString() ?: ""
