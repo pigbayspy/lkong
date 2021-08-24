@@ -9,12 +9,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.databinding.FragmentHotThreadBinding
 import io.pig.lkong.model.HotThreadModel
+import io.pig.lkong.model.listener.OnItemThreadClickListener
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.HotThreadAdapter
 
 /**
  * 热门
  */
 class HotThreadFragment : Fragment() {
+
+    private val listener = object : OnItemThreadClickListener {
+        override fun onItemThreadClick(view: View, tid: Long) {
+            AppNavigation.openPostListActivity(requireContext(), tid)
+        }
+    }
 
     private lateinit var hotThreadViewModel: HotThreadViewModel
     private lateinit var binding: FragmentHotThreadBinding
@@ -45,7 +53,7 @@ class HotThreadFragment : Fragment() {
         binding.recycleListHotThread.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.recycleListHotThread.adapter =
-            HotThreadAdapter(requireActivity(), hotThreads)
+            HotThreadAdapter(requireActivity(), listener, hotThreads)
     }
 
     private fun refreshLoading(loading: Boolean) {

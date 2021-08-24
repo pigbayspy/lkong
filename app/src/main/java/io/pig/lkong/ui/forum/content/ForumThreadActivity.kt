@@ -28,7 +28,7 @@ class ForumThreadActivity : AppCompatActivity() {
 
     private val listener = object : OnThreadClickListener {
         override fun onItemThreadClick(view: View, tid: Long) {
-            AppNavigation.openActivityForPostListByThreadId(this@ForumThreadActivity, tid)
+            AppNavigation.openPostListActivity(this@ForumThreadActivity, tid)
         }
 
         override fun onProfileAreaClick(view: View, uid: Long) {

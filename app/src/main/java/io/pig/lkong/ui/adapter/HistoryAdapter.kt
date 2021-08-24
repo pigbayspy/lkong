@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.HistoryModel
+import io.pig.lkong.model.listener.OnItemThreadClickListener
 import io.pig.lkong.ui.adapter.item.HistoryViewHolder
 import io.pig.lkong.util.DateUtil
 import io.pig.widget.adapter.FixedViewAdapter
@@ -15,7 +16,8 @@ import io.pig.widget.adapter.FixedViewAdapter
  * @since 2021/7/28
  */
 class HistoryAdapter(
-    val context: Context,
+    private val context: Context,
+    private val clickListener: OnItemThreadClickListener,
     histories: List<HistoryModel>
 ) : FixedViewAdapter<HistoryModel>(histories) {
 
@@ -33,6 +35,9 @@ class HistoryAdapter(
         viewHolder.titleText.text = item.threadTitle
         viewHolder.secondaryText.text = getDescribe(item.forumTitle, item.authorName)
         viewHolder.timeText.text = DateUtil.formatDateByToday(item.lastReadTime, todayPrefix)
+        viewHolder.itemView.setOnClickListener {
+            clickListener.onItemThreadClick(it, item.threadId)
+        }
     }
 
     private fun getDescribe(forum: String, author: String): String {

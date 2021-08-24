@@ -63,11 +63,7 @@ object AppNavigation {
         context.startActivity(intent)
     }
 
-    fun openActivityForPostListByThreadId(context: Context, threadId: Long) {
-        openActivityForPostListByThreadId(context, threadId, 1)
-    }
-
-    private fun openActivityForPostListByThreadId(context: Context, threadId: Long, page: Int) {
+    fun openPostListActivity(context: Context, threadId: Long, page: Int = 1) {
         val intent = Intent(context, PostListActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_THREAD_ID, threadId)
         intent.putExtra(DataContract.BUNDLE_THREAD_CURRENT_PAGE, page)

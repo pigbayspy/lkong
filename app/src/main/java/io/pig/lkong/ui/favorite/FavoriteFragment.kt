@@ -25,7 +25,7 @@ class FavoriteFragment : Fragment(), Injectable {
 
     private val listener = object : OnThreadClickListener {
         override fun onItemThreadClick(view: View, tid: Long) {
-            AppNavigation.openActivityForPostListByThreadId(requireContext(), tid)
+            AppNavigation.openPostListActivity(requireContext(), tid)
         }
 
         override fun onProfileAreaClick(view: View, uid: Long) {

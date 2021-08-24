@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.HotThreadModel
+import io.pig.lkong.model.listener.OnItemThreadClickListener
 import io.pig.lkong.ui.adapter.item.HotThreadViewHolder
 import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.TextDrawable
@@ -16,7 +17,8 @@ import io.pig.widget.adapter.FixedViewAdapter
  * @since 2021/7/13
  */
 class HotThreadAdapter(
-    val context: Context,
+    private val context: Context,
+    private val listener: OnItemThreadClickListener,
     hotThreads: List<HotThreadModel>
 ) : FixedViewAdapter<HotThreadModel>(hotThreads) {
 
@@ -39,5 +41,8 @@ class HotThreadAdapter(
             .endConfig() // use buildRect(String, int) for literal color value
             .buildRound((position + 1).toString(), accentColor)
         viewHolder.iconImageView.setImageDrawable(textDrawable)
+        viewHolder.itemView.setOnClickListener {
+            listener.onItemThreadClick(it, hotThread.tid)
+        }
     }
 }

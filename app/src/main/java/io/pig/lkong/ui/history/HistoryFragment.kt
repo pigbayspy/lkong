@@ -11,11 +11,19 @@ import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.databinding.FragmentHistoryBinding
 import io.pig.lkong.model.HistoryModel
+import io.pig.lkong.model.listener.OnItemThreadClickListener
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.HistoryAdapter
 import io.pig.lkong.ui.common.Injectable
 import javax.inject.Inject
 
 class HistoryFragment : Fragment(), Injectable {
+
+    private val listener = object : OnItemThreadClickListener {
+        override fun onItemThreadClick(view: View, tid: Long) {
+            AppNavigation.openPostListActivity(requireContext(), tid)
+        }
+    }
 
     private lateinit var historyViewModel: HistoryViewModel
     private lateinit var binding: FragmentHistoryBinding
@@ -68,7 +76,7 @@ class HistoryFragment : Fragment(), Injectable {
     private fun refresh(history: List<HistoryModel>) {
         binding.recycleListHistory.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        binding.recycleListHistory.adapter = HistoryAdapter(requireContext(), history)
+        binding.recycleListHistory.adapter = HistoryAdapter(requireContext(), listener, history)
     }
 
     override fun injectThis() {
