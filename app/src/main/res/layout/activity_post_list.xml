@@ -11,4 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <include
+        android:id="@+id/post_list_page_control"
+        layout="@layout/widget_pager_control"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

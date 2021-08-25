@@ -232,4 +232,7 @@
     <string name="format_post_rate_summary">+ %d</string>
     <string name="dialog_title_copy_content">复制内容</string>
 
+    <!-- post list -->
+    <string name="format_post_list_page_indicator">%1$d / %2$d</string>
+
 </resources>

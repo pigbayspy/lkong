@@ -101,6 +101,14 @@ class PostListActivity : AppCompatActivity(), Injectable {
                 LinearLayoutManager(this)
             binding.recycleListPost.adapter = adapter
         }
+        postListViewModel.threadInfo.observe(this) {
+            val pages = if (it.replies == 0) {
+                1
+            } else {
+                (it.replies + PAGE_SIZE - 1) / PAGE_SIZE
+            }
+            updatePageText(pages)
+        }
         postListViewModel.getPost(threadId, currentPage)
     }
 
@@ -132,5 +140,20 @@ class PostListActivity : AppCompatActivity(), Injectable {
                 show()
             }
         }
+    }
+
+    /**
+     * 渲染页数
+     */
+    private fun updatePageText(pages: Int) {
+        binding.postListPageControl.widgetPagerControlButtonPageIndicator.text =
+            getString(R.string.format_post_list_page_indicator, currentPage, pages)
+    }
+
+    companion object {
+        /**
+         * 一页的长度
+         */
+        const val PAGE_SIZE = 20
     }
 }

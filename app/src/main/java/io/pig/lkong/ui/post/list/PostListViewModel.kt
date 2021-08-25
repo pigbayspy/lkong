@@ -21,7 +21,7 @@ class PostListViewModel : ViewModel() {
     }
 
     val postList = MutableLiveData<List<PostModel>>()
-    private val threadInfo = MutableLiveData<PostRespThreadData>()
+    val threadInfo = MutableLiveData<PostRespThreadData>()
 
     fun getPost(thread: Long, page: Int) {
         viewModelScope.launch {
