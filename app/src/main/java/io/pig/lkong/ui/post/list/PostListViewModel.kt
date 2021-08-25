@@ -20,8 +20,14 @@ class PostListViewModel : ViewModel() {
         private const val TAG = "PostListViewModel"
     }
 
-    val postList = MutableLiveData<List<PostModel>>()
-    val threadInfo = MutableLiveData<PostRespThreadData>()
+    class ThreadDetail(val posts: List<PostModel>, val thread: PostRespThreadData)
+
+    val detail = MutableLiveData<ThreadDetail>()
+    val page = MutableLiveData(1)
+
+    fun setPage(p: Int) {
+        this.page.value = p
+    }
 
     fun getPost(thread: Long, page: Int) {
         viewModelScope.launch {
@@ -30,8 +36,7 @@ class PostListViewModel : ViewModel() {
                 val postModelList = result.data?.posts?.map {
                     PostModel(it)
                 } ?: emptyList()
-                postList.value = postModelList
-                threadInfo.value = result.data?.thread
+                detail.value = ThreadDetail(postModelList, result.data!!.thread)
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong Network Request Fail", e)
             }
@@ -39,19 +44,19 @@ class PostListViewModel : ViewModel() {
     }
 
     fun saveHistory(lkongDataBase: LkongDatabase, userId: Long, postPos: Int) {
-        val thread = threadInfo.value!!
-        val pid = postList.value!![postPos].pid
-        viewModelScope.launch {
-            lkongDataBase.saveBrowseHistory(
-                userId = userId,
-                threadId = thread.tid,
-                threadTitle = thread.title,
-                forumId = thread.forum.fid,
-                forumTitle = thread.forum.name,
-                postId = pid,
-                authorId = thread.author.uid,
-                authorName = thread.author.name
-            )
+        detail.value?.let {
+            viewModelScope.launch {
+                lkongDataBase.saveBrowseHistory(
+                    userId = userId,
+                    threadId = it.thread.tid,
+                    threadTitle = it.thread.title,
+                    forumId = it.thread.forum.fid,
+                    forumTitle = it.thread.forum.name,
+                    postId = it.posts[postPos].pid,
+                    authorId = it.thread.author.uid,
+                    authorName = it.thread.author.name
+                )
+            }
         }
     }
 }

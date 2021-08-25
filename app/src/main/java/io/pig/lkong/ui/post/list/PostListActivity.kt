@@ -3,6 +3,7 @@ package io.pig.lkong.ui.post.list
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -65,51 +66,23 @@ class PostListActivity : AppCompatActivity(), Injectable {
     }
 
     private fun initRecycleView() {
-        postListViewModel.postList.observe(this) {
-            val userId = userAccountManager.getCurrentUserAccount().userId
-            val listener = object : OnPostButtonClickListener {
-                override fun onProfileImageClick(view: View, uid: Long) {
-                    AppNavigation.openActivityForUserProfile(this@PostListActivity, uid)
-                }
-
-                override fun onEditClick(view: View, position: Int) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onPostTextLongClick(view: View, post: PostModel) {
-                    openContentDialog(post)
-                }
-
-                override fun onRateClick(view: View, position: Int) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onRateTextClick(view: View, rates: List<PostModel.PostRate>) {
-                    openRateLogDialog(rates)
-                }
-
-                override fun onReplyClick(view: View, position: Int) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onShareClick(view: View, position: Int) {
-                    TODO("Not yet implemented")
-                }
-            }
-            val adapter = PostListAdapter(this, userId, listener, it)
-            binding.recycleListPost.layoutManager =
-                LinearLayoutManager(this)
-            binding.recycleListPost.adapter = adapter
+        val source = MediatorLiveData<Any>()
+        source.addSource(postListViewModel.page) {
+            postListViewModel.getPost(threadId, it)
         }
-        postListViewModel.threadInfo.observe(this) {
-            val pages = if (it.replies == 0) {
+        source.addSource(postListViewModel.detail) {
+            refreshPosts(it.posts)
+        }
+        source.observe(this) {
+            val replies = postListViewModel.detail.value?.thread?.replies ?: 0
+            val pages = if (replies == 0) {
                 1
             } else {
-                (it.replies + PAGE_SIZE - 1) / PAGE_SIZE
+                (replies + PAGE_SIZE - 1) / PAGE_SIZE
             }
             updatePageText(pages)
         }
-        postListViewModel.getPost(threadId, currentPage)
+        postListViewModel.setPage(currentPage)
     }
 
     override fun onStop() {
@@ -120,6 +93,42 @@ class PostListActivity : AppCompatActivity(), Injectable {
         val middlePos =
             (layoutMgr.findFirstVisibleItemPosition() + layoutMgr.findLastVisibleItemPosition()) / 2
         postListViewModel.saveHistory(lkongDataBase, userId, middlePos)
+    }
+
+    private fun refreshPosts(post: List<PostModel>) {
+        val listener = object : OnPostButtonClickListener {
+            override fun onProfileImageClick(view: View, uid: Long) {
+                AppNavigation.openActivityForUserProfile(this@PostListActivity, uid)
+            }
+
+            override fun onEditClick(view: View, position: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onPostTextLongClick(view: View, post: PostModel) {
+                openContentDialog(post)
+            }
+
+            override fun onRateClick(view: View, position: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onRateTextClick(view: View, rates: List<PostModel.PostRate>) {
+                openRateLogDialog(rates)
+            }
+
+            override fun onReplyClick(view: View, position: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onShareClick(view: View, position: Int) {
+                TODO("Not yet implemented")
+            }
+        }
+        val userId = userAccountManager.getCurrentUserAccount().userId
+        val adapter = PostListAdapter(this, userId, listener, post)
+        binding.recycleListPost.layoutManager = LinearLayoutManager(this)
+        binding.recycleListPost.adapter = adapter
     }
 
     private fun openRateLogDialog(rates: List<PostModel.PostRate>) {
