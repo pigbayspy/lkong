@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), Injectable {
         injectThis()
 
         // theme
-        val lightMode = ThemeConfig(this, "light_theme")
+        val lightMode = ThemeConfig(this, ThemeUtil.LIGHT_THEME)
         if (!lightMode.isConfigured(BuildConfig.VERSION_CODE)) {
             lightMode.activityTheme(R.style.AppTheme)
                 .primaryColorRes(R.color.colorPrimaryLightDefault)

@@ -12,6 +12,7 @@ import io.pig.lkong.model.HotThreadModel
 import io.pig.lkong.model.listener.OnItemThreadClickListener
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.HotThreadAdapter
+import io.pig.ui.common.getThemeKey
 
 /**
  * 热门
@@ -53,7 +54,7 @@ class HotThreadFragment : Fragment() {
         binding.recycleListHotThread.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         binding.recycleListHotThread.adapter =
-            HotThreadAdapter(requireActivity(), listener, hotThreads)
+            HotThreadAdapter(requireActivity(), getThemeKey(), listener, hotThreads)
     }
 
     private fun refreshLoading(loading: Boolean) {

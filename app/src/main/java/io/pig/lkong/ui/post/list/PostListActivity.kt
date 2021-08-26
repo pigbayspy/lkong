@@ -1,13 +1,16 @@
 package io.pig.lkong.ui.post.list
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import io.pig.lkong.R
 import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
@@ -16,14 +19,26 @@ import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.databinding.ActivityPostListBinding
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.navigation.AppNavigation
+import io.pig.lkong.preference.PrefConst
+import io.pig.lkong.preference.Prefs
 import io.pig.lkong.ui.adapter.PostListAdapter
 import io.pig.lkong.ui.adapter.PostRateAdapter
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
 import io.pig.lkong.ui.common.Injectable
 import io.pig.lkong.util.SlateUtil
+import io.pig.lkong.util.ThemeUtil
+import io.pig.ui.common.getAccentColor
+import io.pig.ui.common.getPrimaryColor
 import javax.inject.Inject
 
 class PostListActivity : AppCompatActivity(), Injectable {
+
+    private val primaryColorInPostControl by lazy {
+        Prefs.getBoolPrefs(
+            PrefConst.USE_PRIMARY_COLOR_POST_CONTROL,
+            PrefConst.USE_PRIMARY_COLOR_POST_CONTROL_VALUE
+        )
+    }
 
     private lateinit var binding: ActivityPostListBinding
     private lateinit var postListViewModel: PostListViewModel
@@ -36,7 +51,6 @@ class PostListActivity : AppCompatActivity(), Injectable {
 
     private var threadId = -1L
     private var targetPostId = -1L
-    private var currentPage = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +68,11 @@ class PostListActivity : AppCompatActivity(), Injectable {
         } else if (intent.hasExtra(DataContract.BUNDLE_POST_ID)) {
             targetPostId = intent.getLongExtra(DataContract.BUNDLE_POST_ID, targetPostId)
         }
-        currentPage = intent.getIntExtra(DataContract.BUNDLE_THREAD_CURRENT_PAGE, currentPage)
         if (threadId == -1L && targetPostId == -1L) {
             throw IllegalStateException("PostListActivity missing extra in intent.")
         }
         initRecycleView()
+        initPageController()
     }
 
     override fun injectThis() {
@@ -68,21 +82,70 @@ class PostListActivity : AppCompatActivity(), Injectable {
     private fun initRecycleView() {
         val source = MediatorLiveData<Any>()
         source.addSource(postListViewModel.page) {
-            postListViewModel.getPost(threadId, it)
+            postListViewModel.getPost(threadId)
         }
         source.addSource(postListViewModel.detail) {
             refreshPosts(it.posts)
         }
         source.observe(this) {
-            val replies = postListViewModel.detail.value?.thread?.replies ?: 0
-            val pages = if (replies == 0) {
-                1
-            } else {
-                (replies + PAGE_SIZE - 1) / PAGE_SIZE
-            }
-            updatePageText(pages)
+            updatePageText()
         }
-        postListViewModel.setPage(currentPage)
+        postListViewModel.initPage(1)
+    }
+
+    private fun initPageController() {
+        val postControlColor =
+            if (primaryColorInPostControl.get()) {
+                getPrimaryColor()
+            } else {
+                getAccentColor()
+            }
+        val toolbarTextColor =
+            if (ThemeUtil.isColorLight(postControlColor)) {
+                Color.BLACK
+            } else {
+                Color.WHITE
+            }
+        val backwardArrow =
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_backward, null)!!.mutate()
+        val forwardArrow =
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_forward, null)!!.mutate()
+        ThemeUtil.setTint(backwardArrow, toolbarTextColor)
+        ThemeUtil.setTint(forwardArrow, toolbarTextColor)
+        binding.postListPageControl.pagerControlButtonBackward.apply {
+            setImageDrawable(backwardArrow)
+            setOnClickListener {
+                postListViewModel.goToPrevPage()
+            }
+        }
+        binding.postListPageControl.pagerControlButtonForward.apply {
+            setImageDrawable(forwardArrow)
+            setOnClickListener {
+                postListViewModel.goToNextPage()
+            }
+        }
+        binding.postListPageControl.pagerControlButtonPageIndicator.apply {
+            setBackgroundColor(postControlColor)
+            setOnClickListener {
+                MaterialDialog(this@PostListActivity)
+                    .title(text = getString(R.string.dialog_post_list_choose_page))
+                    .listItemsSingleChoice(items = getPageIndicatorItems()) { _, index, _ ->
+                        postListViewModel.goToPage(index + 1)
+                    }
+                    .show()
+            }
+        }
+    }
+
+    private fun getPageIndicatorItems(): List<CharSequence> {
+        return List(postListViewModel.getPages()) {
+            getString(
+                R.string.format_post_list_page_indicator_detail,
+                it,
+                (it - 1) * PAGE_SIZE + 1,
+                it * PAGE_SIZE
+            )
+        }
     }
 
     override fun onStop() {
@@ -154,9 +217,11 @@ class PostListActivity : AppCompatActivity(), Injectable {
     /**
      * 渲染页数
      */
-    private fun updatePageText(pages: Int) {
-        binding.postListPageControl.widgetPagerControlButtonPageIndicator.text =
-            getString(R.string.format_post_list_page_indicator, currentPage, pages)
+    private fun updatePageText() {
+        val page = postListViewModel.getPage()
+        val pages = postListViewModel.getPages()
+        binding.postListPageControl.pagerControlButtonPageIndicator.text =
+            getString(R.string.format_post_list_page_indicator, page, pages)
     }
 
     companion object {

@@ -14,12 +14,16 @@ import io.pig.lkong.util.ThemeUtil
 
 fun Activity.getThemeKey(): String {
     return if (PreferenceManager.getDefaultSharedPreferences(this)
-            .getBoolean("dark_theme", false)
-    ) "dark_theme" else "light_theme"
+            .getBoolean(ThemeUtil.DARK_THEME, false)
+    ) ThemeUtil.DARK_THEME else ThemeUtil.LIGHT_THEME
 }
 
 fun Activity.getPrimaryColor(): Int {
     return ThemeUtil.primaryColor(this, getThemeKey())
+}
+
+fun Activity.getAccentColor(): Int {
+    return ThemeUtil.accentColor(this, getThemeKey())
 }
 
 fun Activity.processToolbar(toolbar: Toolbar) {
@@ -36,8 +40,8 @@ fun Activity.processToolbar(toolbar: Toolbar) {
 
 fun Fragment.getThemeKey(): String {
     return if (PreferenceManager.getDefaultSharedPreferences(requireContext())
-            .getBoolean("dark_theme", false)
-    ) "dark_theme" else "light_theme"
+            .getBoolean(ThemeUtil.DARK_THEME, false)
+    ) ThemeUtil.DARK_THEME else ThemeUtil.LIGHT_THEME
 }
 
 fun Fragment.getPrimaryColor(): Int {

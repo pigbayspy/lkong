@@ -25,18 +25,19 @@ class PostListViewModel : ViewModel() {
     val detail = MutableLiveData<ThreadDetail>()
     val page = MutableLiveData(1)
 
-    fun setPage(p: Int) {
+    fun initPage(p: Int) {
         this.page.value = p
     }
 
-    fun getPost(thread: Long, page: Int) {
+    fun getPost(thread: Long) {
         viewModelScope.launch {
             try {
-                val result = LkongRepository.getThreadPost(thread, page)
+                val result = LkongRepository.getThreadPost(thread, getPage())
                 val postModelList = result.data?.posts?.map {
                     PostModel(it)
                 } ?: emptyList()
-                detail.value = ThreadDetail(postModelList, result.data!!.thread)
+                val t = result.data!!.thread
+                detail.value = ThreadDetail(postModelList, t)
             } catch (e: Exception) {
                 Log.e(TAG, "Lkong Network Request Fail", e)
             }
@@ -59,4 +60,37 @@ class PostListViewModel : ViewModel() {
             }
         }
     }
+
+    fun getPages(): Int {
+        val replies = detail.value?.thread?.replies ?: 1
+        return if (replies == 0) {
+            1
+        } else {
+            (replies + PostListActivity.PAGE_SIZE - 1) / PostListActivity.PAGE_SIZE
+        }
+    }
+
+    fun getPage(): Int {
+        return page.value ?: 1
+    }
+
+    fun goToPage(p: Int) {
+        if (p == page.value || p < 1 || p > getPages()) {
+            return
+        }
+        this.page.value = p
+    }
+
+    fun goToNextPage() {
+        if (getPage() + 1 >= 1 && getPage() + 1 <= getPages()) {
+            this.page.value = this.getPage() + 1
+        }
+    }
+
+    fun goToPrevPage() {
+        if (getPage() - 1 >= 1 && getPage() - 1 <= getPages()) {
+            this.page.value = this.getPage() - 1
+        }
+    }
+
 }

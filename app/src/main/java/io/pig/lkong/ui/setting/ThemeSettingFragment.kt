@@ -33,45 +33,43 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
         val primaryColorPref: ColorPreference = findPreference("primary_color")!!
         primaryColorPref.setColor(ThemeUtil.primaryColor(attachActivity, themeKey), BLACK)
         primaryColorPref.setOnPreferenceClickListener {
-            MaterialDialog(attachActivity).apply {
-                title(R.string.setting_theme_primary_color)
-                colorChooser(
+            MaterialDialog(attachActivity)
+                .title(R.string.setting_theme_primary_color)
+                .colorChooser(
                     ColorPalette.Accent,
                     initialSelection = ThemeUtil.primaryColor(attachActivity, themeKey)
                 ) { _, color ->
                     config.primaryColor(color)
                 }
-                positiveButton(R.string.setting_theme_select)
-                show()
-            }
+                .positiveButton(R.string.setting_theme_select)
+                .show()
             return@setOnPreferenceClickListener true
         }
         val accentColorPref: ColorPreference = findPreference("accent_color")!!
         accentColorPref.setColor(ThemeUtil.accentColor(attachActivity, themeKey), BLACK)
         accentColorPref.setOnPreferenceClickListener {
-            MaterialDialog(attachActivity).show {
-                title(R.string.setting_theme_accent_color)
-                colorChooser(
+            MaterialDialog(attachActivity).title(R.string.setting_theme_accent_color)
+                .colorChooser(
                     ColorPalette.Accent,
                     initialSelection = ThemeUtil.accentColor(attachActivity, themeKey)
                 ) { _, color ->
                     config.accentColor(color)
                 }
-            }
+                .show()
             return@setOnPreferenceClickListener true
         }
         val textColorPrimaryPref: ColorPreference = findPreference("text_primary")!!
         textColorPrimaryPref.setColor(ThemeUtil.textColorPrimary(attachActivity, themeKey), BLACK)
         textColorPrimaryPref.setOnPreferenceClickListener {
-            MaterialDialog(attachActivity).show {
-                title(R.string.setting_theme_primary_text_color)
-                colorChooser(
+            MaterialDialog(attachActivity)
+                .title(R.string.setting_theme_primary_text_color)
+                .colorChooser(
                     ColorPalette.Accent,
                     initialSelection = ThemeUtil.textColorPrimary(attachActivity, themeKey)
                 ) { _, color ->
                     config.textColorPrimary(color)
-                }
-            }
+                }.show()
+
             return@setOnPreferenceClickListener true
         }
         val textColorSecondaryPref: ColorPreference = findPreference("text_secondary")!!
@@ -80,22 +78,21 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
             BLACK
         )
         textColorSecondaryPref.setOnPreferenceClickListener {
-            MaterialDialog(attachActivity).show {
-                title(R.string.setting_theme_secondary_text_color)
-                colorChooser(
+            MaterialDialog(attachActivity).title(R.string.setting_theme_secondary_text_color)
+                .colorChooser(
                     ColorPalette.Accent,
                     initialSelection = ThemeUtil.textColorSecondary(attachActivity, themeKey)
                 ) { _, color ->
                     config.textColorSecondary(color)
-                }
-            }
+
+                }.show()
             return@setOnPreferenceClickListener true
         }
-        val darkThemePreference: Preference = findPreference("dark_theme")!!
+        val darkThemePreference: Preference = findPreference(ThemeUtil.DARK_THEME)!!
         darkThemePreference.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _: Preference?, _: Any? ->
-                ThemeUtil.markChanged(attachActivity, "light_theme")
-                ThemeUtil.markChanged(attachActivity, "dark_theme")
+                ThemeUtil.markChanged(attachActivity, ThemeUtil.LIGHT_THEME)
+                ThemeUtil.markChanged(attachActivity, ThemeUtil.DARK_THEME)
                 attachActivity.recreate()
                 return@OnPreferenceChangeListener true
             }

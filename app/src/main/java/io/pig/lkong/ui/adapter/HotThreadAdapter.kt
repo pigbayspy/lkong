@@ -17,12 +17,13 @@ import io.pig.widget.adapter.FixedViewAdapter
  * @since 2021/7/13
  */
 class HotThreadAdapter(
-    private val context: Context,
+    context: Context,
+    themeKey: String,
     private val listener: OnItemThreadClickListener,
     hotThreads: List<HotThreadModel>
 ) : FixedViewAdapter<HotThreadModel>(hotThreads) {
 
-    private val accentColor = ThemeUtil.accentColor(context)
+    private val accentColor = ThemeUtil.accentColor(context, themeKey)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)

@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.preference.PreferenceManager
 import io.pig.lkong.R
 import io.pig.lkong.theme.ThemeConfig
 
@@ -28,6 +29,9 @@ object ThemeUtil {
     const val KEY_APPLY_PRIMARY_NAV_BAR = "apply_primary_navbar"
     const val KEY_TEXT_COLOR_PRIMARY_INVERSE = "text_color_primary_inverse"
 
+    const val DARK_THEME = "dark_theme"
+    const val LIGHT_THEME = "light_theme"
+
     private const val CONFIG_PREFS_KEY_DEFAULT = "[[theme-engine]]"
     private const val CONFIG_PREFS_KEY_CUSTOM = "[[theme-engine_%s]]"
 
@@ -36,19 +40,20 @@ object ThemeUtil {
     const val LIGHT_TOOLBAR_OFF = 3
 
     @ColorInt
-    fun accentColor(context: Context): Int {
-        return Color.parseColor("#263238")
-    }
-
-    @ColorInt
     fun textColorSecondary(context: Context): Int {
-        // Todo
-        return android.R.attr.textColorSecondary
+        val key = if (PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(DARK_THEME, false)
+        ) {
+            DARK_THEME
+        } else {
+            LIGHT_THEME
+        }
+        return textColorSecondary(context, key)
     }
 
     @ColorInt
     fun accentColor(context: Context, key: String): Int {
-        return prefs(context, key).getInt(
+        return pref(context, key).getInt(
             KEY_ACCENT_COLOR,
             resolveColor(context, R.attr.colorAccent, Color.parseColor("#263238"))
         )
@@ -56,7 +61,7 @@ object ThemeUtil {
 
     @ColorInt
     fun primaryColor(context: Context, key: String): Int {
-        return prefs(context, key).getInt(
+        return pref(context, key).getInt(
             KEY_PRIMARY_COLOR,
             resolveColor(context, R.attr.colorPrimary, Color.parseColor("#455A64"))
         )
@@ -64,7 +69,7 @@ object ThemeUtil {
 
     @ColorInt
     fun textColorPrimary(context: Context, key: String): Int {
-        return prefs(context, key).getInt(
+        return pref(context, key).getInt(
             KEY_TEXT_COLOR_PRIMARY,
             resolveColor(context, android.R.attr.textColorPrimary)
         )
@@ -72,7 +77,7 @@ object ThemeUtil {
 
     @ColorInt
     fun textColorSecondary(context: Context, key: String): Int {
-        return prefs(context, key).getInt(
+        return pref(context, key).getInt(
             KEY_TEXT_COLOR_SECONDARY,
             resolveColor(context, android.R.attr.textColorSecondary)
         )
@@ -80,7 +85,7 @@ object ThemeUtil {
 
     @ColorInt
     fun toolbarColor(context: Context, key: String): Int {
-        return prefs(context, key).getInt(
+        return pref(context, key).getInt(
             KEY_TOOLBAR_COLOR,
             primaryColor(context, key)
         )
@@ -130,7 +135,7 @@ object ThemeUtil {
         }
     }
 
-    private fun isColorLight(color: Int): Boolean {
+    fun isColorLight(color: Int): Boolean {
         if (color == Color.BLACK) {
             return false
         } else if (color == Color.WHITE || color == Color.TRANSPARENT) {
@@ -142,7 +147,7 @@ object ThemeUtil {
     }
 
     private fun lightToolbarMode(context: Context, key: String): Int {
-        var value: Int = prefs(context, key)
+        var value: Int = pref(context, key)
             .getInt(KEY_LIGHT_TOOLBAR_MODE, LIGHT_TOOLBAR_AUTO)
         if (value < 1) {
             value = LIGHT_TOOLBAR_AUTO
@@ -151,12 +156,12 @@ object ThemeUtil {
     }
 
     fun coloredStatusBar(context: Context, key: String): Boolean {
-        return prefs(context, key)
+        return pref(context, key)
             .getBoolean(KEY_APPLY_PRIMARY_DARK_STATUS_BAR, true)
     }
 
     fun coloredNavigationBar(context: Context, key: String): Boolean {
-        return prefs(context, key)
+        return pref(context, key)
             .getBoolean(KEY_APPLY_PRIMARY_NAV_BAR, false)
     }
 
@@ -166,19 +171,6 @@ object ThemeUtil {
                 CONFIG_PREFS_KEY_CUSTOM,
                 key
             ), Context.MODE_PRIVATE
-        )
-    }
-
-    private fun prefs(
-        context: Context,
-        key: String?
-    ): SharedPreferences {
-        return context.getSharedPreferences(
-            if (key != null) String.format(
-                CONFIG_PREFS_KEY_CUSTOM,
-                key
-            ) else CONFIG_PREFS_KEY_DEFAULT,
-            Context.MODE_PRIVATE
         )
     }
 
@@ -205,7 +197,7 @@ object ThemeUtil {
 
     @ColorInt
     fun textColorPrimaryInverse(context: Context, key: String): Int {
-        return prefs(context, key).getInt(
+        return pref(context, key).getInt(
             KEY_TEXT_COLOR_PRIMARY_INVERSE,
             resolveColor(context, android.R.attr.textColorPrimaryInverse)
         )

@@ -37,4 +37,8 @@ object PrefConst {
     const val SCREEN_ROTATION_VALUE = "0"
 
     const val ENABLE_BACKGROUND_NOTIFICATION = "prefs_enable_background_notification"
+
+    const val USE_PRIMARY_COLOR_POST_CONTROL = "theme_primary_color_in_post_control"
+
+    const val USE_PRIMARY_COLOR_POST_CONTROL_VALUE = false
 }
