@@ -13,6 +13,10 @@ import io.pig.lkong.R
  */
 object ImageLoaderUtil {
 
+    const val IMAGE_LOAD_ALWAYS = 0
+    const val IMAGE_LOAD_NEVER = 1
+    const val IMAGE_LOAD_ONLY_WIFI = 2
+
     fun loadLkongAvatar(
         context: Context, target: ImageView, uid: Long, avatar: String?, avatarSize: Int
     ) {
@@ -72,5 +76,15 @@ object ImageLoaderUtil {
             .placeholder(R.drawable.ic_forum_loading)
             .error(R.drawable.ic_forum_error)
             .into(target)
+    }
+
+    fun shouldDownloadImage(policy: Int): Boolean {
+        val wifiAvailability: Boolean = NetworkUtil.isWifiConnect()
+        return when (policy) {
+            IMAGE_LOAD_ONLY_WIFI -> wifiAvailability
+            IMAGE_LOAD_NEVER -> false
+            IMAGE_LOAD_ALWAYS -> true
+            else -> true
+        }
     }
 }

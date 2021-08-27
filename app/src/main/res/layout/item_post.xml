@@ -11,14 +11,9 @@
     app:contentPadding="0dp"
     tools:layout_height="120dp">
 
-    <!--    <io.pig.widget.PostItemView-->
-    <!--        android:id="@+id/recycle_item_post_view_item"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"/>-->
-
-    <TextView
+    <io.pig.widget.PostItemView
         android:id="@+id/recycle_item_post_view_item"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <ImageView

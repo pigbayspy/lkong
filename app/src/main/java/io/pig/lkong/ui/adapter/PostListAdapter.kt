@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
+import io.pig.lkong.model.PostDisplayModel
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.ui.adapter.item.PostViewHolder
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
@@ -56,11 +57,15 @@ class PostListAdapter(
             post.authorAvatar,
             avatarSize
         )
-        if (post.message.isNullOrBlank()) {
-            // Todo don't show status = "removed"
-            viewHolder.postItem.text = ""
-        } else {
-            viewHolder.postItem.text = SlateUtil.slateToText(post.message)
+
+        // init post item
+        viewHolder.postItem.apply {
+            postId = post.pid
+            identityTag = post.pid
+            // Todo showImages = ""
+            ordinalText = post.ordinal.toString()
+            val cache = PostDisplayModel(importantSpans = emptyList(), urlSpanCount = 0,)
+            setPostDisplayCache(cache)
         }
 
         // add listener

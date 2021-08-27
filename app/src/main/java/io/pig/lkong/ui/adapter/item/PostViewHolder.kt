@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
+import io.pig.widget.PostItemView
 
 /**
  * @author yinhang
@@ -15,7 +16,7 @@ class PostViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
 
-    val postItem: TextView
+    val postItem: PostItemView
     val avatarImage: ImageView
     val rateButton: ImageButton
     val rateText: TextView

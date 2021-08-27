@@ -52,9 +52,10 @@ class PostItemView : View, ImageSpanContainer {
     private val ordinalFontMetrics: Paint.FontMetrics
     private val movementLimitPx: Float
 
-    var postId: Long? = null
+    var postId: String? = null
     var identityTag: String? = null
     var ordinalText: String? = null
+    val showImages = false
     private var postDisplayCache: PostDisplayModel? = null
     private var invalidateRunnable: Runnable? = null
 
