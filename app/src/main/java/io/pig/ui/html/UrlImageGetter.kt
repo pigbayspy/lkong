@@ -1,262 +1,221 @@
-package io.pig.ui.html;
+package io.pig.ui.html
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.text.Html.ImageGetter;
-import android.util.Log;
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.ColorFilter
+import android.graphics.PixelFormat
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.text.Html.ImageGetter
+import android.util.Log
+import androidx.annotation.DrawableRes
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.Request
+import com.bumptech.glide.request.target.SizeReadyCallback
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
+import io.pig.common.ui.R
+import io.pig.lkong.util.ImageLoaderUtil.shouldDownloadImage
+import java.io.IOException
 
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+class UrlImageGetter(var mContext: Context, downloadPolicy: Int) : ImageGetter {
+    val mResources: Resources
+    var emotionSize = 0
+    var mMaxImageWidth = 0
+    var mPlaceHolderResource = 0
+    var mErrorResource = 0
+    var mImageDownloadPolicy = 0
+    fun setMaxImageWidth(maxImageWidth: Int): UrlImageGetter {
+        mMaxImageWidth = maxImageWidth
+        return this
+    }
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.Request;
-import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
+    fun setEmoticonSize(emoticonSize: Int): UrlImageGetter {
+        emotionSize = emoticonSize
+        return this
+    }
 
-import java.io.IOException;
+    fun setPlaceHolder(@DrawableRes placeHolder: Int): UrlImageGetter {
+        mPlaceHolderResource = placeHolder
+        return this
+    }
 
-import io.pig.common.ui.R;
-import io.pig.lkong.util.ImageLoaderUtil;
+    fun setError(@DrawableRes error: Int): UrlImageGetter {
+        mErrorResource = error
+        return this
+    }
 
-public class UrlImageGetter implements ImageGetter {
-    Context mContext;
-    final Resources mResources;
-    int mEmoticonSize = 0;
-    int mMaxImageWidth = 0;
-    int mPlaceHolderResource = 0;
-    int mErrorResource = 0;
-    int mImageDownloadPolicy = 0;
+    override fun getDrawable(source: String): Drawable {
+        if (source.startsWith(EMOJI_PREFIX)) {
+            val emojiFileName = source.substring(EMOJI_PREFIX.length)
+            try {
+                val emojiDrawable = Drawable.createFromStream(
+                    mContext.assets.open(
+                        "${EMOJI_PATH_WITH_SLASH}${emojiFileName}.png"
+                    ), null
+                )
+                val right = if (emotionSize == 0) {
+                    emojiDrawable.intrinsicWidth
+                } else {
+                    emotionSize
+                }
+                val left = if (emotionSize == 0) {
+                    emojiDrawable.intrinsicHeight
+                } else {
+                    emotionSize
+                }
+                emojiDrawable.setBounds(0, 0, right, left)
+                return emojiDrawable
+            } catch (e: IOException) {
+                Log.d("UrlImageGetter", "getDrawable() from assets failed.", e)
+            }
+        }
+        val urlDrawable = UrlDrawable(mContext, mMaxImageWidth)
+        if (shouldDownloadImage(mImageDownloadPolicy)) {
+            Glide
+                .with(mContext)
+                .load(source)
+                .placeholder(mPlaceHolderResource)
+                .error(mErrorResource)
+                .into(urlDrawable)
+        } else {
+            Glide
+                .with(mContext)
+                .load(mPlaceHolderResource)
+                .placeholder(mPlaceHolderResource)
+                .error(mErrorResource)
+                .into(urlDrawable)
+        }
+        return urlDrawable
+    }
+
+    class UrlDrawable(private val context: Context, private val maxWidth: Int) : BitmapDrawable(
+        context.resources, null as Bitmap?
+    ), Target<Drawable>, Drawable.Callback {
+
+        private var drawable: Drawable? = null
+
+        private fun invalidateTargetTextView() {}
+
+        fun setDrawableAndSelfBounds(newDrawable: Drawable?) {
+            var drawableWidth = newDrawable!!.intrinsicWidth
+            var drawableHeight = newDrawable.intrinsicHeight
+            val newDrawableIntrinsicWidth = newDrawable.intrinsicWidth
+            val newDrawableIntrinsicHeight = newDrawable.intrinsicHeight
+            if (maxWidth != 0 && newDrawableIntrinsicWidth > maxWidth) {
+                val ratio = newDrawableIntrinsicWidth.toDouble() / maxWidth.toDouble()
+                drawableWidth = maxWidth
+                drawableHeight = (newDrawableIntrinsicHeight.toDouble() / ratio).toInt()
+            }
+            newDrawable.setBounds(0, 0, drawableWidth, drawableHeight)
+            drawable?.apply {
+                callback = null
+            }
+            newDrawable.callback = this
+            drawable = newDrawable
+            this.setBounds(0, 0, drawableWidth, drawableHeight)
+        }
+
+        override fun draw(canvas: Canvas) {
+            drawable?.apply {
+                draw(canvas)
+            }
+        }
+
+        override fun setAlpha(alpha: Int) {
+            drawable?.apply {
+                setAlpha(alpha)
+            }
+        }
+
+        override fun setColorFilter(cf: ColorFilter?) {
+            drawable?.apply {
+                colorFilter = cf
+            }
+        }
+
+        override fun getOpacity(): Int {
+            return drawable?.opacity ?: PixelFormat.UNKNOWN
+        }
+
+        fun setDrawable(drawable: Drawable) {
+            if (this.drawable != null) {
+                this.drawable!!.callback = null
+            }
+            drawable.callback = this
+            this.drawable = drawable
+        }
+
+        override fun invalidateDrawable(who: Drawable) {
+            callback?.apply {
+                invalidateDrawable(who)
+            }
+        }
+
+        override fun scheduleDrawable(who: Drawable, what: Runnable, whenTime: Long) {
+            callback?.apply {
+                scheduleDrawable(who, what, whenTime)
+            }
+        }
+
+        override fun unscheduleDrawable(who: Drawable, what: Runnable) {
+            callback?.apply {
+                unscheduleDrawable(who, what)
+            }
+        }
+
+        override fun removeCallback(cb: SizeReadyCallback) {}
+
+        override fun getIntrinsicHeight(): Int {
+            return drawable!!.intrinsicHeight
+        }
+
+        override fun getIntrinsicWidth(): Int {
+            return drawable!!.intrinsicWidth
+        }
+
+        override fun onLoadStarted(placeholder: Drawable?) {
+            setDrawableAndSelfBounds(placeholder)
+            invalidateTargetTextView()
+        }
+
+        override fun onLoadFailed(errorDrawable: Drawable?) {
+            setDrawableAndSelfBounds(errorDrawable)
+            invalidateTargetTextView()
+        }
+
+        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+            setDrawableAndSelfBounds(resource)
+            invalidateTargetTextView()
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {}
+        override fun getSize(cb: SizeReadyCallback) {}
+        override fun setRequest(request: Request?) {}
+        override fun getRequest(): Request? {
+            return null
+        }
+
+        override fun onStart() {}
+        override fun onStop() {}
+        override fun onDestroy() {}
+    }
+
+    companion object {
+        private const val EMOJI_PREFIX = "http://img.lkong.cn/bq/"
+        private const val EMOJI_PATH_WITH_SLASH = "emoji/"
+    }
 
     /**
      * Construct the URLImageParser which will execute AsyncTask and refresh the container
-     *
-     * @param context context
      */
-    public UrlImageGetter(Context context, int downloadPolicy) {
-        this.mContext = context;
-        this.mResources = context.getResources();
-        this.mImageDownloadPolicy = downloadPolicy;
-        this.mErrorResource = R.drawable.placeholder_error;
-        this.mPlaceHolderResource = R.drawable.placeholder_loading;
+    init {
+        mResources = mContext.resources
+        mImageDownloadPolicy = downloadPolicy
+        mErrorResource = R.drawable.placeholder_error
+        mPlaceHolderResource = R.drawable.placeholder_loading
         // this.mEmoticonSize = UIUtils.sp2px(context, context.getResources().getDimension(R.dimen.text_size_body1));
     }
-
-    public UrlImageGetter setMaxImageWidth(int maxImageWidth) {
-        this.mMaxImageWidth = maxImageWidth;
-        return this;
-    }
-
-    public UrlImageGetter setEmoticonSize(int emoticonSize) {
-        this.mEmoticonSize = emoticonSize;
-        return this;
-    }
-
-    public UrlImageGetter setPlaceHolder(@DrawableRes int placeHolder) {
-        this.mPlaceHolderResource = placeHolder;
-        return this;
-    }
-
-    public UrlImageGetter setError(@DrawableRes int error) {
-        this.mErrorResource = error;
-        return this;
-    }
-
-    private static final String EMOJI_PREFIX = "http://img.lkong.cn/bq/";
-    private static final String EMOJI_PATH_WITH_SLASH = "emoji/";
-
-    public Drawable getDrawable(String source) {
-        if (source == null) {
-            return mContext.getResources().getDrawable(mPlaceHolderResource);
-        }
-        if (source.startsWith(EMOJI_PREFIX)) {
-            String emojiFileName = source.substring(EMOJI_PREFIX.length());
-            try {
-                Drawable emojiDrawable = Drawable.createFromStream(mContext.getAssets().open(EMOJI_PATH_WITH_SLASH + emojiFileName + ".png"), null);
-                emojiDrawable.setBounds(0, 0, mEmoticonSize == 0 ? emojiDrawable.getIntrinsicWidth() : mEmoticonSize,
-                        mEmoticonSize == 0 ? emojiDrawable.getIntrinsicHeight() : mEmoticonSize);
-                return emojiDrawable;
-            } catch (IOException e) {
-                Log.d("UrlImageGetter", "getDrawable() from assets failed.", e);
-            }
-        }
-
-        UrlDrawable urlDrawable = new UrlDrawable(mContext, mMaxImageWidth);
-        if (ImageLoaderUtil.INSTANCE.shouldDownloadImage(mImageDownloadPolicy)) {
-            Glide
-                    .with(mContext)
-                    .load(source)
-                    .placeholder(mPlaceHolderResource)
-                    .error(mErrorResource)
-                    .into(urlDrawable);
-        } else {
-            Glide
-                    .with(mContext)
-                    .load(mPlaceHolderResource)
-                    .placeholder(mPlaceHolderResource)
-                    .error(mErrorResource)
-                    .into(urlDrawable);
-        }
-        return urlDrawable;
-    }
-
-    public static class UrlDrawable extends BitmapDrawable implements Target<Drawable>, Drawable.Callback {
-        protected Context mContext;
-        private Drawable mDrawable;
-        protected int mMaxWidth = 0;
-
-        public UrlDrawable(Context context, int maxWidth) {
-            super(context.getResources(), (Bitmap) null);
-            this.mContext = context;
-            this.mMaxWidth = maxWidth;
-        }
-
-        private void invalidateTargetTextView() {
-        }
-
-        public void setDrawableAndSelfBounds(Drawable newDrawable) {
-            int drawableWidth = newDrawable.getIntrinsicWidth();
-            int drawableHeight = newDrawable.getIntrinsicHeight();
-            int newDrawableIntrinsicWidth = newDrawable.getIntrinsicWidth();
-            int newDrawableIntrinsicHeight = newDrawable.getIntrinsicHeight();
-            if (mMaxWidth != 0 && newDrawableIntrinsicWidth > mMaxWidth) {
-                double ratio = (double) newDrawableIntrinsicWidth / (double) mMaxWidth;
-                drawableWidth = mMaxWidth;
-                drawableHeight = (int) ((double) newDrawableIntrinsicHeight / ratio);
-            }
-            newDrawable.setBounds(0, 0, drawableWidth, drawableHeight);
-            if (this.mDrawable != null) {
-                this.mDrawable.setCallback(null);
-            }
-            newDrawable.setCallback(this);
-            this.mDrawable = newDrawable;
-            this.setBounds(0, 0, drawableWidth, drawableHeight);
-        }
-
-        @Override
-        public void draw(Canvas canvas) {
-            if (mDrawable != null) {
-                mDrawable.draw(canvas);
-            }
-        }
-
-        @Override
-        public void setAlpha(int alpha) {
-            if (mDrawable != null) {
-                mDrawable.setAlpha(alpha);
-            }
-        }
-
-        @Override
-        public void setColorFilter(ColorFilter cf) {
-            if (mDrawable != null) {
-                mDrawable.setColorFilter(cf);
-            }
-        }
-
-        @Override
-        public int getOpacity() {
-            if (mDrawable != null) {
-                return mDrawable.getOpacity();
-            }
-            return PixelFormat.UNKNOWN;
-        }
-
-        public void setDrawable(Drawable drawable) {
-            if (this.mDrawable != null) {
-                this.mDrawable.setCallback(null);
-            }
-            drawable.setCallback(this);
-            this.mDrawable = drawable;
-        }
-
-        @Override
-        public void invalidateDrawable(Drawable who) {
-            if (getCallback() != null) {
-                getCallback().invalidateDrawable(who);
-            }
-        }
-
-        @Override
-        public void scheduleDrawable(Drawable who, Runnable what, long when) {
-            if (getCallback() != null) {
-                getCallback().scheduleDrawable(who, what, when);
-            }
-        }
-
-        @Override
-        public void unscheduleDrawable(Drawable who, Runnable what) {
-            if (getCallback() != null) {
-                getCallback().unscheduleDrawable(who, what);
-            }
-        }
-
-        @Override
-        public void removeCallback(@NonNull SizeReadyCallback cb) {
-        }
-
-        @Override
-        public int getIntrinsicHeight() {
-            return mDrawable.getIntrinsicHeight();
-        }
-
-        @Override
-        public int getIntrinsicWidth() {
-            return mDrawable.getIntrinsicWidth();
-        }
-
-        @Override
-        public void onLoadStarted(Drawable placeholder) {
-            setDrawableAndSelfBounds(placeholder);
-            invalidateTargetTextView();
-        }
-
-        @Override
-        public void onLoadFailed(@Nullable Drawable errorDrawable) {
-            setDrawableAndSelfBounds(errorDrawable);
-            invalidateTargetTextView();
-        }
-
-        @Override
-        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-            setDrawableAndSelfBounds(resource);
-            invalidateTargetTextView();
-        }
-
-        @Override
-        public void onLoadCleared(Drawable placeholder) {
-        }
-
-        @Override
-        public void getSize(SizeReadyCallback cb) {
-        }
-
-        @Override
-        public void setRequest(Request request) {
-        }
-
-        @Override
-        public Request getRequest() {
-            return null;
-        }
-
-        @Override
-        public void onStart() {
-        }
-
-        @Override
-        public void onStop() {
-        }
-
-        @Override
-        public void onDestroy() {
-        }
-    }
-} 
+}

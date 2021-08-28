@@ -1,63 +1,68 @@
-package io.pig.ui.html;
+package io.pig.ui.html
 
-import android.text.Editable;
-import android.text.Html;
-import android.text.Layout;
-import android.text.Spannable;
-import android.text.style.AlignmentSpan;
-import android.text.style.BulletSpan;
-import android.text.style.LeadingMarginSpan;
-import android.text.style.TypefaceSpan;
-import android.util.Log;
-
-import org.xml.sax.XMLReader;
-
-import java.util.Vector;
+import android.text.Editable
+import android.text.Html.TagHandler
+import android.text.Layout
+import android.text.Spannable
+import android.text.style.AlignmentSpan
+import android.text.style.BulletSpan
+import android.text.style.LeadingMarginSpan
+import android.text.style.TypefaceSpan
+import android.util.Log
+import org.xml.sax.XMLReader
+import java.util.*
 
 /**
  * Some parts of this code are based on android.text.Html
  */
-public class HtmlTagHandler implements Html.TagHandler {
-    private int mListItemCount = 0;
-    private Vector<String> mListParents = new Vector<>();
+class HtmlTagHandler : TagHandler {
+    private var listItemCount = 0
+    private val listParents = Vector<String>()
 
-    private static class Code {
-    }
+    private class Code
+    private class Center
 
-    private static class Center {
-    }
-
-    @Override
-    public void handleTag(final boolean opening, final String tag, Editable output, final XMLReader xmlReader) {
+    override fun handleTag(opening: Boolean, tag: String, output: Editable, xmlReader: XMLReader) {
         if (opening) {
             // opening tag
             if (HtmlTextView.DEBUG) {
-                Log.d(HtmlTextView.TAG, "opening, output: " + output.toString());
+                Log.d(HtmlTextView.TAG, "opening, output: $output")
             }
-
-            if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
-                mListParents.add(tag);
-                mListItemCount = 0;
-            } else if (tag.equalsIgnoreCase("code")) {
-                start(output, new Code());
-            } else if (tag.equalsIgnoreCase("center")) {
-                start(output, new Center());
+            if (tag.equals("ul", ignoreCase = true) || tag.equals(
+                    "ol",
+                    ignoreCase = true
+                ) || tag.equals("dd", ignoreCase = true)
+            ) {
+                listParents.add(tag)
+                listItemCount = 0
+            } else if (tag.equals("code", ignoreCase = true)) {
+                start(output, Code())
+            } else if (tag.equals("center", ignoreCase = true)) {
+                start(output, Center())
             }
         } else {
             // closing tag
             if (HtmlTextView.DEBUG) {
-                Log.d(HtmlTextView.TAG, "closing, output: " + output.toString());
+                Log.d(HtmlTextView.TAG, "closing, output: $output")
             }
-
-            if (tag.equalsIgnoreCase("ul") || tag.equalsIgnoreCase("ol") || tag.equalsIgnoreCase("dd")) {
-                mListParents.remove(tag);
-                mListItemCount = 0;
-            } else if (tag.equalsIgnoreCase("li")) {
-                handleListTag(output);
-            } else if (tag.equalsIgnoreCase("code")) {
-                end(output, Code.class, new TypefaceSpan("monospace"), false);
-            } else if (tag.equalsIgnoreCase("center")) {
-                end(output, Center.class, new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), true);
+            if (tag.equals("ul", ignoreCase = true) || tag.equals(
+                    "ol",
+                    ignoreCase = true
+                ) || tag.equals("dd", ignoreCase = true)
+            ) {
+                listParents.remove(tag)
+                listItemCount = 0
+            } else if (tag.equals("li", ignoreCase = true)) {
+                handleListTag(output)
+            } else if (tag.equals("code", ignoreCase = true)) {
+                end(output, Code::class.java, TypefaceSpan("monospace"), false)
+            } else if (tag.equals("center", ignoreCase = true)) {
+                end(
+                    output,
+                    Center::class.java,
+                    AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                    true
+                )
             }
         }
     }
@@ -68,36 +73,32 @@ public class HtmlTagHandler implements Html.TagHandler {
      * @param output output
      * @param mark mark
      */
-    private void start(Editable output, Object mark) {
-        int len = output.length();
-        output.setSpan(mark, len, len, Spannable.SPAN_MARK_MARK);
-
+    private fun start(output: Editable, mark: Any) {
+        val len = output.length
+        output.setSpan(mark, len, len, Spannable.SPAN_MARK_MARK)
         if (HtmlTextView.DEBUG) {
-            Log.d(HtmlTextView.TAG, "len: " + len);
+            Log.d(HtmlTextView.TAG, "len: $len")
         }
     }
 
-    private void end(Editable output, Class<?> kind, Object repl, boolean paragraphStyle) {
-        Object obj = getLast(output, kind);
+    private fun end(output: Editable, kind: Class<*>, repl: Any, paragraphStyle: Boolean) {
+        val obj = getLast(output, kind)
         // start of the tag
-        int where = output.getSpanStart(obj);
+        val where = output.getSpanStart(obj)
         // end of the tag
-        int len = output.length();
-
-        output.removeSpan(obj);
-
+        var len = output.length
+        output.removeSpan(obj)
         if (where != len) {
             // paragraph styles like AlignmentSpan need to end with a new line!
             if (paragraphStyle) {
-                output.append("\n");
-                len++;
+                output.append("\n")
+                len++
             }
-            output.setSpan(repl, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            output.setSpan(repl, where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-
         if (HtmlTextView.DEBUG) {
-            Log.d(HtmlTextView.TAG, "where: " + where);
-            Log.d(HtmlTextView.TAG, "len: " + len);
+            Log.d(HtmlTextView.TAG, "where: $where")
+            Log.d(HtmlTextView.TAG, "len: $len")
         }
     }
 
@@ -108,38 +109,39 @@ public class HtmlTagHandler implements Html.TagHandler {
      * @param kind kind
      * @return last
      */
-    private Object getLast(Editable text, Class kind) {
-        Object[] objs = text.getSpans(0, text.length(), kind);
-        if (objs.length == 0) {
-            return null;
-        } else {
-            for (int i = objs.length; i > 0; i--) {
-                if (text.getSpanFlags(objs[i - 1]) == Spannable.SPAN_MARK_MARK) {
-                    return objs[i - 1];
-                }
+    private fun getLast(text: Editable, kind: Class<*>): Any? {
+        val objects = text.getSpans(0, text.length, kind)
+        if (objects.isEmpty()) {
+            return null
+        }
+        for (i in objects.size downTo 1) {
+            if (text.getSpanFlags(objects[i - 1]) == Spannable.SPAN_MARK_MARK) {
+                return objects[i - 1]
             }
-            return null;
         }
+        return null
     }
 
-    private void handleListTag(Editable output) {
-        if (mListParents.lastElement().equals("ul")) {
-            output.append("\n");
-            String[] split = output.toString().split("\n");
-
-            int lastIndex = split.length - 1;
-            int start = output.length() - split[lastIndex].length() - 1;
-            output.setSpan(new BulletSpan(15 * mListParents.size()), start, output.length(), 0);
-        } else if (mListParents.lastElement().equals("ol")) {
-            mListItemCount++;
-
-            output.append("\n");
-            String[] split = output.toString().split("\n");
-
-            int lastIndex = split.length - 1;
-            int start = output.length() - split[lastIndex].length() - 1;
-            output.insert(start, mListItemCount + ". ");
-            output.setSpan(new LeadingMarginSpan.Standard(15 * mListParents.size()), start, output.length(), 0);
+    private fun handleListTag(output: Editable) {
+        if (listParents.lastElement() == "ul") {
+            output.append("\n")
+            val split = output.toString().split("\n".toRegex()).toTypedArray()
+            val lastIndex = split.size - 1
+            val start = output.length - split[lastIndex].length - 1
+            output.setSpan(BulletSpan(15 * listParents.size), start, output.length, 0)
+        } else if (listParents.lastElement() == "ol") {
+            listItemCount++
+            output.append("\n")
+            val split = output.toString().split("\n".toRegex()).toTypedArray()
+            val lastIndex = split.size - 1
+            val start = output.length - split[lastIndex].length - 1
+            output.insert(start, "$listItemCount. ")
+            output.setSpan(
+                LeadingMarginSpan.Standard(15 * listParents.size),
+                start,
+                output.length,
+                0
+            )
         }
     }
-} 
+}
