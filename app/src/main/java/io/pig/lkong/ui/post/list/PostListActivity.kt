@@ -29,6 +29,7 @@ import io.pig.lkong.util.SlateUtil
 import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.common.getAccentColor
 import io.pig.ui.common.getPrimaryColor
+import io.pig.ui.common.getThemeKey
 import javax.inject.Inject
 
 class PostListActivity : AppCompatActivity(), Injectable {
@@ -189,7 +190,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
             }
         }
         val userId = userAccountManager.getCurrentUserAccount().userId
-        val adapter = PostListAdapter(this, userId, listener, post)
+        val adapter = PostListAdapter(this, userId, listener, getThemeKey(), post)
         binding.recycleListPost.layoutManager = LinearLayoutManager(this)
         binding.recycleListPost.adapter = adapter
     }
