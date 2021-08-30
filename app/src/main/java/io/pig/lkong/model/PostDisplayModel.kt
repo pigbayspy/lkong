@@ -1,6 +1,7 @@
 package io.pig.lkong.model
 
 import android.text.DynamicLayout
+import android.text.SpannableStringBuilder
 import android.text.StaticLayout
 
 /**
@@ -10,6 +11,8 @@ import android.text.StaticLayout
 class PostDisplayModel(
     val urlSpanCount: Int,
     val importantSpans: List<Any>,
-    val textLayout: DynamicLayout? = null,
-    val authorLayout: StaticLayout? = null
+    val emoticonSpans: List<Any>,
+    val textLayout: DynamicLayout,
+    val authorLayout: StaticLayout,
+    val spannableStringBuilder: SpannableStringBuilder
 )

@@ -72,6 +72,11 @@ object LkongRepository {
         return lkongSpec.getForumThreads(req)
     }
 
+    suspend fun getNotice(): RespBase<NoticeResp> {
+        val req = NoticeReq()
+        return lkongSpec.getNotice(req)
+    }
+
     private fun getCookie(key: String): String {
         for (cookie in lkongCookie.getAll()) {
             if (cookie.name.equals(key, true)) {

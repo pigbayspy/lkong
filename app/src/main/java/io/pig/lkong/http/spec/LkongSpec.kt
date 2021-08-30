@@ -42,4 +42,7 @@ interface LkongSpec {
     @POST(RestApiConst.GRAPHQL)
     suspend fun getForumThreads(@Body forumThreadReq: ForumThreadReq): RespBase<ForumThreadResp>
 
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getNotice(@Body noticeReq: NoticeReq): RespBase<NoticeResp>
+
 }

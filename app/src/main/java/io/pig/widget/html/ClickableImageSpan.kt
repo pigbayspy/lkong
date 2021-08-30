@@ -67,7 +67,7 @@ class ClickableImageSpan : DynamicDrawableSpanWithoutSpacing, PendingImageSpan {
 
     constructor(
         context: Context,
-        container: ImageSpanContainer,
+        container: ImageSpanContainer?,
         identityTag: Any,
         picassoTag: Any,
         source: String,

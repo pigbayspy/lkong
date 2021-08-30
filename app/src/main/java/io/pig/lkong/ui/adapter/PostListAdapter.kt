@@ -122,56 +122,59 @@ class PostListAdapter(
             ImageSpan::class.java
         )
         val urlSpans = spannable.getSpans(0, sequence.length, URLSpan::class.java)
-        val postDisplayCache = PostDisplayModel()
-        postDisplayCache.getImportantSpans().addAll(listOf(*urlSpans))
-        postDisplayCache.setUrlSpanCount(urlSpans.size)
+        val importantSpanList = mutableListOf<Any>()
+        val imageUrlList = mutableListOf<String>()
+        val emoticonSpanList = mutableListOf<Any>()
+        importantSpanList.addAll(listOf(*urlSpans))
         for (imageSpan in imageSpans) {
             val spanStart = spannable.getSpanStart(imageSpan)
             val spanEnd = spannable.getSpanEnd(imageSpan)
             val spanFlags = spannable.getSpanFlags(imageSpan)
-            if (!TextUtils.isEmpty(imageSpan.source) && !imageSpan.source!!.contains("http://img.lkong.cn/bq/")) {
-                spannable.removeSpan(imageSpan)
-                val clickableImageSpan = ClickableImageSpan(
-                    context,
-                    null,
-                    postModel.pid,
-                    PostListAdapter.POST_PICASSO_TAG,
-                    imageSpan.source,
-                    R.drawable.placeholder_loading,
-                    R.drawable.placeholder_error,
-                    256,
-                    256,
-                    DynamicDrawableSpan.ALIGN_BASELINE,
-                    initPlaceHolder
-                )
-                spannable.setSpan(
-                    clickableImageSpan,
-                    spanStart,
-                    spanEnd,
-                    spanFlags
-                )
-                postDisplayCache.getImportantSpans().add(clickableImageSpan)
-                postDisplayCache.getImageUrls().add(imageSpan.source)
-            } else if (!TextUtils.isEmpty(imageSpan.source) && imageSpan.source!!.contains("http://img.lkong.cn/bq/")) {
-                spannable.removeSpan(imageSpan)
-                val emoticonImageSpan = EmojiSpan(
-                    context,
-                    imageSpan.source,
-                    (contentTextPaint.textSize * 2).toInt(),
-                    ImageSpan.ALIGN_BASELINE,
-                    contentTextPaint.textSize.toInt()
-                )
-                spannable.setSpan(
-                    emoticonImageSpan,
-                    spanStart,
-                    spanEnd,
-                    spanFlags
-                )
-                postDisplayCache.getEmoticonSpans().add(emoticonImageSpan)
+            imageSpan.source.apply {
+                if (!isNullOrEmpty()) {
+                    if (!contains("http://img.lkong.cn/bq/")) {
+                        spannable.removeSpan(imageSpan)
+                        val clickableImageSpan = ClickableImageSpan(
+                            context,
+                            null,
+                            postModel.pid,
+                            POST_PICASSO_TAG,
+                            this,
+                            R.drawable.placeholder_loading,
+                            R.drawable.placeholder_error,
+                            256,
+                            256,
+                            DynamicDrawableSpan.ALIGN_BASELINE,
+                            initPlaceHolder
+                        )
+                        spannable.setSpan(
+                            clickableImageSpan,
+                            spanStart,
+                            spanEnd,
+                            spanFlags
+                        )
+                        importantSpanList.add(clickableImageSpan)
+                        imageUrlList.add(this)
+                    } else if (contains("http://img.lkong.cn/bq/")) {
+                        spannable.removeSpan(imageSpan)
+                        val emoticonImageSpan = EmojiSpan(
+                            context,
+                            this,
+                            (contentTextPaint.textSize * 2).toInt(),
+                            ImageSpan.ALIGN_BASELINE,
+                            contentTextPaint.textSize.toInt()
+                        )
+                        spannable.setSpan(
+                            emoticonImageSpan,
+                            spanStart,
+                            spanEnd,
+                            spanFlags
+                        )
+                        emoticonSpanList.add(emoticonImageSpan)
+                    }
+                }
             }
         }
-        postDisplayCache.setSpannableStringBuilder(spannable)
-
         // Generate content StaticLayout
         val dm = DisplayMetrics()
         getWindowManager().getDefaultDisplay().getMetrics(dm)
@@ -190,8 +193,6 @@ class PostListAdapter(
             0.0f,
             false
         )
-        postDisplayCache.setTextLayout(layout)
-
         // Generate author StaticLayout
         val authorNameSpannable = SpannableStringBuilder()
         authorNameSpannable.append(postModel.authorName)
@@ -236,7 +237,14 @@ class PostListAdapter(
             0.0f,
             false
         )
-        postDisplayCache.setAuthorLayout(authorLayout)
+        val postDisplayModel = PostDisplayModel(
+            authorLayout = authorLayout,
+            textLayout = layout,
+            spannableStringBuilder = spannable,
+            urlSpanCount = urlSpans.size,
+            importantSpans = importantSpanList,
+            emoticonSpans = emoticonSpanList
+        )
         return spannable
     }
 
