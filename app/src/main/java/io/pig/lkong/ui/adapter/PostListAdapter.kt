@@ -33,6 +33,7 @@ class PostListAdapter(
     private val authorId: Long,
     private val display: Display,
     private val listener: OnPostButtonClickListener,
+    imageDownloadPolicy: Int,
     themeKey: String,
     postList: List<PostModel>
 ) : FixedViewAdapter<PostModel>(postList) {
@@ -47,10 +48,12 @@ class PostListAdapter(
     private val imageGetter = EmptyImageGetter()
     private val loadingDrawable =
         ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_loading, null)!!
+    private val showImageValue = ImageLoaderUtil.shouldDownloadImage(imageDownloadPolicy)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_post, parent, false)
+
         return PostViewHolder(v)
     }
 
@@ -84,7 +87,7 @@ class PostListAdapter(
         viewHolder.postItem.apply {
             postId = post.pid
             identityTag = post.pid
-            // Todo showImages = ""
+            showImages = showImageValue
             ordinalText = post.ordinal.toString()
             setPostDisplayCache(displayModel)
         }
@@ -104,7 +107,11 @@ class PostListAdapter(
 
     private fun createSpan(postModel: PostModel): PostDisplayModel {
         val spannedText: Spanned =
-            HtmlUtil.htmlToSpanned(postModel.message, imageGetter, HtmlTagHandler())
+            HtmlUtil.htmlToSpanned(
+                SlateUtil.slateToText(postModel.message ?: ""),
+                imageGetter,
+                HtmlTagHandler()
+            )
         return replaceImageSpan(SpannableString(spannedText), postModel, loadingDrawable)
     }
 

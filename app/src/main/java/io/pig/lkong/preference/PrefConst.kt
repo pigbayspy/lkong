@@ -41,4 +41,8 @@ object PrefConst {
     const val USE_PRIMARY_COLOR_POST_CONTROL = "theme_primary_color_in_post_control"
 
     const val USE_PRIMARY_COLOR_POST_CONTROL_VALUE = false
+
+    const val IS_NIGHT_MODE = "dark_theme"
+
+    const val IS_NIGHT_MODE_VALUE = false
 }

@@ -3,20 +3,24 @@ package io.pig.lkong.ui.post.list
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import io.pig.common.ui.adapter.Bookends
 import io.pig.lkong.R
 import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.databinding.ActivityPostListBinding
+import io.pig.lkong.databinding.LayoutPostIntroHeaderBinding
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.PrefConst
@@ -41,7 +45,15 @@ class PostListActivity : AppCompatActivity(), Injectable {
         )
     }
 
+    private val imageDownloadPolicy by lazy {
+        Prefs.getStringPrefs(
+            PrefConst.IMAGE_DOWNLOAD_POLICY,
+            PrefConst.IMAGE_DOWNLOAD_POLICY_VALUE
+        )
+    }
+
     private lateinit var binding: ActivityPostListBinding
+    private lateinit var headerBinding: LayoutPostIntroHeaderBinding
     private lateinit var postListViewModel: PostListViewModel
 
     @Inject
@@ -58,6 +70,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
 
         postListViewModel = ViewModelProvider(this).get(PostListViewModel::class.java)
         binding = ActivityPostListBinding.inflate(layoutInflater)
+        headerBinding = LayoutPostIntroHeaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // 自动注入
@@ -189,12 +202,31 @@ class PostListActivity : AppCompatActivity(), Injectable {
                 TODO("Not yet implemented")
             }
         }
+        val themeKey = getThemeKey()
         val userId = userAccountManager.getCurrentUserAccount().userId
         val display = windowManager.defaultDisplay
-        val adapter =
-            PostListAdapter(this, userId, authorId, display, listener, getThemeKey(), post)
+        val imagePolicy = imageDownloadPolicy.get().toInt()
+        val adapter = PostListAdapter(
+            context = this,
+            userId = userId,
+            authorId = authorId,
+            display = display,
+            listener = listener,
+            imageDownloadPolicy = imagePolicy,
+            themeKey = themeKey,
+            postList = post
+        )
+        val wrapperAdapter = Bookends(adapter)
+        // init header
+        val headerLayoutParam = RecyclerView.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val rootCard = headerBinding.root
+        rootCard.layoutParams = headerLayoutParam
+        rootCard.setBackgroundColor(ThemeUtil.textColorPrimaryInverse(this, themeKey))
         binding.recycleListPost.layoutManager = LinearLayoutManager(this)
-        binding.recycleListPost.adapter = adapter
+        wrapperAdapter.addHeader(rootCard)
+        binding.recycleListPost.adapter = wrapperAdapter
     }
 
     private fun openRateLogDialog(rates: List<PostModel.PostRate>) {

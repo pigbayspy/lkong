@@ -39,4 +39,8 @@ object Prefs {
     fun getBoolPrefs(key: String, defaultValue: Boolean): BoolPrefs {
         return BoolPrefs(key, defaultValue, preference)
     }
+
+    fun getBool(key: String, defaultValue: Boolean): Boolean {
+        return preference.getBoolean(key, defaultValue)
+    }
 }

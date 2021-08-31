@@ -13,6 +13,8 @@ import android.util.AttributeSet
 import android.view.View
 import io.pig.lkong.R
 import io.pig.lkong.model.PostDisplayModel
+import io.pig.lkong.preference.PrefConst
+import io.pig.lkong.preference.Prefs
 import io.pig.lkong.util.ThemeUtil
 import io.pig.lkong.util.UiUtil
 import io.pig.widget.html.AsyncDrawableType
@@ -29,10 +31,10 @@ class PostItemView : View, ImageSpanContainer {
     companion object {
         private const val MOVEMENT_LIMIT_DP = 12
         var px_margin_16 = 0
-        var px_margin_72: Int = 0
-        var px_width_40: Int = 0
-        var px_height_68: Int = 0
-        var px_margin_8: Int = 0
+        var px_margin_72 = 0
+        var px_width_40 = 0
+        var px_height_68 = 0
+        var px_margin_8 = 0
 
         private fun initValid(context: Context) {
             if (px_width_40 == 0) {
@@ -47,6 +49,7 @@ class PostItemView : View, ImageSpanContainer {
 
     private val ordinalBound = Rect()
     private val clipBound = Rect()
+    private val isNightMode: Boolean
 
     private val ordinalPaint: TextPaint
     private val ordinalFontMetrics: Paint.FontMetrics
@@ -55,7 +58,7 @@ class PostItemView : View, ImageSpanContainer {
     var postId: String? = null
     var identityTag: String? = null
     var ordinalText: String? = null
-    val showImages = false
+    var showImages = false
     private var postDisplayCache: PostDisplayModel? = null
     private var invalidateRunnable: Runnable? = null
 
@@ -70,6 +73,12 @@ class PostItemView : View, ImageSpanContainer {
     )
 
     init {
+        // init
+        setLayerType(LAYER_TYPE_NONE, null)
+        isDrawingCacheEnabled = false
+        isNightMode = Prefs.getBool(PrefConst.IS_NIGHT_MODE, PrefConst.IS_NIGHT_MODE_VALUE)
+
+        initValid(context)
         ordinalPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         ordinalPaint.textSize = resources.getDimension(R.dimen.text_size_caption)
         ordinalPaint.color = ThemeUtil.textColorSecondary(context)
@@ -78,19 +87,14 @@ class PostItemView : View, ImageSpanContainer {
         val displayMetrics = context.resources.displayMetrics
         val displayDensity = displayMetrics.density
         movementLimitPx = MOVEMENT_LIMIT_DP * displayDensity
-        // init
-        setLayerType(LAYER_TYPE_NONE, null)
-        isDrawingCacheEnabled = false
-
-        initValid(context)
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
         canvas.getClipBounds(clipBound)
         if (isInEditMode) {
             return
         }
+        val canvasWidth = canvas.width
         postDisplayCache?.authorLayout?.let {
             canvas.save()
             canvas.translate(px_margin_72.toFloat(), px_margin_16.toFloat())
@@ -101,14 +105,14 @@ class PostItemView : View, ImageSpanContainer {
             canvas.save()
             canvas.translate(px_margin_16.toFloat(), px_margin_72.toFloat())
             it.draw(canvas)
-            canvas.save()
+            canvas.restore()
         }
         val ordinalStr = ordinalText
         if (!ordinalStr.isNullOrEmpty()) {
             ordinalPaint.getTextBounds(ordinalStr.toString(), 0, ordinalStr.length, ordinalBound)
             canvas.drawText(
                 ordinalStr, 0, ordinalStr.length,
-                (width - px_margin_16 - ordinalBound.width()).toFloat(),
+                (canvasWidth - px_margin_16 - ordinalBound.width()).toFloat(),
                 px_margin_16 - ordinalFontMetrics.top,
                 ordinalPaint
             )
@@ -128,11 +132,18 @@ class PostItemView : View, ImageSpanContainer {
     fun setPostDisplayCache(postDisplayModel: PostDisplayModel) {
         this.postDisplayCache = postDisplayModel
         requestLayout()
-        post {
-            val viewImageMaxWidth = measuredWidth - px_margin_16 * 2
-            for (i in postDisplayModel.urlSpanCount..postDisplayModel.importantSpans.size) {
-                val pendingImageSpan = postDisplayModel.importantSpans[i] as PendingImageSpan
-                pendingImageSpan.loadImage(this, viewImageMaxWidth, Color.argb(255, 229, 229, 229))
+        if (showImages) {
+            post {
+                val viewImageMaxWidth = measuredWidth - px_margin_16 * 2
+                val colorMode = if (isNightMode) {
+                    Color.argb(255, 15, 15, 15)
+                } else {
+                    Color.argb(255, 229, 229, 229)
+                }
+                for (i in postDisplayModel.urlSpanCount until postDisplayModel.importantSpans.size) {
+                    val pendingImageSpan = postDisplayModel.importantSpans[i] as PendingImageSpan
+                    pendingImageSpan.loadImage(this, viewImageMaxWidth, colorMode)
+                }
             }
         }
     }
@@ -147,7 +158,7 @@ class PostItemView : View, ImageSpanContainer {
                 if (tag == identityTag) {
                     if (type == AsyncDrawableType.NORMAL) {
                         val charSequence =
-                            postDisplayCache!!.textLayout!!.text as SpannableStringBuilder
+                            postDisplayCache!!.textLayout.text as SpannableStringBuilder
                         notifyDynamicLayoutChange(charSequence)
                         requestLayout()
                     }
