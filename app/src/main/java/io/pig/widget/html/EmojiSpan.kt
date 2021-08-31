@@ -77,7 +77,7 @@ class EmojiSpan(
         }
 
     companion object {
-        private const val EMOJI_PREFIX = "http://img.lkong.cn/bq/"
+        private const val EMOJI_PREFIX = "https://avatar.lkong.com/bq"
         private const val EMOJI_PATH_WITH_SLASH = "emoji/"
         fun getDrawableFromAssets(context: Context, url: String): Drawable? {
             with(context.assets.open(url)) {

@@ -86,7 +86,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
             postListViewModel.getPost(threadId)
         }
         source.addSource(postListViewModel.detail) {
-            refreshPosts(it.posts)
+            refreshPosts(it.thread.author.uid, it.posts)
         }
         source.observe(this) {
             updatePageText()
@@ -159,7 +159,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
         postListViewModel.saveHistory(lkongDataBase, userId, middlePos)
     }
 
-    private fun refreshPosts(post: List<PostModel>) {
+    private fun refreshPosts(authorId: Long, post: List<PostModel>) {
         val listener = object : OnPostButtonClickListener {
             override fun onProfileImageClick(view: View, uid: Long) {
                 AppNavigation.openActivityForUserProfile(this@PostListActivity, uid)
@@ -190,7 +190,9 @@ class PostListActivity : AppCompatActivity(), Injectable {
             }
         }
         val userId = userAccountManager.getCurrentUserAccount().userId
-        val adapter = PostListAdapter(this, userId, listener, getThemeKey(), post)
+        val display = windowManager.defaultDisplay
+        val adapter =
+            PostListAdapter(this, userId, authorId, display, listener, getThemeKey(), post)
         binding.recycleListPost.layoutManager = LinearLayoutManager(this)
         binding.recycleListPost.adapter = adapter
     }

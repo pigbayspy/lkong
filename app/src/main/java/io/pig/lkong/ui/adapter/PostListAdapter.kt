@@ -6,9 +6,7 @@ import android.graphics.drawable.Drawable
 import android.text.*
 import android.text.style.*
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
@@ -32,8 +30,10 @@ import java.util.*
 class PostListAdapter(
     private val context: Context,
     private val userId: Long,
+    private val authorId: Long,
+    private val display: Display,
     private val listener: OnPostButtonClickListener,
-    themeKey:String,
+    themeKey: String,
     postList: List<PostModel>
 ) : FixedViewAdapter<PostModel>(postList) {
 
@@ -45,7 +45,8 @@ class PostListAdapter(
     private val accentColor = ThemeUtil.accentColor(context, themeKey)
     private val datelineTextSize = UiUtil.getSpDimensionPixelSize(context, R.dimen.text_size_body1)
     private val imageGetter = EmptyImageGetter()
-    private val loadingDrawable = ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_loading, null)!!
+    private val loadingDrawable =
+        ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_loading, null)!!
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -77,14 +78,15 @@ class PostListAdapter(
             avatarSize
         )
 
+        val displayModel = createSpan(post)
+
         // init post item
         viewHolder.postItem.apply {
             postId = post.pid
             identityTag = post.pid
             // Todo showImages = ""
             ordinalText = post.ordinal.toString()
-            val cache = PostDisplayModel(importantSpans = emptyList(), urlSpanCount = 0)
-            setPostDisplayCache(cache)
+            setPostDisplayCache(displayModel)
         }
 
         // add listener
@@ -100,17 +102,17 @@ class PostListAdapter(
         }
     }
 
-    private fun createSpan(postModel: PostModel) {
+    private fun createSpan(postModel: PostModel): PostDisplayModel {
         val spannedText: Spanned =
             HtmlUtil.htmlToSpanned(postModel.message, imageGetter, HtmlTagHandler())
-        replaceImageSpan(SpannableString(spannedText), postModel, loadingDrawable)
+        return replaceImageSpan(SpannableString(spannedText), postModel, loadingDrawable)
     }
 
     private fun replaceImageSpan(
         sequence: CharSequence,
         postModel: PostModel,
         initPlaceHolder: Drawable
-    ): CharSequence {
+    ): PostDisplayModel {
         val spannable: SpannableStringBuilder =
             if (sequence is SpannableStringBuilder) {
                 sequence
@@ -132,7 +134,7 @@ class PostListAdapter(
             val spanFlags = spannable.getSpanFlags(imageSpan)
             imageSpan.source.apply {
                 if (!isNullOrEmpty()) {
-                    if (!contains("http://img.lkong.cn/bq/")) {
+                    if (!contains("https://avatar.lkong.com/bq")) {
                         spannable.removeSpan(imageSpan)
                         val clickableImageSpan = ClickableImageSpan(
                             context,
@@ -155,7 +157,7 @@ class PostListAdapter(
                         )
                         importantSpanList.add(clickableImageSpan)
                         imageUrlList.add(this)
-                    } else if (contains("http://img.lkong.cn/bq/")) {
+                    } else if (contains("https://avatar.lkong.com/bq")) {
                         spannable.removeSpan(imageSpan)
                         val emoticonImageSpan = EmojiSpan(
                             context,
@@ -177,7 +179,7 @@ class PostListAdapter(
         }
         // Generate content StaticLayout
         val dm = DisplayMetrics()
-        getWindowManager().getDefaultDisplay().getMetrics(dm)
+        display.getMetrics(dm)
         val padding = UiUtil.getCardViewPadding(
             context.resources.getDimensionPixelSize(R.dimen.default_card_elevation),
             (2.0 * dm.density).toInt()
@@ -196,7 +198,7 @@ class PostListAdapter(
         // Generate author StaticLayout
         val authorNameSpannable = SpannableStringBuilder()
         authorNameSpannable.append(postModel.authorName)
-        if (postModel.authorId === mThreadModel.getAuthorId()) {
+        if (postModel.authorId == authorId) {
             val threadAuthorIndicator: String = context.getString(R.string.indicator_thread_author)
             authorNameSpannable.append(threadAuthorIndicator)
             authorNameSpannable.setSpan(
@@ -237,7 +239,7 @@ class PostListAdapter(
             0.0f,
             false
         )
-        val postDisplayModel = PostDisplayModel(
+        return PostDisplayModel(
             authorLayout = authorLayout,
             textLayout = layout,
             spannableStringBuilder = spannable,
@@ -245,10 +247,9 @@ class PostListAdapter(
             importantSpans = importantSpanList,
             emoticonSpans = emoticonSpanList
         )
-        return spannable
     }
 
     companion object {
-        const val POST_PICASSO_TAG = "picasso_post_list_adapter
+        const val POST_PICASSO_TAG = "picasso_post_list_adapter"
     }
 }
