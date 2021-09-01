@@ -80,7 +80,7 @@ class PostItemView : View, ImageSpanContainer {
 
         initValid(context)
         ordinalPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        ordinalPaint.textSize = resources.getDimension(R.dimen.text_size_caption)
+        ordinalPaint.textSize = resources.getDimension(R.dimen.text_size_body)
         ordinalPaint.color = ThemeUtil.textColorSecondary(context)
         ordinalFontMetrics = ordinalPaint.fontMetrics
         // initTouchHandler

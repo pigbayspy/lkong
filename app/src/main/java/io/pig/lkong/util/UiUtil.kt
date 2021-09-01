@@ -33,6 +33,9 @@ object UiUtil {
      * and maxCardElevation * 1.5 + (1 - cos45) * cornerRadius on top and bottom.
      * 1 - cos(45) = 0.29289321881345247
      *
+     * @param cardElevation 卡片数据
+     * @param cornerRadius 角度数据
+     * @return 值
      */
     fun getCardViewPadding(
         cardElevation: Int,
@@ -53,7 +56,7 @@ object UiUtil {
     }
 
     fun getSpDimensionPixelSize(context: Context, @DimenRes resId: Int): Float {
-        return context.resources.getDimension(resId);
+        return context.resources.getDimension(resId)
     }
 
     class InsetsValue(val left: Int, val top: Int, val right: Int, val bottom: Int)

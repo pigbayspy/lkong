@@ -3,10 +3,23 @@ package io.pig.lkong.ui.adapter
 import android.content.Context
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
-import android.text.*
-import android.text.style.*
+import android.text.DynamicLayout
+import android.text.Layout
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.StaticLayout
+import android.text.TextPaint
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.DynamicDrawableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.ImageSpan
+import android.text.style.URLSpan
 import android.util.DisplayMetrics
-import android.view.*
+import android.view.Display
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
@@ -14,7 +27,11 @@ import io.pig.lkong.model.PostDisplayModel
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.ui.adapter.item.PostViewHolder
 import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
-import io.pig.lkong.util.*
+import io.pig.lkong.util.DateUtil
+import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.lkong.util.SlateUtil
+import io.pig.lkong.util.ThemeUtil
+import io.pig.lkong.util.UiUtil
 import io.pig.ui.html.EmptyImageGetter
 import io.pig.ui.html.HtmlTagHandler
 import io.pig.ui.html.HtmlUtil
@@ -38,7 +55,7 @@ class PostListAdapter(
     postList: List<PostModel>
 ) : FixedViewAdapter<PostModel>(postList) {
 
-    private val avatarSize: Int = UiUtil.getDefaultAvatarSize(context)
+    private val avatarSize = UiUtil.getDefaultAvatarSize(context)
     private val todayPrefix = context.getString(R.string.text_datetime_today)
     private val textColorSecondary = ThemeUtil.textColorSecondary(context, themeKey)
     private val authorTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
@@ -46,6 +63,7 @@ class PostListAdapter(
     private val accentColor = ThemeUtil.accentColor(context, themeKey)
     private val datelineTextSize = UiUtil.getSpDimensionPixelSize(context, R.dimen.text_size_body1)
     private val imageGetter = EmptyImageGetter()
+    private val tagHandler = HtmlTagHandler()
     private val loadingDrawable =
         ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_loading, null)!!
     private val showImageValue = ImageLoaderUtil.shouldDownloadImage(imageDownloadPolicy)
@@ -106,12 +124,9 @@ class PostListAdapter(
     }
 
     private fun createSpan(postModel: PostModel): PostDisplayModel {
-        val spannedText: Spanned =
-            HtmlUtil.htmlToSpanned(
-                SlateUtil.slateToText(postModel.message ?: ""),
-                imageGetter,
-                HtmlTagHandler()
-            )
+        val spannedText = HtmlUtil.htmlToSpanned(
+            SlateUtil.slateToText(postModel.message ?: ""), imageGetter, tagHandler
+        )
         return replaceImageSpan(SpannableString(spannedText), postModel, loadingDrawable)
     }
 
@@ -216,10 +231,7 @@ class PostListAdapter(
             )
         }
         authorNameSpannable.append('\n')
-        val datelineString: String = DateUtil.formatDateByToday(
-            postModel.dateline,
-            todayPrefix,
-        )
+        val datelineString: String = DateUtil.formatDateByToday(postModel.dateline, todayPrefix)
         val start = authorNameSpannable.length
         val end = authorNameSpannable.length + datelineString.length
         authorNameSpannable.append(datelineString)
@@ -235,8 +247,7 @@ class PostListAdapter(
             end,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        val authorWidth: Int =
-            dm.widthPixels - UiUtil.dp2px(context, 72f) - padding.left - padding.right
+        val authorWidth = dm.widthPixels - UiUtil.dp2px(context, 72f) - padding.left - padding.right
         val authorLayout = StaticLayout(
             authorNameSpannable,
             authorTextPaint,
