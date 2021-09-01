@@ -30,6 +30,7 @@ import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.SlateUtil
+import io.pig.lkong.util.TextSizeUtil
 import io.pig.lkong.util.ThemeUtil
 import io.pig.lkong.util.UiUtil
 import io.pig.ui.html.EmptyImageGetter
@@ -67,6 +68,20 @@ class PostListAdapter(
     private val loadingDrawable =
         ResourcesCompat.getDrawable(context.resources, R.drawable.placeholder_loading, null)!!
     private val showImageValue = ImageLoaderUtil.shouldDownloadImage(imageDownloadPolicy)
+
+    init {
+        val textColorPrimary = ThemeUtil.textColorPrimary(context, themeKey)
+        val contentTextSize =
+            TextSizeUtil.textSizeForMode(context, themeKey, TextSizeUtil.TEXT_SIZE_BODY)
+        val accentColor = ThemeUtil.accentColor(context, themeKey)
+        contentTextPaint.textSize = contentTextSize.toFloat()
+        contentTextPaint.color = textColorPrimary
+        contentTextPaint.linkColor = accentColor
+        val authorTextSize = UiUtil.getSpDimensionPixelSize(context, R.dimen.text_size_subhead)
+        authorTextPaint.textSize = authorTextSize
+        authorTextPaint.color = textColorPrimary
+        authorTextPaint.linkColor = accentColor
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -208,7 +223,7 @@ class PostListAdapter(
         )
         val contentWidth: Int =
             dm.widthPixels - UiUtil.dp2px(context, 16f) * 2 - padding.left - padding.right
-        val layout = DynamicLayout(
+        val textLayout = DynamicLayout(
             spannable,
             contentTextPaint,
             contentWidth,
@@ -259,7 +274,7 @@ class PostListAdapter(
         )
         return PostDisplayModel(
             authorLayout = authorLayout,
-            textLayout = layout,
+            textLayout = textLayout,
             spannableStringBuilder = spannable,
             urlSpanCount = urlSpans.size,
             importantSpans = importantSpanList,
