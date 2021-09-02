@@ -15,6 +15,7 @@ class ThreadPostReq(tid:Long, page:Int) {
                 fid
                 name
             }
+            digest
             replies
             views
             status

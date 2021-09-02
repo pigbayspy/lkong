@@ -45,4 +45,8 @@ object PrefConst {
     const val IS_NIGHT_MODE = "dark_theme"
 
     const val IS_NIGHT_MODE_VALUE = false
+
+    const val SCROLL_BY_VOLUME_KEY = "prefs_scroll_by_volume_key"
+
+    const val SCROLL_BY_VOLUME_KEY_VALUE = false
 }

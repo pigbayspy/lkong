@@ -237,5 +237,6 @@
     <string name="dialog_post_list_choose_page">跳转至</string>
     <string name="format_post_list_page_indicator_detail">%1$d 页 (%2$d - %3$d)</string>
     <string name="indicator_thread_author">&#160;&#160;[龙珠]</string>
+    <string name="format_post_header_detail_count">%1$d 查看 · %2$d 回复</string>
 
 </resources>

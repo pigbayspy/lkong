@@ -2,10 +2,16 @@ package io.pig.lkong.ui.post.list
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Html
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.HtmlCompat
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +27,7 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.databinding.ActivityPostListBinding
 import io.pig.lkong.databinding.LayoutPostIntroHeaderBinding
+import io.pig.lkong.http.data.resp.data.PostRespThreadData
 import io.pig.lkong.model.PostModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.PrefConst
@@ -38,19 +45,16 @@ import javax.inject.Inject
 
 class PostListActivity : AppCompatActivity(), Injectable {
 
-    private val primaryColorInPostControl by lazy {
-        Prefs.getBoolPrefs(
-            PrefConst.USE_PRIMARY_COLOR_POST_CONTROL,
-            PrefConst.USE_PRIMARY_COLOR_POST_CONTROL_VALUE
-        )
-    }
+    private val primaryColorInPostControl = Prefs.getBoolPrefs(
+        PrefConst.USE_PRIMARY_COLOR_POST_CONTROL, PrefConst.USE_PRIMARY_COLOR_POST_CONTROL_VALUE
+    )
 
-    private val imageDownloadPolicy by lazy {
-        Prefs.getStringPrefs(
-            PrefConst.IMAGE_DOWNLOAD_POLICY,
-            PrefConst.IMAGE_DOWNLOAD_POLICY_VALUE
-        )
-    }
+    private val imageDownloadPolicy = Prefs.getStringPrefs(
+        PrefConst.IMAGE_DOWNLOAD_POLICY, PrefConst.IMAGE_DOWNLOAD_POLICY_VALUE
+    )
+
+    private val scrollByVolumeKey =
+        Prefs.getBoolPrefs(PrefConst.SCROLL_BY_VOLUME_KEY, PrefConst.SCROLL_BY_VOLUME_KEY_VALUE)
 
     private lateinit var binding: ActivityPostListBinding
     private lateinit var headerBinding: LayoutPostIntroHeaderBinding
@@ -89,6 +93,27 @@ class PostListActivity : AppCompatActivity(), Injectable {
         initPageController()
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        val isFlipPageByVolumeKey = scrollByVolumeKey.get()
+        when (keyCode) {
+            KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                if (isFlipPageByVolumeKey) {
+                    scrollDown()
+                    return true
+                }
+                return false
+            }
+            KeyEvent.KEYCODE_VOLUME_UP -> {
+                if (isFlipPageByVolumeKey) {
+                    scrollUp()
+                    return true
+                }
+                return false
+            }
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
     override fun injectThis() {
         LkongApplication.get(this).presentComponent().inject(this)
     }
@@ -100,6 +125,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
         }
         source.addSource(postListViewModel.detail) {
             refreshPosts(it.thread.author.uid, it.posts)
+            setThreadSubjectSpanned(it.thread)
         }
         source.observe(this) {
             updatePageText()
@@ -249,6 +275,29 @@ class PostListActivity : AppCompatActivity(), Injectable {
         }
     }
 
+    private fun setThreadSubjectSpanned(thread: PostRespThreadData) {
+        val spannableTitle = SpannableStringBuilder()
+        if (thread.digest == true) {
+            val digestIndicator = getString(R.string.indicator_thread_digest)
+            spannableTitle.append(digestIndicator)
+            spannableTitle.setSpan(
+                ForegroundColorSpan(getAccentColor()),
+                0,
+                digestIndicator.length,
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+        spannableTitle.append(Html.fromHtml(thread.title, HtmlCompat.FROM_HTML_MODE_LEGACY))
+        headerBinding.postHeaderTextTitle.text = spannableTitle
+        val detailCount = getString(
+            R.string.format_post_header_detail_count,
+            thread.views,
+            thread.replies
+        )
+        headerBinding.postHeaderTextDetailCount.text = detailCount
+        headerBinding.postHeaderTextForumName.text = thread.forum.name
+    }
+
     /**
      * 渲染页数
      */
@@ -257,6 +306,19 @@ class PostListActivity : AppCompatActivity(), Injectable {
         val pages = postListViewModel.getPages()
         binding.postListPageControl.pagerControlButtonPageIndicator.text =
             getString(R.string.format_post_list_page_indicator, page, pages)
+    }
+
+    private fun scrollDown() {
+        binding.recycleListPost.smoothScrollBy(0, calcScrollDistance())
+    }
+
+    private fun scrollUp() {
+        binding.recycleListPost.smoothScrollBy(0, -calcScrollDistance())
+    }
+
+    private fun calcScrollDistance(): Int {
+        val displayMetrics = resources.displayMetrics
+        return displayMetrics.heightPixels * 3 / 5
     }
 
     companion object {

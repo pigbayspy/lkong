@@ -3,7 +3,6 @@ package io.pig.ui.html
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.text.Html.ImageGetter
 import android.text.Html.TagHandler
 import android.text.Spannable
@@ -55,7 +54,7 @@ class HtmlToSpannedConverter(
             throw RuntimeException(e)
         }
         // Fix flags and range for paragraph-type markup.
-        val obj: Array<ParagraphStyle> = spannableStringBuilder.getSpans(
+        val obj = spannableStringBuilder.getSpans(
             0,
             spannableStringBuilder.length,
             ParagraphStyle::class.java
@@ -210,7 +209,6 @@ class HtmlToSpannedConverter(
 
     override fun characters(ch: CharArray, start: Int, length: Int) {
         val sb = StringBuilder()
-
         /*
          * Ignore whitespace that immediately follows other whitespace;
          * newlines count as spaces.
@@ -339,13 +337,11 @@ class HtmlToSpannedConverter(
 
         private fun startImg(
             text: SpannableStringBuilder,
-            attributes: Attributes, img: ImageGetter?
+            attributes: Attributes,
+            img: ImageGetter
         ) {
             val src = attributes.getValue("", "src")
-            var d: Drawable? = null
-            if (img != null) {
-                d = img.getDrawable(src)
-            }
+            var d = img.getDrawable(src)
             if (d == null) {
                 d = ResourcesCompat.getDrawable(
                     Resources.getSystem(),
@@ -356,10 +352,7 @@ class HtmlToSpannedConverter(
             }
             val len = text.length
             text.append("\uFFFC")
-            text.setSpan(
-                ImageSpan(d, src), len, text.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            text.setSpan(ImageSpan(d, src), len, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         private fun startFont(
@@ -402,7 +395,6 @@ class HtmlToSpannedConverter(
                         }
                     }
                 }
-
                 text.setSpan(TypefaceSpan(obj.face), where, len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
@@ -449,12 +441,11 @@ class HtmlToSpannedConverter(
 
         private fun getHtmlColor(color: String): Int {
             val i = COLOR_MAP[color.lowercase(Locale.ROOT)]
-            return i
-                ?: try {
-                    convertValueToInt(color)
-                } catch (nfe: NumberFormatException) {
-                    -1
-                }
+            return i ?: try {
+                convertValueToInt(color)
+            } catch (nfe: NumberFormatException) {
+                -1
+            }
         }
 
         private fun convertValueToInt(charSeq: CharSequence): Int {
