@@ -19,6 +19,9 @@
     <string name="user_coin_desc">龙币</string>
     <string name="user_diamond_desc">龙晶</string>
     <string name="timeline_thread_avatar_desc">头像</string>
+    <string name="fab_desc">按钮</string>
+    <string name="forward_desc">向前翻页</string>
+    <string name="backward_desc">向前翻页</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>

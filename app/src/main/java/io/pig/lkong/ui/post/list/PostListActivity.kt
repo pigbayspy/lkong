@@ -140,12 +140,11 @@ class PostListActivity : AppCompatActivity(), Injectable {
             } else {
                 getAccentColor()
             }
-        val toolbarTextColor =
-            if (ThemeUtil.isColorLight(postControlColor)) {
-                Color.BLACK
-            } else {
-                Color.WHITE
-            }
+        val toolbarTextColor = if (ThemeUtil.isColorLight(postControlColor)) {
+            Color.BLACK
+        } else {
+            Color.WHITE
+        }
         val backwardArrow =
             ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_backward, null)!!.mutate()
         val forwardArrow =
@@ -319,6 +318,14 @@ class PostListActivity : AppCompatActivity(), Injectable {
     private fun calcScrollDistance(): Int {
         val displayMetrics = resources.displayMetrics
         return displayMetrics.heightPixels * 3 / 5
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.postListLoading.visibility = if (isLoading) {
+            View.VISIBLE
+        } else {
+            View.INVISIBLE
+        }
     }
 
     companion object {

@@ -23,7 +23,7 @@ class LkongDatabaseSqliteImpl(context: Context) : LkongDatabase {
 
     override suspend fun getHistory(uid: Long, start: Int): List<HistoryModel> {
         val entities = dao.queryByUserIdAndTime(uid, start)
-        val result = entities.map {
+        return entities.map {
             HistoryModel(
                 userId = it.userId,
                 threadId = it.threadId,
@@ -36,7 +36,6 @@ class LkongDatabaseSqliteImpl(context: Context) : LkongDatabase {
                 lastReadTime = Date(it.lastReadTime)
             )
         }
-        return result
     }
 
     override suspend fun clearHistory(uid: Long) {

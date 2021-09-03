@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:contentDescription="@string/fab_desc" />
 
     <include
         android:id="@+id/post_list_page_control"
@@ -26,5 +27,13 @@
         android:layout_height="88dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true" />
+
+    <ProgressBar
+        android:id="@+id/post_list_loading"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_centerInParent="true"
+        android:padding="8dp"
+        android:visibility="invisible" />
 
 </RelativeLayout>

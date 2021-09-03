@@ -27,15 +27,17 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?selectableItemBackground"
+                android:contentDescription="@string/backward_desc"
                 android:src="@drawable/ic_arrow_backward" />
 
             <Button
                 android:id="@+id/pager_control_button_page_indicator"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="?selectableItemBackground"
-                android:tag="text_color|accent_color_dependent"/>
+                android:tag="text_color|accent_color_dependent" />
 
             <ImageButton
                 android:id="@+id/pager_control_button_forward"
@@ -43,6 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?selectableItemBackground"
+                android:contentDescription="@string/forward_desc"
                 android:src="@drawable/ic_arrow_forward" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

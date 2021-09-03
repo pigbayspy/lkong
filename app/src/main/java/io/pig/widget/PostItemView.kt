@@ -94,7 +94,7 @@ class PostItemView : View, ImageSpanContainer {
         if (isInEditMode) {
             return
         }
-        val canvasWidth = canvas.width
+        val canvasWidth = width
         postDisplayCache?.authorLayout?.let {
             canvas.save()
             canvas.translate(px_margin_72.toFloat(), px_margin_16.toFloat())
