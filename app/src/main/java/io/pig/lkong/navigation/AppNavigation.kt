@@ -70,6 +70,13 @@ object AppNavigation {
         context.startActivity(intent)
     }
 
+    fun openNewThreadActivity(context: Context, forumId: Long, forumName: String) {
+        val intent = Intent(context, null)
+        intent.putExtra(DataContract.BUNDLE_FORUM_ID, forumId)
+        intent.putExtra(DataContract.BUNDLE_FORUM_NAME, forumName)
+        context.startActivity(intent)
+    }
+
     private fun addNewAccount(activity: Activity, accountType: String, authTokenType: String) {
         val accountManager = AccountManager.get(activity)
         accountManager.addAccount(

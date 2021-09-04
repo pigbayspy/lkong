@@ -12,16 +12,16 @@ import kotlinx.coroutines.launch
  * @author yinhang
  * @since 2021/8/15
  */
-class ForumThreadViewModel : ViewModel() {
+class ForumThreadViewModel(val forumId: Long, val forumName: String) : ViewModel() {
 
     private var page: Int = 0
 
     val threads = MutableLiveData<List<ForumThreadModel>>(emptyList())
 
-    fun getThreads(fid: Long) {
+    fun getThreads() {
         viewModelScope.launch {
             try {
-                val respBase = LkongRepository.getForumThread(fid, page)
+                val respBase = LkongRepository.getForumThread(forumId, page)
                 if (respBase.data != null) {
                     val threadModels = respBase.data.threads.map {
                         ForumThreadModel(it)

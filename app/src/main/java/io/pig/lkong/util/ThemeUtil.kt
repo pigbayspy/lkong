@@ -85,10 +85,7 @@ object ThemeUtil {
 
     @ColorInt
     fun toolbarColor(context: Context, key: String): Int {
-        return pref(context, key).getInt(
-            KEY_TOOLBAR_COLOR,
-            primaryColor(context, key)
-        )
+        return pref(context, key).getInt(KEY_TOOLBAR_COLOR, primaryColor(context, key))
     }
 
     @ColorInt
@@ -97,12 +94,7 @@ object ThemeUtil {
         key: String,
         toolbarColor: Int
     ): Int {
-        val color = if (isLightToolbar(
-                context,
-                key,
-                toolbarColor
-            )
-        ) {
+        val color = if (isLightToolbar(context, key, toolbarColor)) {
             R.color.theme_primary_text_light
         } else {
             R.color.theme_primary_text_dark
@@ -118,6 +110,14 @@ object ThemeUtil {
             R.color.theme_secondary_text_dark
         }
         return ContextCompat.getColor(context, color)
+    }
+
+    @ColorInt
+    fun makeColorDarken(color: Int, factor: Float): Int {
+        val hsv = FloatArray(3)
+        Color.colorToHSV(color, hsv)
+        hsv[2] *= factor // value component
+        return Color.HSVToColor(hsv)
     }
 
     private fun isLightToolbar(

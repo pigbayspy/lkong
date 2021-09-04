@@ -1,5 +1,10 @@
 package io.pig.lkong.ui.forum.content
 
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.StateListDrawable
+import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +12,8 @@ import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +28,8 @@ import io.pig.lkong.model.listener.ForumThreadModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.ForumThreadAdapter
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
+import io.pig.lkong.util.ThemeUtil
+import io.pig.ui.common.getAccentColor
 import io.pig.ui.common.isActivityDestroyed
 
 class ForumThreadActivity : AppCompatActivity() {
@@ -53,20 +62,22 @@ class ForumThreadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(ForumThreadViewModel::class.java)
+        // get param
+        val fid = intent.getLongExtra(DataContract.BUNDLE_FORUM_ID, -1)
+
+        // set title
+        val forumName = intent.getStringExtra(DataContract.BUNDLE_FORUM_NAME) ?: ""
+        if (forumName.isNotBlank()) {
+            title = forumName
+        }
+
+        val viewModelFactory = ForumThreadViewModelFactory(fid, forumName)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(
+            ForumThreadViewModel::class.java
+        )
         binding = ActivityForumThreadBinding.inflate(layoutInflater)
 
         val root = binding.root
-
-        // get param
-        val fid = intent.getLongExtra(DataContract.BUNDLE_FORUM_ID, -1)
-        val avatar = intent.getStringExtra(DataContract.BUNDLE_FORUM_AVATAR) ?: ""
-
-        // set title
-        val forumName = intent.getStringExtra(DataContract.BUNDLE_FORUM_NAME)
-        if (!forumName.isNullOrBlank()) {
-            title = forumName
-        }
 
         setContentView(root)
 
@@ -78,7 +89,7 @@ class ForumThreadActivity : AppCompatActivity() {
         viewModel.threads.observe(this) {
             refresh(it)
         }
-        viewModel.getThreads(fid)
+        viewModel.getThreads()
     }
 
     private fun refresh(threads: List<ForumThreadModel>) {
@@ -112,7 +123,28 @@ class ForumThreadActivity : AppCompatActivity() {
 
     private fun initFab() {
         binding.forumThreadFab.setOnClickListener {
-            // Todo
+            AppNavigation.openNewThreadActivity(this, viewModel.forumId, viewModel.forumName)
+        }
+        val accentColor = getAccentColor()
+        val accentColorDark = ThemeUtil.makeColorDarken(accentColor, 0.8f)
+        val accentColorRipple = ThemeUtil.makeColorDarken(accentColor, 0.9f)
+        val drawable =
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_button_edit, null)!!.mutate()
+        val tint = if (ThemeUtil.isColorLight(accentColor)) {
+            Color.BLACK
+        } else {
+            Color.WHITE
+        }
+        DrawableCompat.setTint(drawable, tint)
+        val backgroundDrawable = StateListDrawable()
+        backgroundDrawable.apply {
+            addState(intArrayOf(android.R.attr.state_pressed), createDrawable(accentColorDark))
+            addState(intArrayOf(), createDrawable(accentColor))
+        }
+        binding.forumThreadFab.apply {
+            setImageDrawable(drawable)
+            rippleColor = accentColorRipple
+            background = backgroundDrawable
         }
     }
 
@@ -147,5 +179,12 @@ class ForumThreadActivity : AppCompatActivity() {
 
     private fun processOnMore() {
 
+    }
+
+    private fun createDrawable(color: Int): Drawable {
+        val ovalShape = OvalShape()
+        val shapeDrawable = ShapeDrawable(ovalShape)
+        shapeDrawable.paint.color = color
+        return shapeDrawable
     }
 }
