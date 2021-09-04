@@ -21,7 +21,6 @@ import io.pig.lkong.model.listener.ForumThreadModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.ForumThreadAdapter
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
-import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.ui.common.isActivityDestroyed
 
 class ForumThreadActivity : AppCompatActivity() {
@@ -58,7 +57,6 @@ class ForumThreadActivity : AppCompatActivity() {
         binding = ActivityForumThreadBinding.inflate(layoutInflater)
 
         val root = binding.root
-        setSupportActionBar(binding.forumThreadToolbar)
 
         // get param
         val fid = intent.getLongExtra(DataContract.BUNDLE_FORUM_ID, -1)
@@ -69,8 +67,6 @@ class ForumThreadActivity : AppCompatActivity() {
         if (!forumName.isNullOrBlank()) {
             title = forumName
         }
-
-        ImageLoaderUtil.loadForumAvatar(this, binding.forumAvatar, fid, avatar)
 
         setContentView(root)
 
@@ -90,7 +86,7 @@ class ForumThreadActivity : AppCompatActivity() {
     }
 
     private fun initRecycle() {
-        binding.threads.forumThreadList.apply {
+        binding.forumThreadList.apply {
             layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
             adapter = wrapperAdapter
             itemAnimator = DefaultItemAnimator()
