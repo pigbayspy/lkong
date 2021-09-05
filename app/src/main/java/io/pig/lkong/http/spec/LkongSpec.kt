@@ -1,8 +1,29 @@
 package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.const.RestApiConst
-import io.pig.lkong.http.data.req.*
-import io.pig.lkong.http.data.resp.*
+import io.pig.lkong.http.data.req.CollectionReq
+import io.pig.lkong.http.data.req.FavoriteReq
+import io.pig.lkong.http.data.req.ForumReq
+import io.pig.lkong.http.data.req.ForumThreadReq
+import io.pig.lkong.http.data.req.HotThreadReq
+import io.pig.lkong.http.data.req.NoticeReq
+import io.pig.lkong.http.data.req.PunchReq
+import io.pig.lkong.http.data.req.SignReq
+import io.pig.lkong.http.data.req.ThreadPostReq
+import io.pig.lkong.http.data.req.TimelineReq
+import io.pig.lkong.http.data.req.UserProfileReq
+import io.pig.lkong.http.data.resp.CollectionResp
+import io.pig.lkong.http.data.resp.FavoriteResp
+import io.pig.lkong.http.data.resp.ForumResp
+import io.pig.lkong.http.data.resp.ForumThreadResp
+import io.pig.lkong.http.data.resp.HotThreadResp
+import io.pig.lkong.http.data.resp.NoticeResp
+import io.pig.lkong.http.data.resp.PunchResp
+import io.pig.lkong.http.data.resp.RespBase
+import io.pig.lkong.http.data.resp.SignResp
+import io.pig.lkong.http.data.resp.ThreadPostResp
+import io.pig.lkong.http.data.resp.TimelineResp
+import io.pig.lkong.http.data.resp.UserProfileResp
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -44,5 +65,8 @@ interface LkongSpec {
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getNotice(@Body noticeReq: NoticeReq): RespBase<NoticeResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun punch(@Body punchReq: PunchReq): RespBase<PunchResp>
 
 }

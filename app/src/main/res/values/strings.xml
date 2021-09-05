@@ -27,6 +27,7 @@
     <string name="action_logout">退出账号</string>
     <string name="action_settings">设置</string>
     <string name="action_evening">夜间模式</string>
+    <string name="action_punch">签到</string>
     <string name="action_notification">通知</string>
     <string name="action_clear">清理</string>
     <string name="action_search">搜索</string>
@@ -241,5 +242,8 @@
     <string name="format_post_list_page_indicator_detail">%1$d 页 (%2$d - %3$d)</string>
     <string name="indicator_thread_author">&#160;&#160;[龙珠]</string>
     <string name="format_post_header_detail_count">%1$d 查看 · %2$d 回复</string>
+
+    <!-- main -->
+    <string name="format_punch_day_count">已签到 %1$d 天</string>
 
 </resources>

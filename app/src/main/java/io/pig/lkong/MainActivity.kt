@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,6 +21,7 @@ import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
 import io.pig.lkong.databinding.ActivityMainBinding
 import io.pig.lkong.exception.SignInException
+import io.pig.lkong.http.source.LkongRepository
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION
 import io.pig.lkong.preference.PrefConst.CHECK_NOTIFICATION_DURATION_VALUE
@@ -35,6 +37,9 @@ import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.TextSizeUtil
 import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.common.processToolbar
+import io.pig.ui.snakebar.SnakeBarType
+import io.pig.ui.snakebar.showSnakeBar
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -122,6 +127,18 @@ class MainActivity : AppCompatActivity(), Injectable {
         return when (item.itemId) {
             R.id.action_main_evening -> false
             R.id.action_main_logout -> false
+            R.id.action_punch -> {
+                lifecycleScope.launch {
+                    val respBase = LkongRepository.punch()
+                    if (respBase.data == null) {
+                        return@launch
+                    }
+                    val punchResult =
+                        getString(R.string.format_punch_day_count, respBase.data.punch.punchday)
+                    showSnakeBar(binding.root, punchResult, SnakeBarType.INFO)
+                }
+                false
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
