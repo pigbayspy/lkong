@@ -1,6 +1,7 @@
 package io.pig.lkong.http.source
 
 import io.pig.lkong.http.data.req.CollectionReq
+import io.pig.lkong.http.data.req.FansReq
 import io.pig.lkong.http.data.req.FavoriteReq
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.ForumThreadReq
@@ -23,6 +24,7 @@ import io.pig.lkong.http.data.resp.SignInResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
 import io.pig.lkong.http.data.resp.TimelineResp
 import io.pig.lkong.http.data.resp.UserProfileResp
+import io.pig.lkong.http.data.resp.data.FansResp
 import io.pig.lkong.http.provider.LkongServiceProvider
 import io.pig.lkong.http.util.CookieUtil
 
@@ -101,6 +103,11 @@ object LkongRepository {
     suspend fun punch(): RespBase<PunchResp> {
         val req = PunchReq()
         return lkongSpec.punch(req)
+    }
+
+    suspend fun getFans(uid: Long, page: Int): RespBase<FansResp> {
+        val req = FansReq(uid, page)
+        return lkongSpec.getFans(req)
     }
 
     private fun getCookie(key: String): String {

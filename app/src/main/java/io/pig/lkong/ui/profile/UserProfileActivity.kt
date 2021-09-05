@@ -5,11 +5,13 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityUserProfileBinding
 import io.pig.lkong.model.UserModel
+import io.pig.lkong.ui.profile.fans.FansFragment
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
 
@@ -48,11 +50,17 @@ class UserProfileActivity : AppCompatActivity() {
         )
         binding.profileTextUserName.text = user.name
         val statsTextSize = resources.getDimensionPixelSize(R.dimen.text_size_caption)
-        binding.profileTextFollowerCount.text = getUserStatsText(
-            user.followers,
-            getString(R.string.text_profile_header_followers),
-            statsTextSize
-        )
+        binding.profileTextFollowerCount.apply {
+            text = getUserStatsText(
+                user.followers,
+                getString(R.string.text_profile_header_followers),
+                statsTextSize
+            )
+            setOnClickListener {
+                val fragment = FansFragment.newInstance(user.uid, user.name)
+                switchFragment(fragment)
+            }
+        }
         binding.profileTextFollowingCount.text = getUserStatsText(
             user.followings,
             getString(R.string.text_profile_header_following),
@@ -94,6 +102,18 @@ class UserProfileActivity : AppCompatActivity() {
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         return builder
+    }
+
+    private fun switchFragment(fragment: Fragment) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out,
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
+        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment)
+        fragmentTransaction.commit()
     }
 
     companion object {

@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import io.pig.common.ui.adapter.Bookends
 import io.pig.lkong.R
@@ -98,7 +97,6 @@ class ForumThreadActivity : AppCompatActivity() {
 
     private fun initRecycle() {
         binding.forumThreadList.apply {
-            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
             adapter = wrapperAdapter
             itemAnimator = DefaultItemAnimator()
             layoutManager = LinearLayoutManager(this@ForumThreadActivity)

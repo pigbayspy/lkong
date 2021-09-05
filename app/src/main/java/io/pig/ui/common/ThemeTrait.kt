@@ -17,7 +17,11 @@ import io.pig.lkong.util.ThemeUtil
 fun Activity.getThemeKey(): String {
     return if (PreferenceManager.getDefaultSharedPreferences(this)
             .getBoolean(ThemeUtil.DARK_THEME, false)
-    ) ThemeUtil.DARK_THEME else ThemeUtil.LIGHT_THEME
+    ) {
+        ThemeUtil.DARK_THEME
+    } else {
+        ThemeUtil.LIGHT_THEME
+    }
 }
 
 fun Activity.getPrimaryColor(): Int {
@@ -70,6 +74,6 @@ fun Fragment.isNightMode(): Boolean {
 fun Activity.toggleNightMode() {
     val pref = Prefs.getBoolPrefs(PrefConst.IS_NIGHT_MODE, PrefConst.IS_NIGHT_MODE_VALUE)
     pref.set(!pref.get())
-    ThemeUtil.markChanged(this, "light_theme", "dark_theme")
+    ThemeUtil.markChanged(this, ThemeUtil.LIGHT_THEME, ThemeUtil.DARK_THEME)
     recreate()
 }

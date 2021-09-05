@@ -2,6 +2,7 @@ package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.const.RestApiConst
 import io.pig.lkong.http.data.req.CollectionReq
+import io.pig.lkong.http.data.req.FansReq
 import io.pig.lkong.http.data.req.FavoriteReq
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.ForumThreadReq
@@ -24,6 +25,7 @@ import io.pig.lkong.http.data.resp.SignResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
 import io.pig.lkong.http.data.resp.TimelineResp
 import io.pig.lkong.http.data.resp.UserProfileResp
+import io.pig.lkong.http.data.resp.data.FansResp
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -69,4 +71,6 @@ interface LkongSpec {
     @POST(RestApiConst.GRAPHQL)
     suspend fun punch(@Body punchReq: PunchReq): RespBase<PunchResp>
 
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getFans(@Body fansReq: FansReq): RespBase<FansResp>
 }
