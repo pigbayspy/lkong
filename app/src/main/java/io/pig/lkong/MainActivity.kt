@@ -36,7 +36,9 @@ import io.pig.lkong.ui.main.MainViewModel
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.TextSizeUtil
 import io.pig.lkong.util.ThemeUtil
+import io.pig.ui.common.isNightMode
 import io.pig.ui.common.processToolbar
+import io.pig.ui.common.toggleNightMode
 import io.pig.ui.snakebar.SnakeBarType
 import io.pig.ui.snakebar.showSnakeBar
 import kotlinx.coroutines.launch
@@ -125,7 +127,12 @@ class MainActivity : AppCompatActivity(), Injectable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Todo
         return when (item.itemId) {
-            R.id.action_main_evening -> false
+            R.id.action_main_evening -> {
+                if (isNightMode()) {
+                    toggleNightMode()
+                }
+                true
+            }
             R.id.action_main_logout -> false
             R.id.action_punch -> {
                 lifecycleScope.launch {
@@ -137,7 +144,7 @@ class MainActivity : AppCompatActivity(), Injectable {
                         getString(R.string.format_punch_day_count, respBase.data.punch.punchday)
                     showSnakeBar(binding.root, punchResult, SnakeBarType.INFO)
                 }
-                false
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }

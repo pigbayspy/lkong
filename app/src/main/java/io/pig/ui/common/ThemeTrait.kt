@@ -5,6 +5,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.google.android.material.appbar.AppBarLayout
+import io.pig.lkong.preference.PrefConst
+import io.pig.lkong.preference.Prefs
 import io.pig.lkong.util.ThemeUtil
 
 /**
@@ -46,4 +48,28 @@ fun Fragment.getThemeKey(): String {
 
 fun Fragment.getPrimaryColor(): Int {
     return ThemeUtil.primaryColor(requireContext(), getThemeKey())
+}
+
+/**
+ * 检查是否是夜间模式
+ */
+fun Activity.isNightMode(): Boolean {
+    return Prefs.getBool(PrefConst.IS_NIGHT_MODE, PrefConst.IS_NIGHT_MODE_VALUE)
+}
+
+/**
+ * 检查是否是夜间模式
+ */
+fun Fragment.isNightMode(): Boolean {
+    if (isAdded) {
+        return requireActivity().isNightMode()
+    }
+    return false
+}
+
+fun Activity.toggleNightMode() {
+    val pref = Prefs.getBoolPrefs(PrefConst.IS_NIGHT_MODE, PrefConst.IS_NIGHT_MODE_VALUE)
+    pref.set(!pref.get())
+    ThemeUtil.markChanged(this, "light_theme", "dark_theme")
+    recreate()
 }

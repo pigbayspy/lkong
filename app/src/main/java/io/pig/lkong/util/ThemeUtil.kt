@@ -178,6 +178,12 @@ object ThemeUtil {
         ThemeConfig(context, key).commit()
     }
 
+    fun markChanged(context: Context, vararg keys:String) {
+        for (key in keys) {
+            ThemeConfig(context, key).commit()
+        }
+    }
+
     private fun resolveColor(context: Context, attr: Int): Int {
         return resolveColor(context, attr, 0)
     }
