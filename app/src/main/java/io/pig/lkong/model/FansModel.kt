@@ -8,7 +8,7 @@ import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 class FansModel : BaseCollectionItem {
 
     val userId: Long
-    val avatar: String
+    val avatar: String?
     val name: String
     val isFollow: Boolean
 

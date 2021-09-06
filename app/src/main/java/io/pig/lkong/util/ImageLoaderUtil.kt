@@ -41,8 +41,15 @@ object ImageLoaderUtil {
     }
 
     fun loadLkongAvatar(
-        context: Context, target: ImageView, uid: Long, avatar: String
+        context: Context, target: ImageView, uid: Long, avatar: String?
     ) {
+        if (avatar.isNullOrEmpty()) {
+            Glide.with(context)
+                .load(R.drawable.ic_placeholder_avatar)
+                .circleCrop()
+                .into(target)
+            return
+        }
         val avatarUrl = LkongUtil.generateAvatarUrl(uid, avatar)
         val glideHeader = LazyHeaders.Builder()
             .addHeader("Referer", "https://www.lkong.com/").build()

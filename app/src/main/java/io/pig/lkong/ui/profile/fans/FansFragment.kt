@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.pig.lkong.R
+import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.FansModel
 import io.pig.lkong.ui.adapter.FansAdapter
@@ -16,31 +17,21 @@ import io.pig.lkong.ui.adapter.FansAdapter
 
 class FansFragment : Fragment() {
 
-    private lateinit var fansViewModel: FansViewModel
-
     private val listAdapter by lazy { FansAdapter(requireContext()) }
 
     private lateinit var binding: LayoutSimpleRecycleBinding
+    private lateinit var fansViewModel: FansViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val userId = requireArguments().getLong(ARG_USER_ID)
-        val userName = requireArguments().getString(ARG_USER_NAME)
+        val userId = requireArguments().getLong(DataContract.BUNDLE_USER_ID)
+        val userName = requireArguments().getString(DataContract.BUNDLE_USER_NAME)
         val viewModelFactory = FansViewModelFactory(userId)
-
+        fansViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(FansViewModel::class.java)
         // set title
         val title = getString(R.string.format_followers_of, userName)
         requireActivity().title = title
-
-        fansViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory).get(FansViewModel::class.java)
-        fansViewModel.fans.observe(viewLifecycleOwner) {
-            refresh(it)
-        }
-        fansViewModel.loading.observe(viewLifecycleOwner) {
-            refreshLoading(it)
-        }
-        fansViewModel.getFans()
     }
 
     override fun onCreateView(
@@ -48,6 +39,15 @@ class FansFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = LayoutSimpleRecycleBinding.inflate(inflater, container, false)
+
+        fansViewModel.fans.observe(viewLifecycleOwner) {
+            refresh(it)
+        }
+        fansViewModel.loading.observe(viewLifecycleOwner) {
+            refreshLoading(it)
+        }
+        fansViewModel.getFans()
+
         val root = binding.root
         root.setOnRefreshListener {
             fansViewModel.clear()
@@ -69,14 +69,12 @@ class FansFragment : Fragment() {
     }
 
     companion object {
-        private const val ARG_USER_ID = "user_id"
-        private const val ARG_USER_NAME = "user_name"
 
         fun newInstance(userId: Long, username: String) =
             FansFragment().apply {
                 arguments = Bundle().apply {
-                    putLong(ARG_USER_ID, userId)
-                    putString(ARG_USER_NAME, username)
+                    putLong(DataContract.BUNDLE_USER_ID, userId)
+                    putString(DataContract.BUNDLE_USER_NAME, username)
                 }
             }
     }

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.FansModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.differ.FansDiffer
 import io.pig.lkong.ui.adapter.item.SearchUserViewHolder
 import io.pig.lkong.util.ImageLoaderUtil
@@ -26,5 +27,8 @@ class FansAdapter(
         val fans = getItem(position)
         viewHolder.nameText.text = fans.name
         ImageLoaderUtil.loadLkongAvatar(context, viewHolder.avatarImage, fans.userId, fans.avatar)
+        viewHolder.avatarImage.setOnClickListener {
+            AppNavigation.openUserProfileActivity(context, fans.userId)
+        }
     }
 }

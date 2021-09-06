@@ -13,6 +13,7 @@ object DataContract {
     const val BUNDLE_THREAD_CURRENT_PAGE = "bundle_thread_current_page"
 
     const val BUNDLE_USER_ID = "bundle_user_id"
+    const val BUNDLE_USER_NAME = "bundle_user_name"
 
     const val BUNDLE_FORUM_ID = "bundle_forum_id"
     const val BUNDLE_FORUM_NAME = "bundle_forum_name"

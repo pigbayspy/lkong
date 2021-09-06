@@ -33,20 +33,20 @@ object AppNavigation {
         )
     }
 
-    fun navigateToManageAccount(activity: Activity) {
+    fun navigateToManageAccount(context: Context) {
         val intent = Intent(Settings.ACTION_SYNC_SETTINGS)
         intent.putExtra(
             Settings.EXTRA_AUTHORITIES,
             arrayOf(SyncUtil.SYNC_AUTHORITY_CHECK_NOTICE)
         )
-        activity.startActivity(intent)
+        context.startActivity(intent)
     }
 
-    fun navigateToFaq(activity: Activity) {
-        openUrl(AppConst.FAQ_URL, activity)
+    fun navigateToFaq(context: Context) {
+        openUrl(AppConst.FAQ_URL, context)
     }
 
-    fun openActivityForUserProfile(context: Activity, uid: Long) {
+    fun openUserProfileActivity(context: Context, uid: Long) {
         val intent = Intent(context, UserProfileActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_USER_ID, uid)
         context.startActivity(intent)

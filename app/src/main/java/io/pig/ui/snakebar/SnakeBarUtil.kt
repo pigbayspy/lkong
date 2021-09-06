@@ -1,6 +1,5 @@
 package io.pig.ui.snakebar
 
-import android.content.Context
 import android.graphics.Color
 import android.text.SpannableString
 import android.text.Spanned

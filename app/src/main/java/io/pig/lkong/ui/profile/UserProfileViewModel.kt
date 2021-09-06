@@ -11,13 +11,13 @@ import kotlinx.coroutines.launch
  * @author yinhang
  * @since 2021/7/17
  */
-class UserProfileViewModel : ViewModel() {
+class UserProfileViewModel(val userId: Long) : ViewModel() {
 
     val user = MutableLiveData<UserModel>()
 
-    fun getUserProfile(uid: Long) {
+    fun getUserProfile() {
         viewModelScope.launch {
-            val respBase = LkongRepository.getUserProfile(uid)
+            val respBase = LkongRepository.getUserProfile(userId)
             if (respBase.data != null) {
                 val userProfile = respBase.data
                 val userModel = UserModel(userProfile)

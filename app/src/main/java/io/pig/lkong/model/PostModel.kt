@@ -15,7 +15,7 @@ class PostModel : BaseCollectionItem {
     val message: String?
     val authorName: String
     val authorId: Long
-    val authorAvatar: String
+    val authorAvatar: String?
     val pid: String
     val tid: Long
     val status: String
@@ -44,7 +44,7 @@ class PostModel : BaseCollectionItem {
         message = parcel.readString() ?: ""
         authorName = parcel.readString() ?: ""
         authorId = parcel.readLong()
-        authorAvatar = parcel.readString() ?: ""
+        authorAvatar = parcel.readString()
         pid = parcel.readString() ?: ""
         tid = parcel.readLong()
         status = parcel.readString() ?: ""

@@ -200,7 +200,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
     private fun refreshPosts(authorId: Long, post: List<PostModel>) {
         val listener = object : OnPostButtonClickListener {
             override fun onProfileImageClick(view: View, uid: Long) {
-                AppNavigation.openActivityForUserProfile(this@PostListActivity, uid)
+                AppNavigation.openUserProfileActivity(this@PostListActivity, uid)
             }
 
             override fun onEditClick(view: View, position: Int) {

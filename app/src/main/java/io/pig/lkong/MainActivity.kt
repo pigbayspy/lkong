@@ -192,7 +192,7 @@ class MainActivity : AppCompatActivity(), Injectable {
             userNameView.text = it.userName
             ImageLoaderUtil.loadLkongAvatar(this, userAvatarView, it.userId, it.userAvatar)
             userAvatarView.setOnClickListener { _ ->
-                AppNavigation.openActivityForUserProfile(this, it.userId)
+                AppNavigation.openUserProfileActivity(this, it.userId)
             }
         }
         addAccountProfile()

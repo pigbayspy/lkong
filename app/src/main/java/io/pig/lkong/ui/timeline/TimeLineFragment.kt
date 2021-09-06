@@ -28,7 +28,7 @@ class TimeLineFragment : Fragment() {
         }
 
         override fun onProfileAreaClick(view: View, uid: Long) {
-            AppNavigation.openActivityForUserProfile(requireActivity(), uid)
+            AppNavigation.openUserProfileActivity(requireActivity(), uid)
         }
     }
 

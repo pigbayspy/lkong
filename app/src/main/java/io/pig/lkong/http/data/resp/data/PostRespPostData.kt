@@ -13,7 +13,7 @@ data class PostRespPostData(
     val user: PostAuthor
 ) {
 
-    data class PostAuthor(val uid: Long, val name: String, val avatar: String)
+    data class PostAuthor(val uid: Long, val name: String, val avatar: String?)
 
     data class PostRate(
         val dateline: Long,

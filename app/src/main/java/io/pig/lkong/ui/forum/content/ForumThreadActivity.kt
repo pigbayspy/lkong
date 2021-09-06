@@ -39,7 +39,7 @@ class ForumThreadActivity : AppCompatActivity() {
         }
 
         override fun onProfileAreaClick(view: View, uid: Long) {
-            AppNavigation.openActivityForUserProfile(this@ForumThreadActivity, uid)
+            AppNavigation.openUserProfileActivity(this@ForumThreadActivity, uid)
         }
     }
 
