@@ -7,8 +7,6 @@ class HotThreadReq {
 
     val operationName = "ViewIndex"
 
-    val variables = emptyMap<Any, Any>()
-
     val query = """
     query ViewIndex {
         ...indexConfigComponent

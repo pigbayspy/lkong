@@ -5,8 +5,6 @@ package io.pig.lkong.http.data.req
  * @since 2021/8/15
  */
 class ForumThreadReq(fid: Long, page: Int = 1) {
-    val operationName = "threads"
-    val variables = mapOf<String, Any>("fid" to fid, "page" to page)
     val query = """
     query threads {
         ...indexThread

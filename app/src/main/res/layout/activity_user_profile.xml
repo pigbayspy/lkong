@@ -66,7 +66,7 @@
                     android:paddingBottom="16dp">
 
                     <TextView
-                        android:id="@+id/profile_text_follower_count"
+                        android:id="@+id/profile_text_fans_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -76,7 +76,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/profile_text_following_count"
+                        android:id="@+id/profile_text_followers_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

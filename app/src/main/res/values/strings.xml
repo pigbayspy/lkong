@@ -78,7 +78,8 @@
     <string name="text_profile_header_threads">主题</string>
     <string name="text_profile_header_posts">回复</string>
     <string name="text_profile_header_count_zero">0</string>
-    <string name="format_followers_of">%1$s 的粉丝</string>
+    <string name="format_fans_of">%1$s 的粉丝</string>
+    <string name="format_followers_of">%1$s 关注了</string>
 
     <!-- timeline -->
     <string name="format_timeline_thread">发表新主题 %1$s</string>

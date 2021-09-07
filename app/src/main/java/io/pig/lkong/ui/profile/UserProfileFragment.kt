@@ -14,6 +14,7 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityUserProfileBinding
 import io.pig.lkong.model.UserModel
 import io.pig.lkong.ui.profile.fans.FansFragment
+import io.pig.lkong.ui.profile.followers.FollowersFragment
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
 
@@ -58,9 +59,9 @@ class UserProfileFragment : Fragment() {
         )
         binding.profileTextUserName.text = user.name
         val statsTextSize = resources.getDimensionPixelSize(R.dimen.text_size_caption)
-        binding.profileTextFollowerCount.apply {
+        binding.profileTextFansCount.apply {
             text = getUserStatsText(
-                user.followers,
+                user.fans,
                 getString(R.string.text_profile_header_followers),
                 statsTextSize
             )
@@ -69,11 +70,17 @@ class UserProfileFragment : Fragment() {
                 activity.switchFragment(fragment)
             }
         }
-        binding.profileTextFollowingCount.text = getUserStatsText(
-            user.followings,
-            getString(R.string.text_profile_header_following),
-            statsTextSize
-        )
+        binding.profileTextFollowersCount.apply {
+            text = getUserStatsText(
+                user.followers,
+                getString(R.string.text_profile_header_following),
+                statsTextSize
+            )
+            setOnClickListener {
+                val fragment = FollowersFragment.newInstance(user.uid, user.name)
+                activity.switchFragment(fragment)
+            }
+        }
         binding.profileTextThreadCount.text = getUserStatsText(
             user.threads,
             getString(R.string.text_profile_header_threads),

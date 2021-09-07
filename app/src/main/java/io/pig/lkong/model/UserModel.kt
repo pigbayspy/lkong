@@ -13,8 +13,8 @@ class UserModel(userProfileResp: UserProfileResp) {
     val avatar: String
     val verify: String?
     val status: String?
-    val followings: Long
     val followers: Long
+    val fans: Long
     val posts: Long
     val threads: Long
     val money: Long
@@ -34,8 +34,8 @@ class UserModel(userProfileResp: UserProfileResp) {
         this.verify = userProfileResp.user.verify
         this.status = userProfileResp.user.status
         // other
-        this.followings = userProfileResp.userCount.followings
-        this.followers = userProfileResp.userCount.followers
+        this.followers = userProfileResp.userCount.followings
+        this.fans = userProfileResp.userCount.followers
         this.posts = userProfileResp.userCount.posts
         this.threads = userProfileResp.userCount.threads
         this.money = userProfileResp.userCount.money
