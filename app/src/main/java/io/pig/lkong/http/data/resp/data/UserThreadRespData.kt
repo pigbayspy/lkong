@@ -7,5 +7,6 @@ class UserThreadRespData(
     val replies: Int,
     val title: String,
     val status: String,
-    val lock: Boolean
+    val lock: Boolean,
+    val digest: List<String>?
 )

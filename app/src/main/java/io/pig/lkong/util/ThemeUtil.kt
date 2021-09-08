@@ -60,6 +60,21 @@ object ThemeUtil {
     }
 
     @ColorInt
+    fun accentColor(context: Context): Int {
+        val key = if (PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(DARK_THEME, false)
+        ) {
+            DARK_THEME
+        } else {
+            LIGHT_THEME
+        }
+        return pref(context, key).getInt(
+            KEY_ACCENT_COLOR,
+            resolveColor(context, R.attr.colorAccent, Color.parseColor("#263238"))
+        )
+    }
+
+    @ColorInt
     fun primaryColor(context: Context, key: String): Int {
         return pref(context, key).getInt(
             KEY_PRIMARY_COLOR,
@@ -178,7 +193,7 @@ object ThemeUtil {
         ThemeConfig(context, key).commit()
     }
 
-    fun markChanged(context: Context, vararg keys:String) {
+    fun markChanged(context: Context, vararg keys: String) {
         for (key in keys) {
             ThemeConfig(context, key).commit()
         }

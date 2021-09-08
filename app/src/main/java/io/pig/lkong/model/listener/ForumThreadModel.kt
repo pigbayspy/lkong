@@ -17,6 +17,7 @@ class ForumThreadModel : BaseCollectionItem {
     val authorName: String
     val authorAvatar: String
     val title: String
+    val digest: Boolean
     val replies: Int
     val dateline: Long
 
@@ -27,6 +28,7 @@ class ForumThreadModel : BaseCollectionItem {
         this.authorName = item.author.name
         this.authorAvatar = item.author.avatar
         this.title = item.title
+        this.digest = item.digest != null
         this.replies = item.replies
         this.dateline = item.dateline
     }
@@ -38,6 +40,7 @@ class ForumThreadModel : BaseCollectionItem {
         this.authorName = parcel.readString() ?: ""
         this.authorAvatar = parcel.readString() ?: ""
         this.title = parcel.readString() ?: ""
+        this.digest = parcel.readByte() == 0.toByte()
         this.replies = parcel.readInt()
         this.dateline = parcel.readLong()
     }
@@ -49,6 +52,7 @@ class ForumThreadModel : BaseCollectionItem {
         dest.writeString(authorName)
         dest.writeString(authorAvatar)
         dest.writeString(title)
+        dest.writeByte(if (this.digest) 0 else 1)
         dest.writeInt(replies)
         dest.writeLong(dateline)
     }

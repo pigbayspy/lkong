@@ -13,6 +13,7 @@ class UserThreadReq(userId: Long, page: Int) {
             title
             status
             lock
+            digest
         }
     }
     """

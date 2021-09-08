@@ -12,6 +12,7 @@ class ForumThreadRespData(
     val lock: Boolean,
     val replies: Int,
     val views: Int,
+    val digest: List<String>?,
     val dateline: Long,
     val lastpost: Long,
     val highlight: Int,
