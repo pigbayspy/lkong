@@ -13,6 +13,7 @@ import io.pig.lkong.http.data.req.SignReq
 import io.pig.lkong.http.data.req.ThreadPostReq
 import io.pig.lkong.http.data.req.TimelineReq
 import io.pig.lkong.http.data.req.UserProfileReq
+import io.pig.lkong.http.data.req.UserThreadReq
 import io.pig.lkong.http.data.resp.CollectionResp
 import io.pig.lkong.http.data.resp.FavoriteResp
 import io.pig.lkong.http.data.resp.ForumResp
@@ -25,6 +26,7 @@ import io.pig.lkong.http.data.resp.SignInResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
 import io.pig.lkong.http.data.resp.TimelineResp
 import io.pig.lkong.http.data.resp.UserProfileResp
+import io.pig.lkong.http.data.resp.UserThreadsResp
 import io.pig.lkong.http.data.resp.data.FansResp
 import io.pig.lkong.http.data.resp.data.FollowersResp
 import io.pig.lkong.http.provider.LkongServiceProvider
@@ -112,9 +114,14 @@ object LkongRepository {
         return lkongSpec.getFans(req)
     }
 
-    suspend fun getFollowers(uid: Long, page: Int):RespBase<FollowersResp> {
+    suspend fun getFollowers(uid: Long, page: Int): RespBase<FollowersResp> {
         val req = FollowersReq(uid, page)
         return lkongSpec.getFollowers(req)
+    }
+
+    suspend fun getUserThreads(userId: Long, page: Int): RespBase<UserThreadsResp> {
+        val req = UserThreadReq(userId, page)
+        return lkongSpec.getUserThreads(req)
     }
 
     private fun getCookie(key: String): String {

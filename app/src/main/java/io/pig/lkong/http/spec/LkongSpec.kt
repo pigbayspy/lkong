@@ -14,6 +14,7 @@ import io.pig.lkong.http.data.req.SignReq
 import io.pig.lkong.http.data.req.ThreadPostReq
 import io.pig.lkong.http.data.req.TimelineReq
 import io.pig.lkong.http.data.req.UserProfileReq
+import io.pig.lkong.http.data.req.UserThreadReq
 import io.pig.lkong.http.data.resp.CollectionResp
 import io.pig.lkong.http.data.resp.FavoriteResp
 import io.pig.lkong.http.data.resp.ForumResp
@@ -26,6 +27,7 @@ import io.pig.lkong.http.data.resp.SignResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
 import io.pig.lkong.http.data.resp.TimelineResp
 import io.pig.lkong.http.data.resp.UserProfileResp
+import io.pig.lkong.http.data.resp.UserThreadsResp
 import io.pig.lkong.http.data.resp.data.FansResp
 import io.pig.lkong.http.data.resp.data.FollowersResp
 import retrofit2.Response
@@ -78,4 +80,7 @@ interface LkongSpec {
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getFollowers(@Body followersReq: FollowersReq): RespBase<FollowersResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getUserThreads(@Body userThreadReq: UserThreadReq): RespBase<UserThreadsResp>
 }
