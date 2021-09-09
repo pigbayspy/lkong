@@ -41,6 +41,7 @@ class ThreadPostReq(tid:Long, page:Int) {
                 user {
                     name
                     uid
+                    avatar
                 }
             }
             quote {
@@ -49,6 +50,7 @@ class ThreadPostReq(tid:Long, page:Int) {
                 author {
                     name
                     uid
+                    avatar
                 }
             }
             content

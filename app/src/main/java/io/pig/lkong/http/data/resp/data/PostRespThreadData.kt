@@ -1,6 +1,8 @@
 package io.pig.lkong.http.data.resp.data
 
-data class PostRespThreadData(
+import io.pig.lkong.http.data.resp.data.common.AuthorData
+
+class PostRespThreadData(
     val title: String,
     val tid: Long,
     val forum: ForumData,
@@ -12,9 +14,7 @@ data class PostRespThreadData(
     val digest: Boolean?,
     val dateline: Long,
     val lastpost: Long,
-    val author: ThreadAuthorData
+    val author: AuthorData
 ) {
-    data class ThreadAuthorData(val uid: Long, val name: String, val avatar: String)
-
-    data class ForumData(val fid: Long, val name: String)
+    class ForumData(val fid: Long, val name: String)
 }

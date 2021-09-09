@@ -1,5 +1,6 @@
 package io.pig.lkong.http.source
 
+import io.pig.lkong.http.data.req.AtMeReq
 import io.pig.lkong.http.data.req.CollectionReq
 import io.pig.lkong.http.data.req.FansReq
 import io.pig.lkong.http.data.req.FavoriteReq
@@ -14,6 +15,7 @@ import io.pig.lkong.http.data.req.ThreadPostReq
 import io.pig.lkong.http.data.req.TimelineReq
 import io.pig.lkong.http.data.req.UserProfileReq
 import io.pig.lkong.http.data.req.UserThreadReq
+import io.pig.lkong.http.data.resp.AtMeResp
 import io.pig.lkong.http.data.resp.CollectionResp
 import io.pig.lkong.http.data.resp.FavoriteResp
 import io.pig.lkong.http.data.resp.ForumResp
@@ -122,6 +124,11 @@ object LkongRepository {
     suspend fun getUserThreads(userId: Long, page: Int): RespBase<UserThreadsResp> {
         val req = UserThreadReq(userId, page)
         return lkongSpec.getUserThreads(req)
+    }
+
+    suspend fun getAtMe(time: Long): RespBase<AtMeResp> {
+        val req = AtMeReq(time)
+        return lkongSpec.getAtMe(req)
     }
 
     private fun getCookie(key: String): String {

@@ -1,6 +1,7 @@
 package io.pig.lkong.http.spec
 
 import io.pig.lkong.http.const.RestApiConst
+import io.pig.lkong.http.data.req.AtMeReq
 import io.pig.lkong.http.data.req.CollectionReq
 import io.pig.lkong.http.data.req.FansReq
 import io.pig.lkong.http.data.req.FavoriteReq
@@ -15,6 +16,7 @@ import io.pig.lkong.http.data.req.ThreadPostReq
 import io.pig.lkong.http.data.req.TimelineReq
 import io.pig.lkong.http.data.req.UserProfileReq
 import io.pig.lkong.http.data.req.UserThreadReq
+import io.pig.lkong.http.data.resp.AtMeResp
 import io.pig.lkong.http.data.resp.CollectionResp
 import io.pig.lkong.http.data.resp.FavoriteResp
 import io.pig.lkong.http.data.resp.ForumResp
@@ -83,4 +85,7 @@ interface LkongSpec {
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getUserThreads(@Body userThreadReq: UserThreadReq): RespBase<UserThreadsResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getAtMe(@Body atMeReq: AtMeReq): RespBase<AtMeResp>
 }
