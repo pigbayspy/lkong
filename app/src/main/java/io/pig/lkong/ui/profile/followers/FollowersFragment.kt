@@ -13,7 +13,6 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.FansModel
 import io.pig.lkong.ui.adapter.FansAdapter
-import io.pig.lkong.ui.profile.fans.FansFragment
 
 class FollowersFragment : Fragment() {
 

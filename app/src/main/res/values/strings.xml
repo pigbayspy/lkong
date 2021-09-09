@@ -245,4 +245,10 @@
     <!-- main -->
     <string name="format_punch_day_count">已签到 %1$d 天</string>
 
+    <!-- notice -->
+    <string name="drawer_item_mentions">提及我的</string>
+    <string name="drawer_item_notice">通知</string>
+    <string name="drawer_item_notice_rate">评分</string>
+    <string name="drawer_item_private_messages">私信</string>
+
 </resources>

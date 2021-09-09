@@ -133,6 +133,10 @@ class MainActivity : AppCompatActivity(), Injectable {
                 }
                 true
             }
+            R.id.action_main_notify -> {
+                AppNavigation.openNotifyActivity(this)
+                true
+            }
             R.id.action_main_logout -> false
             R.id.action_punch -> {
                 lifecycleScope.launch {

@@ -110,8 +110,12 @@ class HomeFragment : Fragment() {
         for (i in 0..tabs.tabCount) {
             val tab = tabs.getTabAt(i)
             tab?.apply {
-                setIcon(fragmentAdapter.getIcon(i))
-                text = ""
+                val icon = fragmentAdapter.getIcon(i)
+                if (icon != null) {
+                    setIcon(icon)
+                } else {
+                    text = fragmentAdapter.getPageTitle(i)
+                }
             }
         }
         pages.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

@@ -14,6 +14,7 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.model.ForumModel
 import io.pig.lkong.sync.SyncUtil
 import io.pig.lkong.ui.forum.content.ForumThreadActivity
+import io.pig.lkong.ui.notify.NotifyActivity
 import io.pig.lkong.ui.post.list.PostListActivity
 import io.pig.lkong.ui.profile.UserProfileActivity
 
@@ -74,6 +75,11 @@ object AppNavigation {
         val intent = Intent(context, null)
         intent.putExtra(DataContract.BUNDLE_FORUM_ID, forumId)
         intent.putExtra(DataContract.BUNDLE_FORUM_NAME, forumName)
+        context.startActivity(intent)
+    }
+
+    fun openNotifyActivity(context: Context) {
+        val intent = Intent(context, NotifyActivity::class.java)
         context.startActivity(intent)
     }
 
