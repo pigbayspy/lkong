@@ -1,14 +1,9 @@
 package io.pig.lkong.http.data.req
 
-class ThreadPostReq(tid:Long, page:Int) {
-    val operationName = "ViewThread"
-    val variables = mapOf<String, Any>("tid" to tid, "page" to page)
+class ThreadPostReq(tid: Long, page: Int) {
     val query = """
-    query ViewThread(${'$'}tid: Int!, ${'$'}page:Int!) {
-        ...indexThreadComponent
-    }
-    fragment indexThreadComponent on Query {
-        thread(tid: ${'$'}tid) {
+    query {
+        thread(tid: $tid) {
             title
             tid
             forum {
@@ -29,7 +24,7 @@ class ThreadPostReq(tid:Long, page:Int) {
                 avatar
             }
         }
-        posts(tid:${'$'}tid, page:${'$'}page) {
+        posts(tid:$tid, page:$page) {
             lou
             pid
             tid

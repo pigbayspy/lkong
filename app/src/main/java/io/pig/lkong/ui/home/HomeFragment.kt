@@ -111,10 +111,11 @@ class HomeFragment : Fragment() {
             val tab = tabs.getTabAt(i)
             tab?.apply {
                 val icon = fragmentAdapter.getIcon(i)
-                if (icon != null) {
+                text = if (icon != null) {
                     setIcon(icon)
+                    ""
                 } else {
-                    text = fragmentAdapter.getPageTitle(i)
+                    fragmentAdapter.getPageTitle(i)
                 }
             }
         }

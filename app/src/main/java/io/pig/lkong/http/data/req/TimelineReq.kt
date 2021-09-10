@@ -2,17 +2,12 @@ package io.pig.lkong.http.data.req
 
 /**
  * @author yinhang
- * @since 2021/7/21
+ * @since 2021/09/10
  */
 class TimelineReq(nextTime: Long) {
-
-    val operationName = "ViewNextFeeds"
-
-    val variables = mapOf<String, Any>("nextTime" to nextTime, "onlyThread" to false)
-
     val query = """
-        query ViewNextFeeds(${'$'}onlyThread: Boolean!, ${'$'}nextTime: Date) {
-            feeds(onlyThread: ${'$'}onlyThread, nextTime: ${'$'}nextTime) {
+        query {
+            feeds(onlyThread: false, nextTime: $nextTime) {
                 data {
                     ...MixPostComponent
                 }

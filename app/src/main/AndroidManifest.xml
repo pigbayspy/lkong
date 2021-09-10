@@ -33,6 +33,9 @@
             android:name=".ui.profile.UserProfileActivity"
             android:theme="@style/Theme.Lkong.NoActionBar" />
         <activity
+            android:name=".ui.notify.NotifyActivity"
+            android:theme="@style/Theme.Lkong.NoActionBar" />
+        <activity
             android:name=".ui.activity.SignInActivity"
             android:label="@string/title_activity_sign_in"
             android:launchMode="singleTask"

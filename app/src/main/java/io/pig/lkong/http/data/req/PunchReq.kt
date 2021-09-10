@@ -1,11 +1,11 @@
 package io.pig.lkong.http.data.req
 
+/**
+ * @author yinhang
+ * @since 2021/09/10
+ */
 class PunchReq {
-
-    private val variables = emptyMap<String, Any>()
-
-    private val query =
-    """
+    val query = """
     mutation {
         punch {
             uid

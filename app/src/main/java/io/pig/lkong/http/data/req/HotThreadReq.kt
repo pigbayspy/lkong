@@ -1,12 +1,10 @@
 package io.pig.lkong.http.data.req
 
 /**
- *
+ * @author yinhang
+ * @since 2021/09/10
  */
 class HotThreadReq {
-
-    val operationName = "ViewIndex"
-
     val query = """
     query ViewIndex {
         ...indexConfigComponent

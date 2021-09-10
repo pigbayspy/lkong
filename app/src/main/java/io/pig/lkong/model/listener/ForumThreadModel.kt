@@ -15,7 +15,7 @@ class ForumThreadModel : BaseCollectionItem {
     val fid: Long
     val authorId: Long
     val authorName: String
-    val authorAvatar: String
+    val authorAvatar: String?
     val title: String
     val digest: Boolean
     val replies: Int
@@ -38,7 +38,7 @@ class ForumThreadModel : BaseCollectionItem {
         this.fid = parcel.readLong()
         this.authorId = parcel.readLong()
         this.authorName = parcel.readString() ?: ""
-        this.authorAvatar = parcel.readString() ?: ""
+        this.authorAvatar = parcel.readString()
         this.title = parcel.readString() ?: ""
         this.digest = parcel.readByte() == 0.toByte()
         this.replies = parcel.readInt()

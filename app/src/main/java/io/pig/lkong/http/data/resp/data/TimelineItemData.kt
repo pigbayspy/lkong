@@ -14,5 +14,5 @@ class TimelineItemData(
     val content: String,
     val pid: String,
     val quote: QuoteData?,
-    val thread: ThreadData?
+    val thread: ThreadData
 )

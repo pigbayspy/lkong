@@ -16,7 +16,7 @@ class FavoriteViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val result = LkongRepository.getFavorites(uid)
-                val threads = result.data?.comments ?: emptyList()
+                val threads = result.data?.userFavoriteList ?: emptyList()
                 val threadModels = threads.map {
                     FavoriteThreadModel(it)
                 }
