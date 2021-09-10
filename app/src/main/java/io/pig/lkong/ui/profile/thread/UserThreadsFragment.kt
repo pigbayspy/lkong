@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.UserThreadModel
 import io.pig.lkong.ui.adapter.UserThreadAdapter
+import io.pig.lkong.ui.timeline.TimeLineFragment
 
 class UserThreadsFragment : Fragment() {
 
@@ -53,16 +55,31 @@ class UserThreadsFragment : Fragment() {
         threadsViewModel.loading.observe(viewLifecycleOwner) {
             refreshLoading(it)
         }
+        threadsViewModel.page.observe(viewLifecycleOwner) {
+            threadsViewModel.getThreads()
+        }
         threadsViewModel.getThreads()
 
         val root = binding.root
         root.setOnRefreshListener {
             threadsViewModel.clear()
         }
+        val layoutMgr = LinearLayoutManager(context)
         binding.simpleContentList.apply {
             adapter = listAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = layoutMgr
             itemAnimator = DefaultItemAnimator()
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val lastPos = layoutMgr.findLastCompletelyVisibleItemPosition()
+                    if (dy > 0 && layoutMgr.itemCount - lastPos <=  TO_LAST_LEFT) {
+                        // load more
+                        threadsViewModel.goToNextPage()
+                    }
+                }
+            })
         }
         return root
     }
@@ -76,6 +93,8 @@ class UserThreadsFragment : Fragment() {
     }
 
     companion object {
+
+        private const val TO_LAST_LEFT = 5
 
         fun newInstance(userId: Long, username: String, userAvatar: String): UserThreadsFragment {
             val fragment = UserThreadsFragment()

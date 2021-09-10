@@ -66,13 +66,11 @@ class PostListActivity : AppCompatActivity(), Injectable {
     @Inject
     lateinit var lkongDataBase: LkongDatabase
 
-    private var threadId = -1L
     private var targetPostId = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        postListViewModel = ViewModelProvider(this).get(PostListViewModel::class.java)
         binding = ActivityPostListBinding.inflate(layoutInflater)
         headerBinding = LayoutPostIntroHeaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -81,14 +79,14 @@ class PostListActivity : AppCompatActivity(), Injectable {
         injectThis()
 
         // 设置参数
-        if (intent.hasExtra(DataContract.BUNDLE_THREAD_ID)) {
-            threadId = intent.getLongExtra(DataContract.BUNDLE_THREAD_ID, threadId)
-        } else if (intent.hasExtra(DataContract.BUNDLE_POST_ID)) {
-            targetPostId = intent.getLongExtra(DataContract.BUNDLE_POST_ID, targetPostId)
-        }
-        if (threadId == -1L && targetPostId == -1L) {
+        val thread = intent.getLongExtra(DataContract.BUNDLE_THREAD_ID, -1)
+        val targetPostId = intent.getLongExtra(DataContract.BUNDLE_POST_ID, -1)
+        if (thread == -1L && targetPostId == -1L) {
             throw IllegalStateException("PostListActivity missing extra in intent.")
         }
+        val viewModelFactory = PostListViewModelFactory(thread)
+        postListViewModel =
+            ViewModelProvider(this, viewModelFactory).get(PostListViewModel::class.java)
         initRecycleView()
         initPageController()
     }
@@ -121,7 +119,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
     private fun initRecycleView() {
         val source = MediatorLiveData<Any>()
         source.addSource(postListViewModel.page) {
-            postListViewModel.getPost(threadId)
+            postListViewModel.getPost()
         }
         source.addSource(postListViewModel.detail) {
             refreshPosts(it.thread.author.uid, it.posts)

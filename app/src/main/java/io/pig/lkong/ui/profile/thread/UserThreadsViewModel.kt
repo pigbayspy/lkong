@@ -16,6 +16,13 @@ class UserThreadsViewModel(val userId: Long) : ViewModel() {
 
     private var isLoadMore = false
 
+    fun goToNextPage() {
+        if (isLoadMore) {
+            return
+        }
+        this.page.value = 1 + (this.page.value ?: 0)
+    }
+
     fun getThreads() {
         if (isLoadMore) {
             return

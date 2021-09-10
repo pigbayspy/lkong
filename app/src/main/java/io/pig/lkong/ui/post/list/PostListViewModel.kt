@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
  * @author yinhang
  * @since 2021/6/27
  */
-class PostListViewModel : ViewModel() {
+class PostListViewModel(private val thread: Long) : ViewModel() {
 
     companion object {
         private const val TAG = "PostListViewModel"
@@ -29,7 +29,7 @@ class PostListViewModel : ViewModel() {
         this.page.value = p
     }
 
-    fun getPost(thread: Long) {
+    fun getPost() {
         viewModelScope.launch {
             try {
                 val result = LkongRepository.getThreadPost(thread, getPage())
@@ -92,5 +92,4 @@ class PostListViewModel : ViewModel() {
             this.page.value = this.getPage() - 1
         }
     }
-
 }
