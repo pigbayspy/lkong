@@ -33,7 +33,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         initConfig()
         val root: View = binding.root

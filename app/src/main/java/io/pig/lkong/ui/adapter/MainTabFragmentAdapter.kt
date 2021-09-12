@@ -2,7 +2,7 @@ package io.pig.lkong.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentPagerAdapter
 import io.pig.lkong.ui.adapter.item.FragmentItem
 
 /**
@@ -12,7 +12,7 @@ import io.pig.lkong.ui.adapter.item.FragmentItem
 class MainTabFragmentAdapter(
     fragmentManager: FragmentManager,
     private val fragmentList: List<FragmentItem>
-) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         return fragmentList[position].fragment
