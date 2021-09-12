@@ -107,6 +107,9 @@ class TimelineAdapter(
             context, holder.authorAvatar, item.authorId,
             item.authorAvatar, avatarSize
         )
+        holder.itemView.setOnClickListener {
+            listener.onItemTimelineClick(it, item)
+        }
         holder.authorAvatar.setOnClickListener {
             listener.onProfileAreaClick(it, item.authorId)
         }
@@ -149,6 +152,9 @@ class TimelineAdapter(
             item.authorAvatar,
             avatarSize
         )
+        holder.itemView.setOnClickListener {
+            listener.onItemTimelineClick(it, item)
+        }
         holder.authorAvatar.setOnClickListener {
             listener.onProfileAreaClick(it, item.authorId)
         }
@@ -197,6 +203,9 @@ class TimelineAdapter(
             item.authorAvatar,
             avatarSize
         )
+        holder.itemView.setOnClickListener {
+            listener.onItemTimelineClick(it, item)
+        }
         holder.authorAvatar.setOnClickListener {
             listener.onProfileAreaClick(it, item.authorId)
         }

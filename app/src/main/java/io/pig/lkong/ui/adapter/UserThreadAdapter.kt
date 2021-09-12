@@ -22,8 +22,7 @@ class UserThreadAdapter(
     private val userId: Long,
     private val username: String,
     private val userAvatar: String
-) :
-    MutableViewAdapter<UserThreadModel>(UserThreadDiffer) {
+) : MutableViewAdapter<UserThreadModel>(UserThreadDiffer) {
 
     private val todayPrefix: String = context.getString(R.string.text_datetime_today)
     private val avatarSize = UiUtil.getDefaultAvatarSize(context)

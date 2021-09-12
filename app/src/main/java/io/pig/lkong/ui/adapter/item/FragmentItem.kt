@@ -9,5 +9,5 @@ import androidx.fragment.app.Fragment
 class FragmentItem(
     val fragment: Fragment,
     val title: String,
-    val icon: Int?
+    val icon: Int
 )

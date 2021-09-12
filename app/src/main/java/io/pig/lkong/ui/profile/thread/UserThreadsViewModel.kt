@@ -53,6 +53,7 @@ class UserThreadsViewModel(val userId: Long) : ViewModel() {
 
     fun clear() {
         this.threads.value = emptyList()
+        this.page.value = 1
         getThreads()
     }
 

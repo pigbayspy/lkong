@@ -26,7 +26,7 @@ class MainTabFragmentAdapter(
         return fragmentList[position].title
     }
 
-    fun getIcon(position: Int): Int? {
+    fun getIcon(position: Int): Int {
         return fragmentList[position].icon
     }
 }

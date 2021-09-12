@@ -2,6 +2,7 @@ package io.pig.lkong.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import io.pig.lkong.http.data.resp.data.AtMeRespData
 import io.pig.lkong.http.data.resp.data.TimelineItemData
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 import io.pig.lkong.util.SlateUtil
@@ -16,7 +17,7 @@ class TimelineModel : BaseCollectionItem {
     val authorId: Long
     val authorName: String
     val authorAvatar: String?
-    val dateline: Date
+    val dateline: Long
     val pid: String
     val content: String
     val threadId: Long
@@ -28,12 +29,7 @@ class TimelineModel : BaseCollectionItem {
         this.authorId = parcel.readLong()
         this.authorName = parcel.readString() ?: ""
         this.authorAvatar = parcel.readString() ?: ""
-        val tmpDateline: Long = parcel.readLong()
-        this.dateline = if (tmpDateline == -1L) {
-            Date()
-        } else {
-            Date(tmpDateline)
-        }
+        this.dateline = parcel.readLong()
         this.pid = parcel.readString() ?: ""
         this.content = parcel.readString() ?: ""
         this.threadId = parcel.readLong()
@@ -46,7 +42,7 @@ class TimelineModel : BaseCollectionItem {
         this.authorId = timeline.author.uid
         this.authorName = timeline.author.name
         this.authorAvatar = timeline.author.avatar
-        this.dateline = Date(timeline.dateline)
+        this.dateline = timeline.dateline
         this.pid = timeline.pid
         this.content = SlateUtil.slateToCleanText(timeline.content)
         this.threadId = timeline.thread.tid
@@ -89,7 +85,7 @@ class TimelineModel : BaseCollectionItem {
         dest.writeLong(authorId)
         dest.writeString(authorName)
         dest.writeString(authorAvatar)
-        dest.writeLong(dateline.time)
+        dest.writeLong(dateline)
         dest.writeString(pid)
         dest.writeString(content)
         dest.writeLong(threadId)

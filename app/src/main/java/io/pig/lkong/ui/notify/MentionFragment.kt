@@ -1,4 +1,4 @@
-package io.pig.lkong.ui.timeline
+package io.pig.lkong.ui.notify
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,19 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.pig.lkong.databinding.FragmentTimeLineBinding
+import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.TimelineModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.TimelineAdapter
 import io.pig.lkong.ui.adapter.listener.OnTimelineClickListener
 import io.pig.ui.common.getThemeKey
 
-/**
- * 时间线
- */
-class TimeLineFragment : Fragment() {
-    private lateinit var timelineViewModel: TimelineViewModel
-    private lateinit var binding: FragmentTimeLineBinding
+class MentionFragment : Fragment() {
+
+    private lateinit var mentionViewModel: MentionViewModel
+    private lateinit var binding: LayoutSimpleRecycleBinding
 
     private val listener = object : OnTimelineClickListener {
         override fun onItemTimelineClick(view: View, timeline: TimelineModel) {
@@ -34,27 +32,33 @@ class TimeLineFragment : Fragment() {
 
     private val listAdapter by lazy { TimelineAdapter(requireContext(), listener, getThemeKey()) }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        mentionViewModel = ViewModelProvider(this).get(MentionViewModel::class.java)
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        timelineViewModel = ViewModelProvider(this).get(TimelineViewModel::class.java)
-        binding = FragmentTimeLineBinding.inflate(inflater, container, false)
+        binding = LayoutSimpleRecycleBinding.inflate(inflater, container, false)
         val root = binding.root
-        timelineViewModel.apply {
-            timelines.observe(viewLifecycleOwner) {
+        mentionViewModel.apply {
+            mentions.observe(viewLifecycleOwner) {
                 refreshTimeline(it)
             }
             loading.observe(viewLifecycleOwner) {
                 refreshLoading(it)
             }
         }
-        timelineViewModel.getTimeline()
+        mentionViewModel.getMentions()
         root.setOnRefreshListener {
-            timelineViewModel.refresh()
+            mentionViewModel.refresh()
         }
         val layoutMgr = LinearLayoutManager(requireContext())
-        binding.recycleListTimeline.apply {
+        binding.simpleContentList.apply {
             layoutManager = layoutMgr
             adapter = listAdapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -64,12 +68,11 @@ class TimeLineFragment : Fragment() {
                     val lastPos = layoutMgr.findLastCompletelyVisibleItemPosition()
                     if (dy > 0 && layoutMgr.itemCount - lastPos <= TO_LAST_LEFT) {
                         // load more
-                        timelineViewModel.getTimeline()
+                        mentionViewModel.getMentions()
                     }
                 }
             })
         }
-
         return root
     }
 
@@ -82,9 +85,10 @@ class TimeLineFragment : Fragment() {
     }
 
     companion object {
-
         private const val TO_LAST_LEFT = 5
 
-        fun newInstance() = TimeLineFragment()
+        fun newInstance(): MentionFragment {
+            return MentionFragment()
+        }
     }
 }

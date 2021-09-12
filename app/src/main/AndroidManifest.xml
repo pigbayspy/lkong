@@ -33,7 +33,7 @@
             android:theme="@style/Theme.Lkong.NoActionBar" />
         <activity
             android:name=".ui.notify.NotifyActivity"
-            android:theme="@style/Theme.Lkong.NoActionBar" />
+            android:theme="@style/AppTheme.Translucent" />
         <activity
             android:name=".ui.activity.SignInActivity"
             android:label="@string/title_activity_sign_in"

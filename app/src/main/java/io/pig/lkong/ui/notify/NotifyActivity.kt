@@ -8,6 +8,7 @@ import io.pig.lkong.R
 import io.pig.lkong.databinding.ActivityNotifyBinding
 import io.pig.lkong.ui.adapter.MainTabFragmentAdapter
 import io.pig.lkong.ui.adapter.item.FragmentItem
+import io.pig.ui.common.getPrimaryColor
 
 class NotifyActivity : AppCompatActivity() {
 
@@ -19,19 +20,26 @@ class NotifyActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initTabs()
+        initToolbar()
     }
 
     private fun initTabs() {
         val tabs = binding.fragmentNotifyTab
+        tabs.setBackgroundColor(getPrimaryColor())
         val pages = binding.fragmentNotifyPager
         // 设置缓存
-        pages.offscreenPageLimit = 2
         tabs.setupWithViewPager(pages)
         // 初始化 fragment
         val noticeFragment = NoticeFragment.newInstance()
-        val noticeItem = FragmentItem(noticeFragment, getString(R.string.drawer_item_mentions), null)
-        val fragments = listOf(noticeItem)
+        val noticeItem =
+            FragmentItem(noticeFragment, getString(R.string.drawer_item_notice), -1)
+        val mentionFragment = MentionFragment.newInstance()
+        val mentionItem =
+            FragmentItem(mentionFragment, getString(R.string.drawer_item_mentions), -1)
+        val fragments = listOf(noticeItem, mentionItem)
+        pages.offscreenPageLimit = fragments.size - 1
 
+        // FixMe 修复 fragment 不显示的问题
         val fragmentAdapter = MainTabFragmentAdapter(supportFragmentManager, fragments)
         pages.adapter = fragmentAdapter
         for (i in 0..tabs.tabCount) {
@@ -55,6 +63,11 @@ class NotifyActivity : AppCompatActivity() {
             ) {
             }
         })
+    }
+
+    private fun initToolbar() {
+        binding.notifyToolbar.setBackgroundColor(getPrimaryColor())
+        setSupportActionBar(binding.notifyToolbar)
     }
 
     private fun setDrawerTitle(title: String) {
