@@ -18,6 +18,7 @@ import io.pig.lkong.ui.adapter.item.FragmentItem
 import io.pig.lkong.ui.forum.ForumsFragment
 import io.pig.lkong.ui.thread.hot.HotThreadFragment
 import io.pig.lkong.ui.timeline.TimeLineFragment
+import io.pig.ui.common.getPrimaryColor
 
 class HomeFragment : Fragment() {
 
@@ -62,9 +63,7 @@ class HomeFragment : Fragment() {
         // 初始化 tab
         tabs = inflater.inflate(R.layout.layout_tab, container, false) as TabLayout
         pages = binding.fragmentContentMainPager
-        // 设置缓存
-        pages.offscreenPageLimit = 2
-        tabs.setupWithViewPager(pages)
+        tabs.setBackgroundColor(getPrimaryColor())
         setupViewPager()
     }
 
@@ -78,8 +77,7 @@ class HomeFragment : Fragment() {
         activity.removeAppBarView(tabs)
     }
 
-    private fun setupViewPager() {
-        val activity = requireActivity() as MainActivity
+    private fun getFragments(): List<FragmentItem> {
         val forumsFragment = ForumsFragment.newInstance()
         val timelineFragment = TimeLineFragment.newInstance()
         val hotThreadFragment = HotThreadFragment.newInstance()
@@ -98,13 +96,16 @@ class HomeFragment : Fragment() {
             getString(R.string.tab_item_hot_thread),
             R.drawable.ic_tab_whatshot
         )
-        val fragments = if (forumsFirst.get()) {
+        return if (forumsFirst.get()) {
             listOf(forumsItem, timeLineItem)
         } else {
             listOf(timeLineItem, forumsItem)
         } + hotThreadItem
+    }
 
-        val fragmentAdapter = MainTabFragmentAdapter(childFragmentManager, fragments)
+    private fun setupViewPager() {
+        val activity = requireActivity() as MainActivity
+        val fragmentAdapter = MainTabFragmentAdapter(childFragmentManager, getFragments())
         pages.adapter = fragmentAdapter
         for (i in 0..tabs.tabCount) {
             val tab = tabs.getTabAt(i)
@@ -114,6 +115,9 @@ class HomeFragment : Fragment() {
                 text = ""
             }
         }
+        // 设置缓存
+        pages.offscreenPageLimit = fragmentAdapter.count - 1
+        tabs.setupWithViewPager(pages)
         pages.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {}

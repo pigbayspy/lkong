@@ -1,7 +1,6 @@
 package io.pig.lkong.ui.notify
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import io.pig.lkong.R
@@ -14,8 +13,8 @@ class NotifyActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNotifyBinding
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding = ActivityNotifyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -38,8 +37,6 @@ class NotifyActivity : AppCompatActivity() {
             FragmentItem(mentionFragment, getString(R.string.drawer_item_mentions), -1)
         val fragments = listOf(noticeItem, mentionItem)
         pages.offscreenPageLimit = fragments.size - 1
-
-        // FixMe 修复 fragment 不显示的问题
         val fragmentAdapter = MainTabFragmentAdapter(supportFragmentManager, fragments)
         pages.adapter = fragmentAdapter
         for (i in 0..tabs.tabCount) {
