@@ -11,6 +11,7 @@ import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.req.NoticeReq
 import io.pig.lkong.http.data.req.PunchReq
 import io.pig.lkong.http.data.req.SignReq
+import io.pig.lkong.http.data.req.SystemNoticeReq
 import io.pig.lkong.http.data.req.ThreadPostReq
 import io.pig.lkong.http.data.req.TimelineReq
 import io.pig.lkong.http.data.req.UserProfileReq
@@ -25,6 +26,7 @@ import io.pig.lkong.http.data.resp.NoticeResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
 import io.pig.lkong.http.data.resp.SignInResp
+import io.pig.lkong.http.data.resp.SystemNoticeResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
 import io.pig.lkong.http.data.resp.TimelineResp
 import io.pig.lkong.http.data.resp.UserProfileResp
@@ -129,6 +131,11 @@ object LkongRepository {
     suspend fun getAtMe(time: Long): RespBase<AtMeResp> {
         val req = AtMeReq(time)
         return lkongSpec.getAtMe(req)
+    }
+
+    suspend fun getSystemNotice(date: Long): RespBase<SystemNoticeResp> {
+        val req = SystemNoticeReq(date)
+        return lkongSpec.getSystemNotice(req)
     }
 
     private fun getCookie(key: String): String {

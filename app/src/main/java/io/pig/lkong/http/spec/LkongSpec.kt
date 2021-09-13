@@ -12,6 +12,7 @@ import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.req.NoticeReq
 import io.pig.lkong.http.data.req.PunchReq
 import io.pig.lkong.http.data.req.SignReq
+import io.pig.lkong.http.data.req.SystemNoticeReq
 import io.pig.lkong.http.data.req.ThreadPostReq
 import io.pig.lkong.http.data.req.TimelineReq
 import io.pig.lkong.http.data.req.UserProfileReq
@@ -26,6 +27,7 @@ import io.pig.lkong.http.data.resp.NoticeResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
 import io.pig.lkong.http.data.resp.SignResp
+import io.pig.lkong.http.data.resp.SystemNoticeResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
 import io.pig.lkong.http.data.resp.TimelineResp
 import io.pig.lkong.http.data.resp.UserProfileResp
@@ -88,4 +90,7 @@ interface LkongSpec {
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getAtMe(@Body atMeReq: AtMeReq): RespBase<AtMeResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getSystemNotice(@Body systemNoticeReq: SystemNoticeReq): RespBase<SystemNoticeResp>
 }
