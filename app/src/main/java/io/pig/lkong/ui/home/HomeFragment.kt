@@ -106,6 +106,7 @@ class HomeFragment : Fragment() {
     private fun setupViewPager() {
         val activity = requireActivity() as MainActivity
         val fragmentAdapter = MainTabFragmentAdapter(childFragmentManager, getFragments())
+        tabs.setupWithViewPager(pages)
         pages.adapter = fragmentAdapter
         for (i in 0..tabs.tabCount) {
             val tab = tabs.getTabAt(i)
@@ -117,7 +118,6 @@ class HomeFragment : Fragment() {
         }
         // 设置缓存
         pages.offscreenPageLimit = fragmentAdapter.count - 1
-        tabs.setupWithViewPager(pages)
         pages.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {}

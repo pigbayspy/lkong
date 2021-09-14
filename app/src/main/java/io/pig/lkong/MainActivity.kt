@@ -36,6 +36,7 @@ import io.pig.lkong.ui.main.MainViewModel
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.TextSizeUtil
 import io.pig.lkong.util.ThemeUtil
+import io.pig.ui.common.getPrimaryColor
 import io.pig.ui.common.isNightMode
 import io.pig.ui.common.processToolbar
 import io.pig.ui.common.toggleNightMode
@@ -79,6 +80,17 @@ class MainActivity : AppCompatActivity(), Injectable {
                 .textSizeSpForMode(16, TextSizeUtil.TEXT_SIZE_BODY)
                 .commit()
         }
+        val nightMode = ThemeConfig(this, ThemeUtil.DARK_THEME)
+        if (!nightMode.isConfigured(BuildConfig.VERSION_CODE)) {
+            nightMode.activityTheme(R.style.AppThemeDark)
+                .primaryColorRes(R.color.colorPrimaryDarkDefault)
+                .accentColorRes(R.color.colorAccentDarkDefault)
+                .lightToolbarMode(ThemeUtil.LIGHT_TOOLBAR_AUTO)
+                .coloredActionBar(true)
+                .coloredNavigationBar(true)
+                .textSizeSpForMode(16, TextSizeUtil.TEXT_SIZE_BODY)
+                .commit()
+        }
 
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -92,9 +104,7 @@ class MainActivity : AppCompatActivity(), Injectable {
         }
         // 初始化配置
         initConfig()
-
-        setSupportActionBar(binding.appBarMain.mainToolbar)
-        processToolbar(binding.appBarMain.mainToolbar)
+        initToolbar()
 
         drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -219,5 +229,12 @@ class MainActivity : AppCompatActivity(), Injectable {
             CHECK_NOTIFICATION_DURATION,
             CHECK_NOTIFICATION_DURATION_VALUE
         )
+    }
+
+    private fun initToolbar() {
+        val toolbar = binding.appBarMain.mainToolbar
+        toolbar.setBackgroundColor(getPrimaryColor())
+        setSupportActionBar(toolbar)
+        processToolbar(toolbar)
     }
 }

@@ -4,21 +4,18 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import io.pig.lkong.R
 import io.pig.lkong.model.NoticeModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.differ.NoticeDiffer
 import io.pig.lkong.ui.adapter.item.NoticeViewHolder
-import io.pig.lkong.util.SlateUtil
-import io.pig.ui.html.HtmlTagHandler
-import io.pig.ui.html.HtmlToSpannedUtil
 import io.pig.widget.adapter.MutableViewAdapter
 
 class NoticeAdapter(
     private val context: Context,
     private val themeKey: String
 ) : MutableViewAdapter<NoticeModel>(NoticeDiffer) {
-
-    private val tagHandler = HtmlTagHandler()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -30,8 +27,50 @@ class NoticeAdapter(
         super.onBindViewHolder(holder, position)
         val viewHolder = holder as NoticeViewHolder
         val notice = getItem(position)
-        val htmlContent = SlateUtil.slateToHtml(notice.content)
-        val contentText = HtmlToSpannedUtil.fromHtml(htmlContent, null, tagHandler)
-        viewHolder.text.text = contentText
+        renderContent(viewHolder, notice)
+    }
+
+    private fun renderContent(viewHolder: NoticeViewHolder, notice: NoticeModel) {
+        when (notice.action) {
+            "replyThread" -> {
+                val reply = gson.fromJson(notice.content, ReplyThread::class.java)
+                val text = if (reply.user.isEmpty()) {
+                    context.getString(R.string.format_reply_thread, reply.title)
+                } else {
+                    val username = reply.user[0].name
+                    context.getString(R.string.format_users_reply_thread, username, reply.title)
+                }
+                viewHolder.text.text = text
+                viewHolder.card.setOnClickListener {
+                    AppNavigation.openPostListActivity(context, reply.tid)
+                }
+            }
+            "modifyThread" -> {
+                val modify = gson.fromJson(notice.content, ModifyThread::class.java)
+                when (modify.key) {
+                    "modifyThreadLock" -> {
+                        val text = context.getString(R.string.format_close_thread, modify.title)
+                        viewHolder.text.text = text
+                    }
+                }
+            }
+        }
+    }
+
+    class ReplyThread(
+        val title: String,
+        val repnum: Int,
+        val tid: Long,
+        val user: List<UserReply>
+    ) {
+        class UserReply(val pid: String, val uid: Long, val name: String)
+    }
+
+    class ModifyThread(val key: String, val tid: Long, val args: OperateParam, val title: String) {
+        class OperateParam(val tid: Long, val undo: Boolean, val reason: String)
+    }
+
+    companion object {
+        val gson = Gson()
     }
 }

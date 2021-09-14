@@ -14,10 +14,9 @@ class SystemNoticeReq(date: Long) {
                 author
                 dateline
                 fromid
-                }
+            }
             hasMore
             nextDate
-            }
         }
     }
     """

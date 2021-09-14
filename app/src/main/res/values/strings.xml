@@ -83,7 +83,6 @@
     <string name="format_threads_of">%1$s 的主题</string>
     <string name="format_digests_by">$1%s 的精华帖</string>
 
-
     <!-- timeline -->
     <string name="format_timeline_thread">发表新主题 %1$s</string>
     <string name="format_timeline_quote">\@%1$s 回复了 %2$s</string>
@@ -250,5 +249,8 @@
     <string name="drawer_item_notice">通知</string>
     <string name="drawer_item_notice_rate">评分</string>
     <string name="drawer_item_private_messages">私信</string>
+    <string name="format_users_reply_thread">%s 回复了你的帖子 %s</string>
+    <string name="format_reply_thread">你的帖子 %s 被回复了</string>
+    <string name="format_close_thread">你的帖子 %s 被关闭了</string>
 
 </resources>
