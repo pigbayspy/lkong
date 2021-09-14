@@ -3,6 +3,7 @@ package io.pig.ui.html
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.text.Html.ImageGetter
 import android.text.Html.TagHandler
 import android.text.Spannable
@@ -35,7 +36,7 @@ import java.util.*
 
 class HtmlToSpannedConverter(
     private val mSource: String,
-    private val imageGetter: ImageGetter,
+    private val imageGetter: ImageGetter?,
     private val tagHandler: TagHandler,
     private val parser: Parser
 ) : ContentHandler {
@@ -81,102 +82,164 @@ class HtmlToSpannedConverter(
     }
 
     private fun handleStartTag(tag: String, attributes: Attributes) {
-        if (tag.equals("br", ignoreCase = true)) {
-            // We don't need to handle this. TagSoup will ensure that there's a </br> for each <br>
-            // so we can safely emite the linebreaks when we handle the close tag.
-        } else if (tag.equals("p", ignoreCase = true)) {
-            handleP(spannableStringBuilder)
-        } else if (tag.equals("div", ignoreCase = true)) {
-            handleP(spannableStringBuilder)
-        } else if (tag.equals("strong", ignoreCase = true)) {
-            start(spannableStringBuilder, Bold())
-        } else if (tag.equals("b", ignoreCase = true)) {
-            start(spannableStringBuilder, Bold())
-        } else if (tag.equals("em", ignoreCase = true)) {
-            start(spannableStringBuilder, Italic())
-        } else if (tag.equals("cite", ignoreCase = true)) {
-            start(spannableStringBuilder, Italic())
-        } else if (tag.equals("dfn", ignoreCase = true)) {
-            start(spannableStringBuilder, Italic())
-        } else if (tag.equals("i", ignoreCase = true)) {
-            start(spannableStringBuilder, Italic())
-        } else if (tag.equals("big", ignoreCase = true)) {
-            start(spannableStringBuilder, Big())
-        } else if (tag.equals("small", ignoreCase = true)) {
-            start(spannableStringBuilder, Small())
-        } else if (tag.equals("font", ignoreCase = true)) {
-            startFont(spannableStringBuilder, attributes)
-        } else if (tag.equals("blockquote", ignoreCase = true)) {
-            handleP(spannableStringBuilder)
-            start(spannableStringBuilder, Blockquote())
-        } else if (tag.equals("tt", ignoreCase = true)) {
-            start(spannableStringBuilder, Monospace())
-        } else if (tag.equals("a", ignoreCase = true)) {
-            startA(spannableStringBuilder, attributes)
-        } else if (tag.equals("u", ignoreCase = true)) {
-            start(spannableStringBuilder, Underline())
-        } else if (tag.equals("sup", ignoreCase = true)) {
-            start(spannableStringBuilder, Super())
-        } else if (tag.equals("sub", ignoreCase = true)) {
-            start(spannableStringBuilder, Sub())
-        } else if (tag.length == 2 && Character.toLowerCase(tag[0]) == 'h' && tag[1] >= '1' && tag[1] <= '6') {
-            handleP(spannableStringBuilder)
-            start(
-                spannableStringBuilder, Header(
-                    tag[1] - '1'
+        when {
+            tag.equals("br", ignoreCase = true) -> {
+                // We don't need to handle this. TagSoup will ensure that there's a </br> for each <br>
+                // so we can safely emite the linebreaks when we handle the close tag.
+            }
+            tag.equals("p", ignoreCase = true) -> {
+                handleP(spannableStringBuilder)
+            }
+            tag.equals("div", ignoreCase = true) -> {
+                handleP(spannableStringBuilder)
+            }
+            tag.equals("strong", ignoreCase = true) -> {
+                start(spannableStringBuilder, Bold())
+            }
+            tag.equals("b", ignoreCase = true) -> {
+                start(spannableStringBuilder, Bold())
+            }
+            tag.equals("em", ignoreCase = true) -> {
+                start(spannableStringBuilder, Italic())
+            }
+            tag.equals("cite", ignoreCase = true) -> {
+                start(spannableStringBuilder, Italic())
+            }
+            tag.equals("dfn", ignoreCase = true) -> {
+                start(spannableStringBuilder, Italic())
+            }
+            tag.equals("i", ignoreCase = true) -> {
+                start(spannableStringBuilder, Italic())
+            }
+            tag.equals("big", ignoreCase = true) -> {
+                start(spannableStringBuilder, Big())
+            }
+            tag.equals("small", ignoreCase = true) -> {
+                start(spannableStringBuilder, Small())
+            }
+            tag.equals("font", ignoreCase = true) -> {
+                startFont(spannableStringBuilder, attributes)
+            }
+            tag.equals("blockquote", ignoreCase = true) -> {
+                handleP(spannableStringBuilder)
+                start(spannableStringBuilder, Blockquote())
+            }
+            tag.equals("tt", ignoreCase = true) -> {
+                start(spannableStringBuilder, Monospace())
+            }
+            tag.equals("a", ignoreCase = true) -> {
+                startA(spannableStringBuilder, attributes)
+            }
+            tag.equals("u", ignoreCase = true) -> {
+                start(spannableStringBuilder, Underline())
+            }
+            tag.equals("sup", ignoreCase = true) -> {
+                start(spannableStringBuilder, Super())
+            }
+            tag.equals("sub", ignoreCase = true) -> {
+                start(spannableStringBuilder, Sub())
+            }
+            tag.length == 2 && Character.toLowerCase(tag[0]) == 'h' && tag[1] >= '1' && tag[1] <= '6' -> {
+                handleP(spannableStringBuilder)
+                start(
+                    spannableStringBuilder, Header(
+                        tag[1] - '1'
+                    )
                 )
+            }
+            tag.equals("img", ignoreCase = true) -> {
+                startImg(spannableStringBuilder, attributes)
+            }
+            else -> tagHandler.handleTag(true, tag, spannableStringBuilder, parser)
+        }
+    }
+
+    private fun startImg(text: SpannableStringBuilder, attributes: Attributes) {
+        val src = attributes.getValue("", "src")
+        var d: Drawable? = null
+        if (imageGetter != null) {
+            d = imageGetter.getDrawable(src)
+        }
+        if (d == null) {
+            d = ResourcesCompat.getDrawable(
+                Resources.getSystem(),
+                R.drawable.placeholder_loading,
+                null
             )
-        } else if (tag.equals("img", ignoreCase = true)) {
-            startImg(spannableStringBuilder, attributes, imageGetter)
-        } else tagHandler.handleTag(true, tag, spannableStringBuilder, parser)
+            d!!.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)
+        }
+        val len = text.length
+        text.append("\uFFFC")
+        text.setSpan(ImageSpan(d, src), len, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 
     private fun handleEndTag(tag: String) {
-        if (tag.equals("br", ignoreCase = true)) {
-            handleBr(spannableStringBuilder)
-        } else if (tag.equals("p", ignoreCase = true)) {
-            handleP(spannableStringBuilder)
-        } else if (tag.equals("div", ignoreCase = true)) {
-            handleP(spannableStringBuilder)
-        } else if (tag.equals("strong", ignoreCase = true)) {
-            end(spannableStringBuilder, Bold::class.java, StyleSpan(Typeface.BOLD))
-        } else if (tag.equals("b", ignoreCase = true)) {
-            end(spannableStringBuilder, Bold::class.java, StyleSpan(Typeface.BOLD))
-        } else if (tag.equals("em", ignoreCase = true)) {
-            end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
-        } else if (tag.equals("cite", ignoreCase = true)) {
-            end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
-        } else if (tag.equals("dfn", ignoreCase = true)) {
-            end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
-        } else if (tag.equals("i", ignoreCase = true)) {
-            end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
-        } else if (tag.equals("big", ignoreCase = true)) {
-            end(spannableStringBuilder, Big::class.java, RelativeSizeSpan(1.25f))
-        } else if (tag.equals("small", ignoreCase = true)) {
-            end(spannableStringBuilder, Small::class.java, RelativeSizeSpan(0.8f))
-        } else if (tag.equals("font", ignoreCase = true)) {
-            endFont(spannableStringBuilder)
-        } else if (tag.equals("blockquote", ignoreCase = true)) {
-            handleP(spannableStringBuilder)
-            end(spannableStringBuilder, Blockquote::class.java, QuoteSpan())
-        } else if (tag.equals("tt", ignoreCase = true)) {
-            end(
-                spannableStringBuilder, Monospace::class.java,
-                TypefaceSpan("monospace")
-            )
-        } else if (tag.equals("a", ignoreCase = true)) {
-            endA(spannableStringBuilder)
-        } else if (tag.equals("u", ignoreCase = true)) {
-            end(spannableStringBuilder, Underline::class.java, UnderlineSpan())
-        } else if (tag.equals("sup", ignoreCase = true)) {
-            end(spannableStringBuilder, Super::class.java, SuperscriptSpan())
-        } else if (tag.equals("sub", ignoreCase = true)) {
-            end(spannableStringBuilder, Sub::class.java, SubscriptSpan())
-        } else if (tag.length == 2 && Character.toLowerCase(tag[0]) == 'h' && tag[1] >= '1' && tag[1] <= '6') {
-            handleP(spannableStringBuilder)
-            endHeader(spannableStringBuilder)
-        } else {
-            tagHandler.handleTag(false, tag, spannableStringBuilder, parser)
+        when {
+            tag.equals("br", ignoreCase = true) -> {
+                handleBr(spannableStringBuilder)
+            }
+            tag.equals("p", ignoreCase = true) -> {
+                handleP(spannableStringBuilder)
+            }
+            tag.equals("div", ignoreCase = true) -> {
+                handleP(spannableStringBuilder)
+            }
+            tag.equals("strong", ignoreCase = true) -> {
+                end(spannableStringBuilder, Bold::class.java, StyleSpan(Typeface.BOLD))
+            }
+            tag.equals("b", ignoreCase = true) -> {
+                end(spannableStringBuilder, Bold::class.java, StyleSpan(Typeface.BOLD))
+            }
+            tag.equals("em", ignoreCase = true) -> {
+                end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
+            }
+            tag.equals("cite", ignoreCase = true) -> {
+                end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
+            }
+            tag.equals("dfn", ignoreCase = true) -> {
+                end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
+            }
+            tag.equals("i", ignoreCase = true) -> {
+                end(spannableStringBuilder, Italic::class.java, StyleSpan(Typeface.ITALIC))
+            }
+            tag.equals("big", ignoreCase = true) -> {
+                end(spannableStringBuilder, Big::class.java, RelativeSizeSpan(1.25f))
+            }
+            tag.equals("small", ignoreCase = true) -> {
+                end(spannableStringBuilder, Small::class.java, RelativeSizeSpan(0.8f))
+            }
+            tag.equals("font", ignoreCase = true) -> {
+                endFont(spannableStringBuilder)
+            }
+            tag.equals("blockquote", ignoreCase = true) -> {
+                handleP(spannableStringBuilder)
+                end(spannableStringBuilder, Blockquote::class.java, QuoteSpan())
+            }
+            tag.equals("tt", ignoreCase = true) -> {
+                end(
+                    spannableStringBuilder, Monospace::class.java,
+                    TypefaceSpan("monospace")
+                )
+            }
+            tag.equals("a", ignoreCase = true) -> {
+                endA(spannableStringBuilder)
+            }
+            tag.equals("u", ignoreCase = true) -> {
+                end(spannableStringBuilder, Underline::class.java, UnderlineSpan())
+            }
+            tag.equals("sup", ignoreCase = true) -> {
+                end(spannableStringBuilder, Super::class.java, SuperscriptSpan())
+            }
+            tag.equals("sub", ignoreCase = true) -> {
+                end(spannableStringBuilder, Sub::class.java, SubscriptSpan())
+            }
+            tag.length == 2 && Character.toLowerCase(tag[0]) == 'h' && tag[1] >= '1' && tag[1] <= '6' -> {
+                handleP(spannableStringBuilder)
+                endHeader(spannableStringBuilder)
+            }
+            else -> {
+                tagHandler.handleTag(false, tag, spannableStringBuilder, parser)
+            }
         }
     }
 
@@ -216,19 +279,18 @@ class HtmlToSpannedConverter(
         for (i in 0 until length) {
             val c = ch[i + start]
             if (c == ' ' || c == '\n') {
-                var pred: Char
                 var len = sb.length
-                if (len == 0) {
+                val preChar: Char = if (len == 0) {
                     len = spannableStringBuilder.length
-                    pred = if (len == 0) {
+                    if (len == 0) {
                         '\n'
                     } else {
                         spannableStringBuilder[len - 1]
                     }
                 } else {
-                    pred = sb[len - 1]
+                    sb[len - 1]
                 }
-                if (pred != ' ' && pred != '\n') {
+                if (preChar != ' ' && preChar != '\n') {
                     sb.append(' ')
                 }
             } else {
@@ -308,10 +370,10 @@ class HtmlToSpannedConverter(
         }
 
         private fun <T> getLast(text: Spanned, kind: Class<T>): T? {
-            /*
-         * This knows that the last returned object from getSpans()
-         * will be the most recently added.
-         */
+            /**
+             * This knows that the last returned object from getSpans()
+             * will be the most recently added.
+             */
             val objects: Array<T> = text.getSpans(0, text.length, kind)
             return if (objects.isEmpty()) {
                 null
@@ -335,30 +397,7 @@ class HtmlToSpannedConverter(
             }
         }
 
-        private fun startImg(
-            text: SpannableStringBuilder,
-            attributes: Attributes,
-            img: ImageGetter
-        ) {
-            val src = attributes.getValue("", "src")
-            var d = img.getDrawable(src)
-            if (d == null) {
-                d = ResourcesCompat.getDrawable(
-                    Resources.getSystem(),
-                    R.drawable.placeholder_loading,
-                    null
-                )
-                d!!.setBounds(0, 0, d.intrinsicWidth, d.intrinsicHeight)
-            }
-            val len = text.length
-            text.append("\uFFFC")
-            text.setSpan(ImageSpan(d, src), len, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-
-        private fun startFont(
-            text: SpannableStringBuilder,
-            attributes: Attributes
-        ) {
+        private fun startFont(text: SpannableStringBuilder, attributes: Attributes) {
             val color = attributes.getValue("", "color")
             val face = attributes.getValue("", "face")
             val len = text.length
@@ -450,7 +489,6 @@ class HtmlToSpannedConverter(
 
         private fun convertValueToInt(charSeq: CharSequence): Int {
             val nm = charSeq.toString()
-
             // XXX This code is copied from Integer.decode() so we don't
             // have to instantiate an Integer!
             var sign = 1
@@ -467,7 +505,7 @@ class HtmlToSpannedConverter(
                     return 0
                 }
                 val c = nm[index + 1]
-                if ('x' == c || 'X' == c) {
+                if (c.equals('x', true)) {
                     index += 2
                     base = 16
                 } else {

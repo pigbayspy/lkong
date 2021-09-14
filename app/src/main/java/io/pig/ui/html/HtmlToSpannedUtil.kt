@@ -10,17 +10,14 @@ object HtmlToSpannedUtil {
 
     private val schema = HTMLSchema()
 
-    fun fromHtml(source: String, imageGetter: ImageGetter, tagHandler: TagHandler): Spanned {
+    fun fromHtml(source: String, imageGetter: ImageGetter?, tagHandler: TagHandler): Spanned {
         val parser = Parser()
         try {
             parser.setProperty(Parser.schemaProperty, schema)
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
-        val converter = HtmlToSpannedConverter(
-            source, imageGetter, tagHandler,
-            parser
-        )
+        val converter = HtmlToSpannedConverter(source, imageGetter, tagHandler, parser)
         return converter.convert()
     }
 }

@@ -34,7 +34,6 @@ class MentionFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mentionViewModel = ViewModelProvider(this).get(MentionViewModel::class.java)
     }
 

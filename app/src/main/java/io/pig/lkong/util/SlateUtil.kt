@@ -16,6 +16,15 @@ object SlateUtil {
 
     private val slateType = object : TypeToken<List<SlateNode>>() {}.type
 
+    fun slateToHtml(slate: String): String {
+        val slateList = gson.fromJson<List<SlateNode>>(slate, slateType)
+        return buildString {
+            slateList.forEach {
+                append(it.toString())
+            }
+        }
+    }
+
     fun slateToText(slate: String): String {
         val slateList = gson.fromJson<List<SlateNode>>(slate, slateType)
         val slateHtml = buildString {
