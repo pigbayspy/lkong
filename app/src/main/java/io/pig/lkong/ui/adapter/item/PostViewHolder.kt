@@ -16,19 +16,10 @@ class PostViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
 
-    val postItem: PostItemView
-    val avatarImage: ImageView
-    val rateButton: ImageButton
-    val rateText: TextView
-    val shareButton: ImageButton
-    val editButton: ImageButton
-
-    init {
-        postItem = itemView.findViewById(R.id.recycle_item_post_view_item)
-        avatarImage = itemView.findViewById(R.id.recycle_item_post_image_avatar)
-        rateText = itemView.findViewById(R.id.recycle_item_post_text_rate)
-        rateButton = itemView.findViewById(R.id.recycle_item_post_button_rate)
-        shareButton = itemView.findViewById(R.id.recycle_item_post_button_share)
-        editButton = itemView.findViewById(R.id.recycle_item_post_button_edit)
-    }
+    val postItem: PostItemView = itemView.findViewById(R.id.item_post_view_item)
+    val avatarImage: ImageView = itemView.findViewById(R.id.item_post_image_avatar)
+    val rateButton: ImageButton = itemView.findViewById(R.id.item_post_button_rate)
+    val rateText: TextView = itemView.findViewById(R.id.item_post_text_rate)
+    val shareButton: ImageButton = itemView.findViewById(R.id.item_post_button_share)
+    val editButton: ImageButton = itemView.findViewById(R.id.item_post_button_edit)
 }

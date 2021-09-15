@@ -12,13 +12,8 @@ import java.util.concurrent.Executor
  */
 object AndroidSchedulers : Executor {
 
-    private val mainScheduler: Scheduler
-    private val handler: Handler
-
-    init {
-        handler = Handler(Looper.myLooper()!!)
-        mainScheduler = Schedulers.from(this)
-    }
+    private val mainScheduler: Scheduler = Schedulers.from(this)
+    private val handler: Handler = Handler(Looper.myLooper()!!)
 
     fun mainThread(): Scheduler {
         return mainScheduler

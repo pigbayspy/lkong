@@ -12,6 +12,6 @@ import io.pig.lkong.R
  */
 class HotThreadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val iconImageView: ImageView = itemView.findViewById(R.id.item_hot_thread_image_view_rank)
-    val titleTextView: TextView = itemView.findViewById(R.id.item_hot_thread_text_view_subject)
+    val iconImageView: ImageView = itemView.findViewById(R.id.item_hot_thread_image_rank)
+    val titleTextView: TextView = itemView.findViewById(R.id.item_hot_thread_text_subject)
 }

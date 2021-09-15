@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recycle_item_timeline_card_root_container"
+    android:id="@+id/item_timeline_card_root_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/default_card_radius"
@@ -15,14 +15,14 @@
         android:background="?selectableItemBackground">
 
         <ImageView
-            android:id="@+id/recycle_item_timeline_image_author_avatar"
+            android:id="@+id/item_timeline_image_author_avatar"
             android:contentDescription="@string/timeline_thread_avatar_desc"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="16dp"/>
 
         <TextView
-            android:id="@+id/recycle_item_timeline_text_author_name"
+            android:id="@+id/item_timeline_text_author_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"
@@ -32,17 +32,17 @@
             android:tag="text_color|primary_text"/>
 
         <TextView
-            android:id="@+id/recycle_item_timeline_text_dateline"
+            android:id="@+id/item_timeline_text_dateline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/recycle_item_timeline_text_author_name"
+            android:layout_below="@+id/item_timeline_text_author_name"
             android:layout_marginLeft="72dp"
             android:layout_marginRight="72dp"
             android:textSize="@dimen/text_size_body1"
             android:tag="text_color|primary_text"/>
 
         <TextView
-            android:id="@+id/recycle_item_timeline_text_message"
+            android:id="@+id/item_timeline_text_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

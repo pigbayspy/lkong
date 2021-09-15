@@ -10,7 +10,7 @@
     android:background="?selectableItemBackground">
 
     <TextView
-        android:id="@+id/recycle_item_browse_history_text_title"
+        android:id="@+id/item_browse_history_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -19,21 +19,21 @@
         android:textSize="@dimen/text_size_subhead" />
 
     <TextView
-        android:id="@+id/recycle_item_browse_history_text_secondary"
+        android:id="@+id/item_browse_history_text_secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/recycle_item_browse_history_text_title"
-        android:layout_toStartOf="@+id/recycle_item_browse_history_text_time"
+        android:layout_below="@+id/item_browse_history_text_title"
+        android:layout_toStartOf="@+id/item_browse_history_text_time"
         android:ellipsize="end"
         android:maxLines="1"
         android:tag="text_color|secondary_text,text_size|caption"
         android:textSize="@dimen/text_size_body1" />
 
     <TextView
-        android:id="@+id/recycle_item_browse_history_text_time"
+        android:id="@+id/item_browse_history_text_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/recycle_item_browse_history_text_secondary"
+        android:layout_alignBaseline="@+id/item_browse_history_text_secondary"
         android:layout_alignParentEnd="true"
         android:gravity="end"
         android:tag="text_color|secondary_text,text_size|caption"

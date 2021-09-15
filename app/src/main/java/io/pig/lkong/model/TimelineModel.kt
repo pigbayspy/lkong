@@ -2,11 +2,9 @@ package io.pig.lkong.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import io.pig.lkong.http.data.resp.data.AtMeRespData
 import io.pig.lkong.http.data.resp.data.TimelineItemData
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 import io.pig.lkong.util.SlateUtil
-import java.util.*
 
 /**
  * @author yinhang

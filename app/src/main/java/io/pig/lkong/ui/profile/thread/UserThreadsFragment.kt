@@ -15,7 +15,6 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.UserThreadModel
 import io.pig.lkong.ui.adapter.UserThreadAdapter
-import io.pig.lkong.ui.timeline.TimeLineFragment
 
 class UserThreadsFragment : Fragment() {
 
@@ -74,7 +73,7 @@ class UserThreadsFragment : Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastPos = layoutMgr.findLastCompletelyVisibleItemPosition()
-                    if (dy > 0 && layoutMgr.itemCount - lastPos <=  TO_LAST_LEFT) {
+                    if (dy > 0 && layoutMgr.itemCount - lastPos <= TO_LAST_LEFT) {
                         // load more
                         threadsViewModel.goToNextPage()
                     }

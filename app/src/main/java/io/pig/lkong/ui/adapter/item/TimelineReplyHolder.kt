@@ -12,15 +12,7 @@ import io.pig.lkong.R
 class TimelineReplyHolder(itemView: View, themeKey: String) :
     TimelineViewHolder(itemView, themeKey) {
 
-    val secondaryContainer: RelativeLayout
-    val secondaryMessageText: TextView
-    val thirdMessageText: TextView
-
-    init {
-        itemView.apply {
-            secondaryContainer = findViewById(R.id.secondary_message_container)
-            secondaryMessageText = findViewById(R.id.recycle_item_timeline_secondary_message)
-            thirdMessageText = findViewById(R.id.recycle_item_timeline_third_message)
-        }
-    }
+    val secondaryContainer: RelativeLayout = itemView.findViewById(R.id.secondary_message_container)
+    val secondaryMessageText: TextView = itemView.findViewById(R.id.item_timeline_secondary_message)
+    val thirdMessageText: TextView = itemView.findViewById(R.id.item_timeline_third_message)
 }

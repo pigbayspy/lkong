@@ -6,7 +6,7 @@
     android:background="?selectableItemBackground">
 
     <io.pig.ui.FixedAspectRatioImageView
-        android:id="@+id/recycle_view_item_forum_image_view_icon"
+        android:id="@+id/item_forum_image_view_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -17,10 +17,10 @@
         app:far_width_weight="1" />
 
     <TextView
-        android:id="@+id/recycle_view_item_forum_text_view_title"
+        android:id="@+id/item_forum_text_view_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/recycle_view_item_forum_image_view_icon"
+        android:layout_below="@+id/item_forum_image_view_icon"
         android:layout_gravity="bottom"
         android:gravity="center"
         android:paddingBottom="4dp"

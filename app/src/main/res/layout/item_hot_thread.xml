@@ -8,14 +8,14 @@
     android:paddingBottom="8dp"
     android:background="?selectableItemBackground">
     <ImageView
-        android:id="@+id/item_hot_thread_image_view_rank"
+        android:id="@+id/item_hot_thread_image_rank"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/hot_thread_desc" />
     <TextView
-        android:id="@+id/item_hot_thread_text_view_subject"
+        android:id="@+id/item_hot_thread_text_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"

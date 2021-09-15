@@ -11,15 +11,7 @@ import io.pig.lkong.R
  */
 class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val titleText: TextView
-    val secondaryText: TextView
-    val timeText: TextView
-
-    init {
-        itemView.apply {
-            titleText = findViewById(R.id.recycle_item_browse_history_text_title)
-            secondaryText = findViewById(R.id.recycle_item_browse_history_text_secondary)
-            timeText = findViewById(R.id.recycle_item_browse_history_text_time)
-        }
-    }
+    val titleText: TextView = itemView.findViewById(R.id.item_browse_history_text_title)
+    val secondaryText: TextView = itemView.findViewById(R.id.item_browse_history_text_secondary)
+    val timeText: TextView = itemView.findViewById(R.id.item_browse_history_text_time)
 }

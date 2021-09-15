@@ -12,7 +12,7 @@ import io.pig.lkong.R
  */
 class ForumViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val forumIconImage: ImageView = itemView.findViewById(R.id.recycle_view_item_forum_image_view_icon)
-    val forumTitleText: TextView = itemView.findViewById(R.id.recycle_view_item_forum_text_view_title)
-    val forumSecondaryText: TextView = itemView.findViewById(R.id.recycle_view_item_forum_text_view_secondary)
+    val forumIconImage: ImageView = itemView.findViewById(R.id.item_forum_image_view_icon)
+    val forumTitleText: TextView = itemView.findViewById(R.id.item_forum_text_view_title)
+    val forumSecondaryText: TextView = itemView.findViewById(R.id.item_forum_text_view_secondary)
 }

@@ -11,15 +11,7 @@ import io.pig.lkong.R
  */
 class PostRateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val userNameText: TextView
-    val scoreText: TextView
-    val reasonText: TextView
-
-    init {
-        itemView.apply {
-            userNameText = findViewById(R.id.item_post_rate_text_username)
-            scoreText = findViewById(R.id.item_post_rate_text_score)
-            reasonText = findViewById(R.id.item_post_rate_text_reason)
-        }
-    }
+    val userNameText: TextView = itemView.findViewById(R.id.item_post_rate_text_username)
+    val scoreText: TextView = itemView.findViewById(R.id.item_post_rate_text_score)
+    val reasonText: TextView = itemView.findViewById(R.id.item_post_rate_text_reason)
 }

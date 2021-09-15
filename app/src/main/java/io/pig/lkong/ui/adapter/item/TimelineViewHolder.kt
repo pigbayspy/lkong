@@ -17,23 +17,15 @@ open class TimelineViewHolder(
     themeKey: String
 ) : RecyclerView.ViewHolder(itemView) {
 
-    val rootCard: CardView
-    val authorText: TextView
-    val datelineText: TextView
-    val messageText: TextView
-    val authorAvatar: ImageView
+    val rootCard: CardView = itemView.findViewById(R.id.item_timeline_card_root_container)
+    val authorText: TextView = itemView.findViewById(R.id.item_timeline_text_author_name)
+    val datelineText: TextView = itemView.findViewById(R.id.item_timeline_text_dateline)
+    val messageText: TextView = itemView.findViewById(R.id.item_timeline_text_message)
+    val authorAvatar: ImageView = itemView.findViewById(R.id.item_timeline_image_author_avatar)
 
     init {
-        this.rootCard = itemView.findViewById(R.id.recycle_item_timeline_card_root_container)
-        this.authorText = itemView.findViewById(R.id.recycle_item_timeline_text_author_name)
-        this.datelineText = itemView.findViewById(R.id.recycle_item_timeline_text_dateline)
-        this.messageText = itemView.findViewById(R.id.recycle_item_timeline_text_message)
-        this.authorAvatar = itemView.findViewById(R.id.recycle_item_timeline_image_author_avatar)
         rootCard.setCardBackgroundColor(
-            ThemeUtil.textColorPrimaryInverse(
-                itemView.context,
-                themeKey
-            )
+            ThemeUtil.textColorPrimaryInverse(itemView.context, themeKey)
         )
     }
 }

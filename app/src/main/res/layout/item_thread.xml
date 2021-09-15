@@ -27,13 +27,13 @@
             android:id="@+id/item_thread_text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/item_thread_text_datetime"
+            android:layout_toStartOf="@id/item_thread_text_time"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@string/item_thread_text_title"
             android:textSize="@dimen/text_size_subhead" />
         <TextView
-            android:id="@+id/item_thread_text_datetime"
+            android:id="@+id/item_thread_text_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="32dp"
