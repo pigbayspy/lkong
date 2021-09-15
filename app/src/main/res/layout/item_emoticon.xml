@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.pig.common.ui.widget.FixedAspectRatioImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_emoticon_image"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?selectableItemBackground"
+    android:scaleType="fitXY"
+    app:far_fixed_orientation="horizontal"
+    app:far_height_weight="1"
+    app:far_width_weight="1" />

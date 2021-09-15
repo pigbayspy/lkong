@@ -23,6 +23,14 @@
     <string name="forward_desc">向前翻页</string>
     <string name="backward_desc">向前翻页</string>
 
+    <!-- hint -->
+    <string name="hint_content">内容</string>
+    <string name="hint_title">标题</string>
+    <string name="hint_account_email">注册邮箱</string>
+    <string name="hint_account_password">密码</string>
+    <string name="hint_url_name">链接文本</string>
+    <string name="hint_url_value">链接地址</string>
+
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>
     <string name="action_settings">设置</string>
@@ -31,6 +39,7 @@
     <string name="action_notification">通知</string>
     <string name="action_clear">清理</string>
     <string name="action_search">搜索</string>
+    <string name="action_send_post">发送</string>
 
     <!-- fragment 字段 -->
     <string name="menu_home">个人主页</string>
@@ -53,8 +62,6 @@
 
     <!-- 输入 -->
     <string name="activity_sign_in_card_title">登陆龙的天空</string>
-    <string name="hint_account_email">注册邮箱</string>
-    <string name="hint_account_password">密码</string>
 
     <!-- 错误 -->
     <string name="input_error_email">请输入您的注册邮箱</string>
@@ -224,19 +231,17 @@
     <!-- format -->
     <string name="format_unit_ten_kilo">万</string>
     <string name="format_forum_item_summary">今日 %s</string>
+    <string name="format_post_tail_prefix">&#160;──&#160;</string>
 
     <!-- forum threads -->
     <string-array name="thread_list_type_arrays">
         <item>默认</item>
         <item>精华</item>
     </string-array>
-    <string name="dialog_title_rate">评分</string>
     <string name="format_post_rate_summary">+ %d</string>
-    <string name="dialog_title_copy_content">复制内容</string>
 
     <!-- post list -->
     <string name="format_post_list_page_indicator">%1$d / %2$d</string>
-    <string name="dialog_post_list_choose_page">跳转至</string>
     <string name="format_post_list_page_indicator_detail">%1$d 页 (%2$d - %3$d)</string>
     <string name="indicator_thread_author">&#160;&#160;[龙珠]</string>
     <string name="format_post_header_detail_count">%1$d 查看 · %2$d 回复</string>
@@ -252,5 +257,24 @@
     <string name="format_users_reply_thread">%s 回复了你的帖子 %s</string>
     <string name="format_reply_thread">你的帖子 %s 被回复了</string>
     <string name="format_close_thread">你的帖子 %s 被关闭了</string>
+
+    <!-- dialog -->
+    <string name="dialog_exit_new_post_title">要舍弃这条信息吗？</string>
+    <string name="dialog_post_list_choose_page">跳转至</string>
+    <string name="dialog_title_rate">评分</string>
+    <string name="dialog_title_copy_content">复制内容</string>
+    <string name="dialog_title_insert_url">插入链接</string>
+    <string name="dialog_choose_emoticon_title">选择表情：</string>
+    <string name="dialog_exit_discard">舍弃</string>
+    <string name="dialog_exit_confirm">确认</string>
+    <string name="dialog_exit_cancel">取消</string>
+    <string name="dialog_new_post_sending">正在发送…</string>
+
+    <!-- toast -->
+    <string name="toast_error_url_empty">链接名称或者地址不能为空</string>
+    <string name="toast_failure_new_post">发送失败，请重试。</string>
+    <string name="toast_double_tap_to_exit">再次点击返回键退出</string>
+    <string name="toast_error_title_empty">标题不能为空</string>
+    <string name="toast_error_content_empty">内容不能为空。</string>
 
 </resources>

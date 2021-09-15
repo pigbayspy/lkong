@@ -49,4 +49,9 @@ object PrefConst {
     const val SCROLL_BY_VOLUME_KEY = "prefs_scroll_by_volume_key"
 
     const val SCROLL_BY_VOLUME_KEY_VALUE = false
+
+    const val POST_TAIL_TEXT = "prefs_post_extra_tail_text"
+
+    const val POST_TAIL_TEXT_VALUE = ""
+
 }

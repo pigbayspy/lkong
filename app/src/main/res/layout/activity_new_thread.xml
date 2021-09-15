@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+
+        android:id="@+id/new_thread_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/toolbar_elevation"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/new_thread_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="72dp"
+            app:contentInsetStart="72dp"
+            app:popupTheme="?toolbar_popup_theme"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_marginBottom="?actionBarSize"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/new_thread_edit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="top|start"
+            android:hint="@string/hint_title"
+            android:inputType="textMultiLine"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:textSize="@dimen/text_size_edit" />
+
+        <View
+            android:id="@+id/new_thread_view_div"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:tag="background|secondary_text" />
+
+        <EditText
+            android:id="@+id/new_thread_edit_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:gravity="top|start"
+            android:hint="@string/hint_content"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:textSize="@dimen/text_size_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:tag="background|primary_color">
+
+        <ImageButton
+            android:id="@+id/action_insert_image"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="?selectableItemBackground"
+            android:src="@drawable/ic_action_insert_image"
+            android:tag="tint|secondary_text" />
+
+        <ImageButton
+            android:id="@+id/action_insert_emoji"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="?selectableItemBackground"
+            android:src="@drawable/ic_action_insert_emoticon"
+            android:tag="tint|secondary_text" />
+
+        <ImageButton
+            android:id="@+id/action_insert_link"
+            android:layout_width="?actionBarSize"
+            android:layout_height="?actionBarSize"
+            android:background="?selectableItemBackground"
+            android:src="@drawable/ic_action_insert_link"
+            android:tag="tint|secondary_text" />
+    </LinearLayout>
+</RelativeLayout>
