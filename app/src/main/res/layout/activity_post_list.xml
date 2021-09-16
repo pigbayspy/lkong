@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,6 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/post_list_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentTop="true"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="?actionBarSize"
+        app:popupTheme="?toolbar_popup_theme"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/post_list_fab"
@@ -26,7 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="88dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/post_list_fab" />
 
     <ProgressBar
         android:id="@+id/post_list_loading"

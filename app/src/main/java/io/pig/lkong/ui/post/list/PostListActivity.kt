@@ -10,15 +10,18 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.pig.common.ui.adapter.Bookends
 import io.pig.lkong.R
 import io.pig.lkong.account.UserAccountManager
@@ -41,6 +44,9 @@ import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.common.getAccentColor
 import io.pig.ui.common.getPrimaryColor
 import io.pig.ui.common.getThemeKey
+import io.pig.widget.PagerControl
+import io.pig.widget.listener.OnPagerControlListener
+import io.pig.widget.util.QuickReturnHelper
 import javax.inject.Inject
 
 class PostListActivity : AppCompatActivity(), Injectable {
@@ -56,17 +62,40 @@ class PostListActivity : AppCompatActivity(), Injectable {
     private val scrollByVolumeKey =
         Prefs.getBoolPrefs(PrefConst.SCROLL_BY_VOLUME_KEY, PrefConst.SCROLL_BY_VOLUME_KEY_VALUE)
 
+    private val pagerControlListener = object : OnPagerControlListener {
+        override fun onBackwardClick() {
+            postListViewModel.goToPrevPage()
+        }
+
+        override fun onForwardClick() {
+            postListViewModel.goToNextPage()
+        }
+
+        override fun onPageIndicatorClick() {
+            MaterialDialog(this@PostListActivity)
+                .title(text = getString(R.string.dialog_post_list_choose_page))
+                .listItemsSingleChoice(items = getPageIndicatorItems()) { _, index, _ ->
+                    postListViewModel.goToPage(index + 1)
+                }.show()
+        }
+    }
+
     private lateinit var binding: ActivityPostListBinding
     private lateinit var headerBinding: LayoutPostIntroHeaderBinding
     private lateinit var postListViewModel: PostListViewModel
+
+    private lateinit var pageController: PagerControl
+    private lateinit var fab: FloatingActionButton
+    private lateinit var toolbar: Toolbar
+    private lateinit var toolbarReturnHelper: QuickReturnHelper
+
+    private val mBaseTranslationY = 0
 
     @Inject
     lateinit var userAccountManager: UserAccountManager
 
     @Inject
     lateinit var lkongDataBase: LkongDatabase
-
-    private var targetPostId = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +106,10 @@ class PostListActivity : AppCompatActivity(), Injectable {
 
         // 自动注入
         injectThis()
+        fab = binding.postListFab
+        pageController = binding.postListPageControl.root
+        toolbar = binding.postListToolbar
+        toolbarReturnHelper = QuickReturnHelper(toolbar, QuickReturnHelper.ANIMATE_DIRECTION_UP)
 
         // 设置参数
         val thread = intent.getLongExtra(DataContract.BUNDLE_THREAD_ID, -1)
@@ -88,6 +121,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
         postListViewModel =
             ViewModelProvider(this, viewModelFactory).get(PostListViewModel::class.java)
         initRecycleView()
+        initFab()
         initPageController()
     }
 
@@ -129,15 +163,54 @@ class PostListActivity : AppCompatActivity(), Injectable {
             updatePageText()
         }
         postListViewModel.initPage(1)
+        binding.recycleListPost.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            private var dragging = false
+            private var negativeDyAmount = 0
+            private var amountScrollY = 0
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                this.dragging = RecyclerView.SCROLL_STATE_DRAGGING == newState
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                    && isRecyclerViewAtBottom(recyclerView)
+                ) {
+                    pageController.show()
+                    fab.show()
+                    toolbarReturnHelper.show()
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                amountScrollY += dy
+                val toolbarHeight: Int = toolbar.height
+                if (dy > 0) {
+                    negativeDyAmount = 0
+                    if (amountScrollY - mBaseTranslationY - toolbarHeight > toolbarHeight) {
+                        toolbarReturnHelper.hide()
+                        pageController.hide()
+                        fab.hide()
+                    }
+                } else if (dy < 0) {
+                    amountScrollY = 0
+                    negativeDyAmount += dy
+                    if (Math.abs(negativeDyAmount - mBaseTranslationY) > toolbarHeight) {
+                        toolbarReturnHelper.show()
+                        pageController.show()
+                        fab.show()
+                    }
+                }
+            }
+        })
     }
 
     private fun initPageController() {
-        val postControlColor =
-            if (primaryColorInPostControl.get()) {
-                getPrimaryColor()
-            } else {
-                getAccentColor()
-            }
+        val postControlColor = if (primaryColorInPostControl.get()) {
+            getPrimaryColor()
+        } else {
+            getAccentColor()
+        }
         val toolbarTextColor = if (ThemeUtil.isColorLight(postControlColor)) {
             Color.BLACK
         } else {
@@ -149,28 +222,21 @@ class PostListActivity : AppCompatActivity(), Injectable {
             ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_forward, null)!!.mutate()
         ThemeUtil.setTint(backwardArrow, toolbarTextColor)
         ThemeUtil.setTint(forwardArrow, toolbarTextColor)
-        binding.postListPageControl.pagerControlButtonBackward.apply {
-            setImageDrawable(backwardArrow)
-            setOnClickListener {
-                postListViewModel.goToPrevPage()
-            }
-        }
-        binding.postListPageControl.pagerControlButtonForward.apply {
-            setImageDrawable(forwardArrow)
-            setOnClickListener {
-                postListViewModel.goToNextPage()
-            }
-        }
-        binding.postListPageControl.pagerControlButtonPageIndicator.apply {
-            setBackgroundColor(postControlColor)
-            setOnClickListener {
-                MaterialDialog(this@PostListActivity)
-                    .title(text = getString(R.string.dialog_post_list_choose_page))
-                    .listItemsSingleChoice(items = getPageIndicatorItems()) { _, index, _ ->
-                        postListViewModel.goToPage(index + 1)
-                    }
-                    .show()
-            }
+        pageController.setOnPagerControlListener(pagerControlListener)
+        pageController.getBackwardButton().setImageDrawable(backwardArrow)
+        pageController.getForwardButton().setImageDrawable(forwardArrow)
+        pageController.getContainer().setBackgroundColor(postControlColor)
+    }
+
+    private fun initFab() {
+        val postControlColor =
+            if (primaryColorInPostControl.get()) getPrimaryColor() else getAccentColor()
+        val postControlColorDark = ThemeUtil.makeColorDarken(postControlColor, 0.8f)
+        val postControlColorRipple = ThemeUtil.makeColorDarken(postControlColor, 0.9f)
+        fab.setBackgroundColor(postControlColorDark)
+        fab.rippleColor = postControlColorRipple
+        fab.setOnClickListener {
+            // Todo
         }
     }
 
@@ -301,8 +367,29 @@ class PostListActivity : AppCompatActivity(), Injectable {
     private fun updatePageText() {
         val page = postListViewModel.getPage()
         val pages = postListViewModel.getPages()
-        binding.postListPageControl.pagerControlButtonPageIndicator.text =
-            getString(R.string.format_post_list_page_indicator, page, pages)
+        pageController.setPageIndicatorText(
+            getString(
+                R.string.format_post_list_page_indicator,
+                page,
+                pages
+            )
+        )
+    }
+
+    private fun isRecyclerViewAtBottom(recyclerView: RecyclerView): Boolean {
+        val layoutManager = recyclerView.layoutManager
+        val adapter = recyclerView.adapter!!
+        return when (layoutManager) {
+            is GridLayoutManager -> {
+                layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+            }
+            is LinearLayoutManager -> {
+                layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1
+            }
+            else -> {
+                throw IllegalStateException()
+            }
+        }
     }
 
     private fun scrollDown() {

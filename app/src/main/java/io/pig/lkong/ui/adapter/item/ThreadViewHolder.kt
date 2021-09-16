@@ -14,8 +14,8 @@ class ThreadViewHolder(
     itemView: View,
 ) : RecyclerView.ViewHolder(itemView) {
 
-    val avatarImage: ImageView = itemView.findViewById(R.id.item_thread_text_title)
-    val threadTitleText: TextView = itemView.findViewById(R.id.item_thread_image_icon)
+    val avatarImage: ImageView = itemView.findViewById(R.id.item_thread_image_icon)
+    val threadTitleText: TextView = itemView.findViewById(R.id.item_thread_text_title)
     val threadAuthorNameText: TextView = itemView.findViewById(R.id.item_thread_text_username)
     val threadRepliesText: TextView = itemView.findViewById(R.id.item_thread_text_reply_count)
     val threadDatetimeText: TextView = itemView.findViewById(R.id.item_thread_text_time)
