@@ -2,11 +2,16 @@ package io.pig.lkong.ui.edit
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextUtils
+import android.text.style.DynamicDrawableSpan
+import android.text.style.ImageSpan
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
@@ -28,10 +33,12 @@ import io.pig.ui.snakebar.SnakeBarType
 import io.pig.ui.snakebar.showSnakeBar
 import io.pig.widget.html.AsyncDrawableType
 import io.pig.widget.html.AsyncTargetDrawable
+import io.pig.widget.html.ClickableImageSpan
+import io.pig.widget.html.EmojiSpan
 
 abstract class AbstractPostActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityNewThreadBinding
+    protected lateinit var binding: ActivityNewThreadBinding
 
     private lateinit var postTailText: StringPrefs
 
@@ -187,7 +194,64 @@ abstract class AbstractPostActivity : AppCompatActivity() {
 
     abstract fun getLogTag(): String
 
+    protected fun replaceImageSpan(
+        initPlaceHolder: Drawable?,
+        pid: String,
+        sequence: CharSequence
+    ): CharSequence {
+        val spannable: Spannable = SpannableString(sequence)
+        val imageSpans = spannable.getSpans(
+            0, sequence.length,
+            ImageSpan::class.java
+        )
+        for (imageSpan in imageSpans) {
+            val spanStart = spannable.getSpanStart(imageSpan)
+            val spanEnd = spannable.getSpanEnd(imageSpan)
+            val spanFlags = spannable.getSpanFlags(imageSpan)
+            if (!TextUtils.isEmpty(imageSpan.source) && !imageSpan.source!!.contains("http://img.lkong.cn/bq/")) {
+                spannable.removeSpan(imageSpan)
+                val clickableImageSpan = ClickableImageSpan(
+                    this,
+                    null,
+                    pid,
+                    PICASSO_TAG,
+                    imageSpan.source!!,
+                    R.drawable.placeholder_loading,
+                    R.drawable.placeholder_error,
+                    256,
+                    256,
+                    DynamicDrawableSpan.ALIGN_BASELINE,
+                    initPlaceHolder!!
+                )
+                spannable.setSpan(
+                    clickableImageSpan,
+                    spanStart,
+                    spanEnd,
+                    spanFlags
+                )
+            } else if (!TextUtils.isEmpty(imageSpan.source) && imageSpan.source!!.contains("http://img.lkong.cn/bq/")) {
+                spannable.removeSpan(imageSpan)
+                val emoticonImageSpan = EmojiSpan(
+                    this,
+                    imageSpan.source!!,
+                    (contentTextSize * 2 * 2).toInt(),
+                    ImageSpan.ALIGN_BASELINE,
+                    contentTextSize.toInt() * 2
+                )
+                spannable.setSpan(
+                    emoticonImageSpan,
+                    spanStart,
+                    spanEnd,
+                    spanFlags
+                )
+            }
+        }
+        return spannable
+    }
+
     companion object {
         private const val SELECT_PICTURE = 1
+
+        private const val PICASSO_TAG = "abstract_post_activity"
     }
 }

@@ -20,4 +20,9 @@ object DataContract {
     const val BUNDLE_FORUM_NAME = "bundle_forum_name"
     const val BUNDLE_FORUM_AVATAR = "bundle_forum_avatar"
     const val BUNDLE_FORUM_DESCRIPTION = "bundle_forum_description"
+
+    // edit
+    const val BUNDLE_IS_EDIT_MODE = "bundle_is_edit_mode"
+    const val BUNDLE_EDIT_TITLE = "bundle_edit_title"
+    const val BUNDLE_EDIT_CONTENT = "bundle_edit_content"
 }
