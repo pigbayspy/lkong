@@ -32,6 +32,7 @@ import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.snack.em.SnackTypeEnum
 import io.pig.lkong.ui.snack.util.SnackBarUtil
 import io.pig.lkong.util.UiUtil
+import io.pig.ui.snakebar.ToastErrorConst
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
@@ -89,6 +90,7 @@ class SignInActivity : AccountAuthenticatorActivity() {
         // 设置参数
         val signInCard = findViewById<CardView>(R.id.activity_sign_in_card)
         signInCard.layoutParams = cardViewLayoutParams
+        window.statusBarColor = resources.getColor(R.color.activity_bg_sign_in)
         // 获取 intent
         if (intent.hasExtra(START_MAIN_ACTIVITY)) {
             startMainActivity = intent.getBooleanExtra(START_MAIN_ACTIVITY, startMainActivity)
@@ -161,6 +163,11 @@ class SignInActivity : AccountAuthenticatorActivity() {
                     }
 
                     override fun onError(e: Throwable) {
+                        showSnackBar(
+                            ToastErrorConst.TOAST_FAILURE_SIGN,
+                            SnackTypeEnum.ERROR,
+                            Snackbar.LENGTH_SHORT
+                        )
                         setLoading(false)
                     }
                 })
@@ -259,8 +266,16 @@ class SignInActivity : AccountAuthenticatorActivity() {
         return resources.getBoolean(R.bool.isTablet)
     }
 
+    private fun showSnackBar(errorCode: Int, type: SnackTypeEnum, length: Int) {
+        SnackBarUtil.makeSimple(
+            getSnackBarRootView(),
+            getString(ToastErrorConst.errorCodeToStringRes(errorCode)),
+            type,
+            length
+        ).show()
+    }
+
     private fun showSnackBar(content: CharSequence, type: SnackTypeEnum, length: Int) {
-        binding.root
         SnackBarUtil.makeSimple(getSnackBarRootView(), content, type, length).show()
     }
 

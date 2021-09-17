@@ -272,9 +272,15 @@
 
     <!-- toast -->
     <string name="toast_error_url_empty">链接名称或者地址不能为空</string>
-    <string name="toast_failure_new_post">发送失败，请重试。</string>
     <string name="toast_double_tap_to_exit">再次点击返回键退出</string>
     <string name="toast_error_title_empty">标题不能为空</string>
-    <string name="toast_error_content_empty">内容不能为空。</string>
+    <string name="toast_error_universal_try_again">遇到了错误，请重试</string>
+    <string name="toast_error_content_empty">内容不能为空</string>
+    <string name="toast_failure_sign">登录失败，请检查您的用户名和密码</string>
+    <string name="toast_failure_get_user_info">获取用户信息失败</string>
+    <string name="toast_failure_get_forum_list">刷新板块列表失败</string>
+    <string name="toast_failure_rate_post">评分失败</string>
+    <string name="toast_failure_save_image_as">图片保存失败</string>
+    <string name="toast_failure_new_post">发送失败，请重试</string>
 
 </resources>
