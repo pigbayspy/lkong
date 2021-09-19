@@ -1,6 +1,7 @@
 package io.pig.lkong.http.data.resp.data
 
 import io.pig.lkong.http.data.resp.data.common.AuthorData
+import io.pig.lkong.http.data.resp.data.common.PostRate
 
 class PostRespPostData(
     val lou: Int,
@@ -14,14 +15,6 @@ class PostRespPostData(
     val editTime: Long?,
     val user: AuthorData
 ) {
-
-    class PostRate(
-        val dateline: Long,
-        val id: String,
-        val num: Int,
-        val reason: String,
-        val user: AuthorData
-    )
 
     class PostQuote(
         val content: String,

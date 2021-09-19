@@ -14,8 +14,8 @@ import io.pig.widget.adapter.FixedViewAdapter
  * @author yinhang
  * @since 2021/8/18
  */
-class PostRateAdapter(context: Context, rates: List<PostModel.PostRate>) :
-    FixedViewAdapter<PostModel.PostRate>(rates) {
+class PostRateAdapter(context: Context, rates: List<PostModel.PostRateModel>) :
+    FixedViewAdapter<PostModel.PostRateModel>(rates) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -27,7 +27,7 @@ class PostRateAdapter(context: Context, rates: List<PostModel.PostRate>) :
         super.onBindViewHolder(holder, position)
         val viewHolder = holder as PostRateViewHolder
         val item = getItem(position)
-        viewHolder.userNameText.text = item.userName
+        viewHolder.userNameText.text = item.username
         viewHolder.scoreText.text = item.num.toString()
         if (item.reason.isBlank()) {
             viewHolder.reasonText.visibility = View.GONE

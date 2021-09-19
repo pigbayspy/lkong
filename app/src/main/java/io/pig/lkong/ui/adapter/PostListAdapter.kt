@@ -105,6 +105,7 @@ class PostListAdapter(
         }
         if (post.authorId == userId) {
             viewHolder.editButton.visibility = View.VISIBLE
+            viewHolder.rateButton.visibility = View.INVISIBLE
         }
         ImageLoaderUtil.loadLkongAvatar(
             context,
@@ -127,7 +128,10 @@ class PostListAdapter(
 
         // add listener
         viewHolder.avatarImage.setOnClickListener {
-            listener.onProfileImageClick(viewHolder.itemView, post.authorId)
+            listener.onProfileImageClick(it, post.authorId)
+        }
+        viewHolder.rateButton.setOnClickListener {
+            listener.onRateClick(it, post.pid, post.tid)
         }
         viewHolder.postItem.apply {
             isLongClickable = true

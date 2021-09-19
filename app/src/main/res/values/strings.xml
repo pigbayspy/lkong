@@ -30,6 +30,8 @@
     <string name="hint_account_password">密码</string>
     <string name="hint_url_name">链接文本</string>
     <string name="hint_url_value">链接地址</string>
+    <string name="hint_rate_reason">评分理由</string>
+    <string name="hint_rate_score">数值</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>
@@ -275,6 +277,7 @@
     <string name="toast_failure_new_post">发送失败，请重试。</string>
     <string name="toast_double_tap_to_exit">再次点击返回键退出</string>
     <string name="toast_error_title_empty">标题不能为空</string>
-    <string name="toast_error_content_empty">内容不能为空。</string>
+    <string name="toast_error_content_empty">内容不能为空</string>
+    <string name="toast_error_rate_score_empty">评分数值不能为零</string>
 
 </resources>
