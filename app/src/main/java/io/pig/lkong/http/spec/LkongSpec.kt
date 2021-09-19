@@ -9,6 +9,8 @@ import io.pig.lkong.http.data.req.FollowersReq
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.ForumThreadReq
 import io.pig.lkong.http.data.req.HotThreadReq
+import io.pig.lkong.http.data.req.NewRateReq
+import io.pig.lkong.http.data.req.NewThreadReq
 import io.pig.lkong.http.data.req.NoticeReq
 import io.pig.lkong.http.data.req.PunchReq
 import io.pig.lkong.http.data.req.SignReq
@@ -23,6 +25,8 @@ import io.pig.lkong.http.data.resp.FavoriteResp
 import io.pig.lkong.http.data.resp.ForumResp
 import io.pig.lkong.http.data.resp.ForumThreadResp
 import io.pig.lkong.http.data.resp.HotThreadResp
+import io.pig.lkong.http.data.resp.NewRateResp
+import io.pig.lkong.http.data.resp.NewThreadResp
 import io.pig.lkong.http.data.resp.NoticeResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
@@ -93,4 +97,10 @@ interface LkongSpec {
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getSystemNotice(@Body systemNoticeReq: SystemNoticeReq): RespBase<SystemNoticeResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun createThread(@Body threadReq: NewThreadReq): RespBase<NewThreadResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun createRate(@Body rateReq: NewRateReq): RespBase<NewRateResp>
 }

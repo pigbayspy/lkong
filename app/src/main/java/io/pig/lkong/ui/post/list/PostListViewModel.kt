@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.pig.common.ui.adapter.Bookends
 import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.http.data.resp.data.PostRespThreadData
 import io.pig.lkong.http.source.LkongRepository
@@ -57,6 +58,34 @@ class PostListViewModel(private val thread: Long) : ViewModel() {
                     authorId = it.thread.author.uid,
                     authorName = it.thread.author.name
                 )
+            }
+        }
+    }
+
+    fun ratePost(
+        pid: String,
+        num: Int,
+        reason: String,
+        adapter: Bookends
+    ) {
+        viewModelScope.launch {
+            try {
+                val respBase = LkongRepository.createRate(thread, pid, num, reason)
+                if (respBase.data != null) {
+                    val newRate = PostModel.PostRateModel(respBase.data.rate)
+                    for ((i, post) in detail.value!!.posts.withIndex()) {
+                        if (post.pid == pid) {
+                            post.rates = post.rates + newRate
+                            post.rateSum += num
+                            adapter.notifyItemChanged(i + adapter.headerCount)
+                            return@launch
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Lkong Network Request Fail, error: ${respBase.errors}")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Lkong Network Request Fail", e)
             }
         }
     }

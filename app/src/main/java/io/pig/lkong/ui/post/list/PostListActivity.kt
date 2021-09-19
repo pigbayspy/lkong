@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -44,10 +47,13 @@ import io.pig.lkong.util.ThemeUtil
 import io.pig.ui.common.getAccentColor
 import io.pig.ui.common.getPrimaryColor
 import io.pig.ui.common.getThemeKey
+import io.pig.ui.snakebar.SnakeBarType
+import io.pig.ui.snakebar.showSnakeBar
 import io.pig.widget.PagerControl
 import io.pig.widget.listener.OnPagerControlListener
 import io.pig.widget.util.QuickReturnHelper
 import javax.inject.Inject
+import kotlin.math.abs
 
 class PostListActivity : AppCompatActivity(), Injectable {
 
@@ -195,7 +201,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
                 } else if (dy < 0) {
                     amountScrollY = 0
                     negativeDyAmount += dy
-                    if (Math.abs(negativeDyAmount - mBaseTranslationY) > toolbarHeight) {
+                    if (abs(negativeDyAmount - mBaseTranslationY) > toolbarHeight) {
                         toolbarReturnHelper.show()
                         pageController.show()
                         fab.show()
@@ -275,11 +281,11 @@ class PostListActivity : AppCompatActivity(), Injectable {
                 openContentDialog(post)
             }
 
-            override fun onRateClick(view: View, position: Int) {
-                TODO("Not yet implemented")
+            override fun onRateClick(view: View, pid: String, tid: Long) {
+                openRateDialog(pid)
             }
 
-            override fun onRateTextClick(view: View, rates: List<PostModel.PostRate>) {
+            override fun onRateTextClick(view: View, rates: List<PostModel.PostRateModel>) {
                 openRateLogDialog(rates)
             }
 
@@ -318,7 +324,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
         binding.recycleListPost.adapter = wrapperAdapter
     }
 
-    private fun openRateLogDialog(rates: List<PostModel.PostRate>) {
+    private fun openRateLogDialog(rates: List<PostModel.PostRateModel>) {
         val adapter = PostRateAdapter(this, rates)
         MaterialDialog(this).apply {
             title(R.string.dialog_title_rate)
@@ -335,6 +341,34 @@ class PostListActivity : AppCompatActivity(), Injectable {
                 message(text = SlateUtil.slateToText(post.message))
                 show()
             }
+        }
+    }
+
+    private fun openRateDialog(pid: String) {
+        MaterialDialog(this).show {
+            title(R.string.dialog_title_rate)
+            customView(R.layout.dialog_input_rate, scrollable = false)
+            positiveButton(android.R.string.ok, click = {
+                val reasonEditText = it.findViewById<EditText>(R.id.edit_reason)
+                val numEditText = it.findViewById<EditText>(R.id.edit_num)
+                val reason = reasonEditText.text.toString()
+                val numText = numEditText.text.toString()
+                if (TextUtils.isEmpty(numText) || !TextUtils.isDigitsOnly(numText) || numText == "0") {
+                    showSnakeBar(
+                        binding.root,
+                        getString(R.string.toast_error_rate_score_empty),
+                        SnakeBarType.ERROR
+                    )
+                    return@positiveButton
+                }
+                val num = Integer.parseInt(numText)
+                postListViewModel.ratePost(
+                    pid,
+                    num,
+                    reason,
+                    binding.recycleListPost.adapter as Bookends
+                )
+            })
         }
     }
 

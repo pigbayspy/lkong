@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
+import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.preference.PreferenceManager
@@ -13,9 +14,12 @@ import io.pig.lkong.theme.ThemeConfig
 
 /**
  * @author yinhang
- * @since 2021/6/13
+ * @since 2021-06-13
  */
 object ThemeUtil {
+
+    const val KEY_ACTIVITY_THEME = "activity_theme"
+    const val KEY_ACTIVITY_THEME_DEFAULT = "activity_theme_default"
 
     const val KEY_ACCENT_COLOR = "accent_color"
     const val KEY_PRIMARY_COLOR = "primary_color"
@@ -23,6 +27,7 @@ object ThemeUtil {
     const val KEY_LIGHT_TOOLBAR_MODE = "light_toolbar_mode"
     const val KEY_TEXT_COLOR_PRIMARY = "text_color_primary"
     const val KEY_TEXT_COLOR_SECONDARY = "text_color_secondary"
+    const val KEY_TEXT_COLOR_SECONDARY_INVERSE = "text_color_secondary_inverse"
     const val KEY_LIGHT_STATUS_BAR_MODE = "light_status_bar_mode"
     const val KEY_PRIMARY_COLOR_DARK = "primary_color_dark"
     const val KEY_APPLY_PRIMARY_DARK_STATUS_BAR = "apply_primary_dark_status_bar"
@@ -83,6 +88,14 @@ object ThemeUtil {
     }
 
     @ColorInt
+    fun primaryColorDark(context: Context, key: String): Int {
+        return pref(context, key).getInt(
+            KEY_PRIMARY_COLOR_DARK,
+            resolveColor(context, R.attr.colorPrimaryDark, Color.parseColor("#37474F"))
+        )
+    }
+
+    @ColorInt
     fun textColorPrimary(context: Context, key: String): Int {
         return pref(context, key).getInt(
             KEY_TEXT_COLOR_PRIMARY,
@@ -95,6 +108,14 @@ object ThemeUtil {
         return pref(context, key).getInt(
             KEY_TEXT_COLOR_SECONDARY,
             resolveColor(context, android.R.attr.textColorSecondary)
+        )
+    }
+
+    @ColorInt
+    fun textColorSecondaryInverse(context: Context, key: String): Int {
+        return pref(context, key).getInt(
+            KEY_TEXT_COLOR_SECONDARY_INVERSE,
+            resolveColor(context, android.R.attr.textColorSecondaryInverse)
         )
     }
 
@@ -199,7 +220,7 @@ object ThemeUtil {
         }
     }
 
-    private fun resolveColor(context: Context, attr: Int): Int {
+    fun resolveColor(context: Context, attr: Int): Int {
         return resolveColor(context, attr, 0)
     }
 
@@ -222,5 +243,19 @@ object ThemeUtil {
             KEY_TEXT_COLOR_PRIMARY_INVERSE,
             resolveColor(context, android.R.attr.textColorPrimaryInverse)
         )
+    }
+
+    @StyleRes
+    fun activityTheme(context: Context, key: String): Int {
+        val prefs: SharedPreferences = pref(context, key)
+        val valueStr = prefs.getString(KEY_ACTIVITY_THEME, null)
+        var valueTypeStr = prefs.getString(KEY_ACTIVITY_THEME_DEFAULT, null)
+        if (valueStr != null) {
+            if (valueTypeStr == null) {
+                valueTypeStr = "style"
+            }
+            return context.resources.getIdentifier(valueStr, valueTypeStr, context.packageName)
+        }
+        return 0
     }
 }

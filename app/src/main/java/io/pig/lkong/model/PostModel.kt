@@ -3,6 +3,7 @@ package io.pig.lkong.model
 import android.os.Parcel
 import android.os.Parcelable
 import io.pig.lkong.http.data.resp.data.PostRespPostData
+import io.pig.lkong.http.data.resp.data.common.PostRate
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 
 /**
@@ -20,8 +21,8 @@ class PostModel : BaseCollectionItem {
     val tid: Long
     val status: String
     val ordinal: Int
-    val rates: List<PostRate>
-    val rateSum: Int
+    var rates: List<PostRateModel>
+    var rateSum: Int
 
     constructor(item: PostRespPostData) {
         this.dateline = item.dateline
@@ -34,9 +35,9 @@ class PostModel : BaseCollectionItem {
         this.status = item.status
         this.ordinal = item.lou
         this.rates = item.rate?.map {
-            PostRate(it)
+            PostRateModel(it)
         } ?: emptyList()
-        this.rateSum = this.rates.map { it.num }.sum()
+        this.rateSum = this.rates.sumOf { it.num }
     }
 
     private constructor(parcel: Parcel) {
@@ -50,7 +51,7 @@ class PostModel : BaseCollectionItem {
         status = parcel.readString() ?: ""
         ordinal = parcel.readInt()
         rates = mutableListOf()
-        parcel.readTypedList(rates, PostRate.CREATOR)
+        parcel.readTypedList(rates, PostRateModel.CREATOR)
         rateSum = parcel.readInt()
     }
 
@@ -82,22 +83,22 @@ class PostModel : BaseCollectionItem {
         }
     }
 
-    class PostRate : BaseCollectionItem {
+    class PostRateModel : BaseCollectionItem {
 
         val dateline: Long
         val id: String
         val num: Int
         val reason: String
         val userId: Long
-        val userName: String
+        val username: String
 
-        constructor(item: PostRespPostData.PostRate) {
+        constructor(item: PostRate) {
             this.dateline = item.dateline
             this.id = item.id
             this.num = item.num
             this.reason = item.reason
             this.userId = item.user.uid
-            this.userName = item.user.name
+            this.username = item.user.name
         }
 
         private constructor(parcel: Parcel) {
@@ -106,7 +107,7 @@ class PostModel : BaseCollectionItem {
             this.num = parcel.readInt()
             this.reason = parcel.readString() ?: ""
             this.userId = parcel.readLong()
-            this.userName = parcel.readString() ?: ""
+            this.username = parcel.readString() ?: ""
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -115,19 +116,19 @@ class PostModel : BaseCollectionItem {
             parcel.writeInt(num)
             parcel.writeString(reason)
             parcel.writeLong(userId)
-            parcel.writeString(userName)
+            parcel.writeString(username)
         }
 
         override fun describeContents(): Int {
             return 0
         }
 
-        companion object CREATOR : Parcelable.Creator<PostRate> {
-            override fun createFromParcel(parcel: Parcel): PostRate {
-                return PostRate(parcel)
+        companion object CREATOR : Parcelable.Creator<PostRateModel> {
+            override fun createFromParcel(parcel: Parcel): PostRateModel {
+                return PostRateModel(parcel)
             }
 
-            override fun newArray(size: Int): Array<PostRate?> {
+            override fun newArray(size: Int): Array<PostRateModel?> {
                 return arrayOfNulls(size)
             }
         }

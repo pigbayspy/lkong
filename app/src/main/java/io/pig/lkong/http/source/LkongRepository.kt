@@ -8,6 +8,7 @@ import io.pig.lkong.http.data.req.FollowersReq
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.ForumThreadReq
 import io.pig.lkong.http.data.req.HotThreadReq
+import io.pig.lkong.http.data.req.NewRateReq
 import io.pig.lkong.http.data.req.NoticeReq
 import io.pig.lkong.http.data.req.PunchReq
 import io.pig.lkong.http.data.req.SignReq
@@ -22,6 +23,7 @@ import io.pig.lkong.http.data.resp.FavoriteResp
 import io.pig.lkong.http.data.resp.ForumResp
 import io.pig.lkong.http.data.resp.ForumThreadResp
 import io.pig.lkong.http.data.resp.HotThreadResp
+import io.pig.lkong.http.data.resp.NewRateResp
 import io.pig.lkong.http.data.resp.NoticeResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
@@ -136,6 +138,16 @@ object LkongRepository {
     suspend fun getSystemNotice(date: Long): RespBase<SystemNoticeResp> {
         val req = SystemNoticeReq(date)
         return lkongSpec.getSystemNotice(req)
+    }
+
+    suspend fun createRate(
+        tid: Long,
+        pid: String,
+        num: Int,
+        reason: String
+    ): RespBase<NewRateResp> {
+        val req = NewRateReq(num, pid, reason, tid)
+        return lkongSpec.createRate(req)
     }
 
     private fun getCookie(key: String): String {
