@@ -25,4 +25,7 @@ object DataContract {
     const val BUNDLE_IS_EDIT_MODE = "bundle_is_edit_mode"
     const val BUNDLE_EDIT_TITLE = "bundle_edit_title"
     const val BUNDLE_EDIT_CONTENT = "bundle_edit_content"
+
+    // notice
+    const val BUNDLE_NOTICE_COUNT_MODEL = "bundle_notice_count_model"
 }

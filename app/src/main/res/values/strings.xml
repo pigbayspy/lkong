@@ -234,6 +234,11 @@
     <string name="format_unit_ten_kilo">万</string>
     <string name="format_forum_item_summary">今日 %s</string>
     <string name="format_post_tail_prefix">&#160;──&#160;</string>
+    <string name="format_notice_mentions">%1$d 个新提及</string>
+    <string name="format_notice_notice">%1$d 条新通知</string>
+    <string name="format_notice_private_message">%1$d 条新私信</string>
+    <string name="format_notice_rate">%1$d 个新评分</string>
+    <string name="format_notice_all_count">你有 %1$d 条新消息</string>
 
     <!-- forum threads -->
     <string-array name="thread_list_type_arrays">
@@ -285,5 +290,12 @@
     <string name="toast_failure_rate_post">评分失败</string>
     <string name="toast_failure_save_image_as">图片保存失败</string>
     <string name="toast_failure_new_post">发送失败，请重试</string>
+
+    <!-- service -->
+    <string name="provider_notice_label">自动检查新消息</string>
+
+    <!-- permission -->
+    <string name="permission_notice_service">自动检查新消息</string>
+    <string name="permission_notice_receiver">新消息通知</string>
 
 </resources>

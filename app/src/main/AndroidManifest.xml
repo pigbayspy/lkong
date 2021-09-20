@@ -24,6 +24,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lkong"
         android:usesCleartextTraffic="true">
+        <service
+            android:name=".notice.NoticeService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="@string/permission_notice_service">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/notice_sync_adapter" />
+        </service>
+
+        <receiver
+            android:name=".broadcast.CheckNewBroadcastReceiver"
+            android:exported="true"
+            android:permission="@string/permission_notice_receiver">
+            <intent-filter android:priority="1">
+                <action android:name="io.pig.lkong.broadcast.SYNC_CHECK_NOTICE_COUNT_DONE" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ui.forum.content.ForumThreadActivity"
             android:exported="true"

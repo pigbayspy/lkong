@@ -12,7 +12,7 @@ import android.os.Bundle
  */
 object SyncUtil {
 
-    const val SYNC_AUTHORITY_CHECK_NOTICE = "io.pig.lkong.data.provider.checknotice"
+    const val SYNC_AUTHORITY_CHECK_NOTICE = "io.pig.lkong.data.provider.notice"
 
     const val SYNC_FREQ_ONE_HOUR = 3600L
 
