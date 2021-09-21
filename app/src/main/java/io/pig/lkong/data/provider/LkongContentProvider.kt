@@ -36,8 +36,7 @@ open class LkongContentProvider : BaseContentProvider() {
     }
 
     override fun getType(uri: Uri): String? {
-        val match = getMatcher().match(uri)
-        when (match) {
+        when (getMatcher().match(uri)) {
             URI_TYPE_CACHE_OBJECT -> return TYPE_CURSOR_DIR + CacheObjectColumns.TABLE_NAME
             URI_TYPE_CACHE_OBJECT_ID -> return TYPE_CURSOR_ITEM + CacheObjectColumns.TABLE_NAME
         }

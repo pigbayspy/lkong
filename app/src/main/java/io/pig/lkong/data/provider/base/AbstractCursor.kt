@@ -6,7 +6,7 @@ import java.util.*
 
 abstract class AbstractCursor(cursor: Cursor) : CursorWrapper(cursor) {
 
-    private val columnIndexes: HashMap<String, Int>
+    private val columnIndexes = HashMap<String, Int>(cursor.columnCount * 4 / 3, .75f)
 
     abstract fun getId(): Long
 
@@ -75,7 +75,4 @@ abstract class AbstractCursor(cursor: Cursor) : CursorWrapper(cursor) {
         } else getBlob(index)
     }
 
-    init {
-        columnIndexes = HashMap(cursor.columnCount * 4 / 3, .75f)
-    }
 }

@@ -20,8 +20,8 @@ import io.pig.common.ui.R
 import io.pig.lkong.util.ImageLoaderUtil.shouldDownloadImage
 import java.io.IOException
 
-class UrlImageGetter(var mContext: Context, downloadPolicy: Int) : ImageGetter {
-    val mResources: Resources
+class UrlImageGetter(var context: Context, downloadPolicy: Int) : ImageGetter {
+    val resources: Resources = context.resources
     var emotionSize = 0
     var mMaxImageWidth = 0
     var mPlaceHolderResource = 0
@@ -52,7 +52,7 @@ class UrlImageGetter(var mContext: Context, downloadPolicy: Int) : ImageGetter {
             val emojiFileName = source.substring(EMOJI_PREFIX.length)
             try {
                 val emojiDrawable = Drawable.createFromStream(
-                    mContext.assets.open(
+                    context.assets.open(
                         "${EMOJI_PATH_WITH_SLASH}${emojiFileName}.png"
                     ), null
                 )
@@ -72,17 +72,17 @@ class UrlImageGetter(var mContext: Context, downloadPolicy: Int) : ImageGetter {
                 Log.d("UrlImageGetter", "getDrawable() from assets failed.", e)
             }
         }
-        val urlDrawable = UrlDrawable(mContext, mMaxImageWidth)
+        val urlDrawable = UrlDrawable(context, mMaxImageWidth)
         if (shouldDownloadImage(mImageDownloadPolicy)) {
             Glide
-                .with(mContext)
+                .with(context)
                 .load(source)
                 .placeholder(mPlaceHolderResource)
                 .error(mErrorResource)
                 .into(urlDrawable)
         } else {
             Glide
-                .with(mContext)
+                .with(context)
                 .load(mPlaceHolderResource)
                 .placeholder(mPlaceHolderResource)
                 .error(mErrorResource)
@@ -141,9 +141,7 @@ class UrlImageGetter(var mContext: Context, downloadPolicy: Int) : ImageGetter {
         }
 
         fun setDrawable(drawable: Drawable) {
-            if (this.drawable != null) {
-                this.drawable!!.callback = null
-            }
+            this.drawable?.callback = null
             drawable.callback = this
             this.drawable = drawable
         }
@@ -212,7 +210,6 @@ class UrlImageGetter(var mContext: Context, downloadPolicy: Int) : ImageGetter {
      * Construct the URLImageParser which will execute AsyncTask and refresh the container
      */
     init {
-        mResources = mContext.resources
         mImageDownloadPolicy = downloadPolicy
         mErrorResource = R.drawable.placeholder_error
         mPlaceHolderResource = R.drawable.placeholder_loading

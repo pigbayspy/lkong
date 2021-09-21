@@ -45,12 +45,16 @@ class QuickReturnHelper(private val targetView: View, private val direction: Int
                     return
                 }
             }
-            val translationYWithTarget: Int = if (direction == ANIMATE_DIRECTION_DOWN) {
-                height + getMarginTop()
-            } else if (direction == ANIMATE_DIRECTION_UP) {
-                -(height + getMarginTop())
-            } else {
-                throw IllegalArgumentException("Unknown direction.")
+            val translationYWithTarget: Int = when (direction) {
+                ANIMATE_DIRECTION_DOWN -> {
+                    height + getMarginTop()
+                }
+                ANIMATE_DIRECTION_UP -> {
+                    -(height + getMarginTop())
+                }
+                else -> {
+                    throw IllegalArgumentException("Unknown direction.")
+                }
             }
             val translationY = if (visible) 0 else translationYWithTarget
             if (animate) {

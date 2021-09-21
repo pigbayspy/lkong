@@ -12,21 +12,21 @@ object CacheObjectColumns : BaseColumns {
 
     private val CONTENT_URI_NOTIFY =
         Uri.parse(ProviderConst.CONTENT_URI_BASE + "/" + TABLE_NAME)
-            .buildUpon().appendQueryParameter("QUERY_NOTIFY", java.lang.Boolean.toString(true))
+            .buildUpon().appendQueryParameter("QUERY_NOTIFY", true.toString())
             .build()
 
-    val CONTENT_URI = Uri.parse(ProviderConst.CONTENT_URI_BASE + "/" + TABLE_NAME)
-        .buildUpon().appendQueryParameter("QUERY_NOTIFY", java.lang.Boolean.toString(false)).build()
+    val CONTENT_URI: Uri = Uri.parse(ProviderConst.CONTENT_URI_BASE + "/" + TABLE_NAME)
+        .buildUpon().appendQueryParameter("QUERY_NOTIFY", false.toString()).build()
 
     fun contentUri(authority: String): Uri {
         return Uri.parse("content://$authority/$TABLE_NAME")
-            .buildUpon().appendQueryParameter("QUERY_NOTIFY", java.lang.Boolean.toString(false))
+            .buildUpon().appendQueryParameter("QUERY_NOTIFY", false.toString())
             .build()
     }
 
     fun contentUriNotify(authority: String): Uri {
         return Uri.parse("content://$authority/$TABLE_NAME")
-            .buildUpon().appendQueryParameter("QUERY_NOTIFY", java.lang.Boolean.toString(true))
+            .buildUpon().appendQueryParameter("QUERY_NOTIFY", true.toString())
             .build()
     }
 
@@ -55,5 +55,5 @@ object CacheObjectColumns : BaseColumns {
      */
     const val CACHE_TIME_EXPIRE = "cache_time_expire"
 
-    const val DEFAULT_ORDER = TABLE_NAME + "." + CACHE_ID
+    const val DEFAULT_ORDER = "$TABLE_NAME.$CACHE_ID"
 }

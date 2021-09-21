@@ -196,7 +196,7 @@ class MainActivity : AppCompatActivity(), Injectable {
 
     override fun onResume() {
         super.onResume()
-
+        mainViewModel.checkNoticeCount(lkongDatabase)
     }
 
     fun setDrawerTitle(title: String) {
