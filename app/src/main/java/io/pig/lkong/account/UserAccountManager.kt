@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.HandlerThread
+import android.text.TextUtils
 import android.util.Log
 import io.pig.lkong.MainActivity
 import io.pig.lkong.account.const.AccountConst.ACCOUNT_TYPE
@@ -44,6 +45,27 @@ class UserAccountManager {
             val thread = HandlerThread(THREAD_NAME)
             thread.start()
             handler = Handler(thread.looper)
+        }
+
+        fun getUserAccountFromAccountManager(
+            account: Account,
+            accountManager: AccountManager
+        ): UserAccount {
+            val idString = accountManager.getUserData(account, KEY_ACCOUNT_USER_ID)
+            val userId = java.lang.Long.valueOf(if (TextUtils.isEmpty(idString)) "0" else idString)
+            val userEmail = account.name
+            val userName = accountManager.getUserData(account, KEY_ACCOUNT_USER_NAME)
+            val userAvatar =
+                accountManager.getUserData(account, KEY_ACCOUNT_USER_AVATAR)
+            val userAuth = accountManager.getUserData(account, KEY_ACCOUNT_USER_AUTH)
+            return UserAccount(
+                account,
+                userId,
+                userName,
+                userEmail,
+                userAvatar,
+                userAuth,
+            )
         }
     }
 

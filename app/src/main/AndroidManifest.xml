@@ -46,6 +46,17 @@
             </intent-filter>
         </receiver>
 
+        <provider
+            android:name=".data.provider.LkongContentProvider"
+            android:authorities="io.pig.lkong.data.provider"
+            android:exported="false" />
+
+        <provider
+            android:name=".data.provider.NoticeContentProvider"
+            android:authorities="io.pig.lkong.data.provider.NOTICE"
+            android:exported="false"
+            android:label="@string/provider_notice_label" />
+
         <activity
             android:name=".ui.forum.content.ForumThreadActivity"
             android:exported="true"
