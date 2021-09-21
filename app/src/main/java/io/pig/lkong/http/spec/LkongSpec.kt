@@ -6,6 +6,7 @@ import io.pig.lkong.http.data.req.CollectionReq
 import io.pig.lkong.http.data.req.FansReq
 import io.pig.lkong.http.data.req.FavoriteReq
 import io.pig.lkong.http.data.req.FollowersReq
+import io.pig.lkong.http.data.req.ForumDigestThreadReq
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.ForumThreadReq
 import io.pig.lkong.http.data.req.HotThreadReq
@@ -75,7 +76,10 @@ interface LkongSpec {
     suspend fun getCollections(@Body collectionReq: CollectionReq): RespBase<CollectionResp>
 
     @POST(RestApiConst.GRAPHQL)
-    suspend fun getForumThreads(@Body forumThreadReq: ForumThreadReq): RespBase<ForumThreadResp>
+    suspend fun getForumThreads(@Body threadReq: ForumThreadReq): RespBase<ForumThreadResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getForumDigestThreads(@Body threadReq: ForumDigestThreadReq): RespBase<ForumThreadResp>
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getNotice(@Body noticeReq: NoticeReq): RespBase<NoticeResp>

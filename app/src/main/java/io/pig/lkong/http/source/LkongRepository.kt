@@ -5,6 +5,7 @@ import io.pig.lkong.http.data.req.CollectionReq
 import io.pig.lkong.http.data.req.FansReq
 import io.pig.lkong.http.data.req.FavoriteReq
 import io.pig.lkong.http.data.req.FollowersReq
+import io.pig.lkong.http.data.req.ForumDigestThreadReq
 import io.pig.lkong.http.data.req.ForumReq
 import io.pig.lkong.http.data.req.ForumThreadReq
 import io.pig.lkong.http.data.req.HotThreadReq
@@ -100,7 +101,15 @@ object LkongRepository {
         return lkongSpec.getTimeline(req)
     }
 
-    suspend fun getForumThread(forum: Long, page: Int): RespBase<ForumThreadResp> {
+    suspend fun getForumThread(
+        forum: Long,
+        page: Int,
+        digest: Boolean = false
+    ): RespBase<ForumThreadResp> {
+        if (digest) {
+            val req = ForumDigestThreadReq(forum, page)
+            return lkongSpec.getForumDigestThreads(req)
+        }
         val req = ForumThreadReq(forum, page)
         return lkongSpec.getForumThreads(req)
     }
