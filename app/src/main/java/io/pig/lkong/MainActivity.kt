@@ -1,5 +1,6 @@
 package io.pig.lkong
 
+import android.accounts.Account
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -19,6 +20,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import io.pig.lkong.account.UserAccountManager
 import io.pig.lkong.application.LkongApplication
+import io.pig.lkong.data.LkongDatabase
+import io.pig.lkong.data.impl.LkongDatabaseSqliteImpl
 import io.pig.lkong.databinding.ActivityMainBinding
 import io.pig.lkong.exception.SignInException
 import io.pig.lkong.http.source.LkongRepository
@@ -57,8 +60,12 @@ class MainActivity : AppCompatActivity(), Injectable {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var mNotificationMenuItem: MenuItem
+    private lateinit var lkongDatabase: LkongDatabase
 
     private lateinit var checkNoticeDuration: StringPrefs
+
+    private var hasNotice = false
 
     @Inject
     lateinit var userAccountMgr: UserAccountManager
@@ -96,6 +103,13 @@ class MainActivity : AppCompatActivity(), Injectable {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mainViewModel.notice.observe(this) {
+            if (it != null) {
+                hasNotice = it.hasNotice()
+                invalidateOptionsMenu()
+            }
+        }
+
         // 检查是否登录
         if (!userAccountMgr.isSignedIn()) {
             AppNavigation.navigateToSignInActivity(this)
@@ -105,6 +119,7 @@ class MainActivity : AppCompatActivity(), Injectable {
         // 初始化配置
         initConfig()
         initToolbar()
+        initDb()
 
         drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -127,11 +142,21 @@ class MainActivity : AppCompatActivity(), Injectable {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+        mNotificationMenuItem = menu.findItem(R.id.action_main_notify)
         return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if (hasNotice) {
+            mNotificationMenuItem.setIcon(R.drawable.ic_action_notification_red_dot)
+        } else {
+            mNotificationMenuItem.setIcon(R.drawable.ic_action_notification)
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -167,6 +192,11 @@ class MainActivity : AppCompatActivity(), Injectable {
     override fun onDestroy() {
         super.onDestroy()
         Running.set(false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     fun setDrawerTitle(title: String) {
@@ -231,10 +261,20 @@ class MainActivity : AppCompatActivity(), Injectable {
         )
     }
 
+    private fun initDb() {
+        this.lkongDatabase = LkongDatabaseSqliteImpl(this)
+    }
+
     private fun initToolbar() {
         val toolbar = binding.appBarMain.mainToolbar
         toolbar.setBackgroundColor(getPrimaryColor())
         setSupportActionBar(toolbar)
         processToolbar(toolbar)
+    }
+
+    private fun checkNewNoticeCount() {
+        val account: Account = userAccountMgr.getCurrentUserAccount().account
+        SyncUtil.manualSync(account, SyncUtil.SYNC_AUTHORITY_CHECK_NOTICE)
+        mainViewModel.checkNoticeCount(lkongDatabase)
     }
 }

@@ -1,5 +1,6 @@
 package io.pig.lkong.data
 
+import io.pig.lkong.http.data.resp.data.NoticeRespData
 import io.pig.lkong.model.HistoryModel
 
 /**
@@ -22,4 +23,6 @@ interface LkongDatabase {
         authorId: Long,
         authorName: String
     )
+
+    fun loadNotice(userId: Long): NoticeRespData?
 }

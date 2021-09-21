@@ -4,12 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import io.pig.lkong.R
 import io.pig.lkong.model.NoticeModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.differ.NoticeDiffer
 import io.pig.lkong.ui.adapter.item.NoticeViewHolder
+import io.pig.lkong.util.JsonUtil
 import io.pig.widget.adapter.MutableViewAdapter
 
 class NoticeAdapter(
@@ -33,7 +33,7 @@ class NoticeAdapter(
     private fun renderContent(viewHolder: NoticeViewHolder, notice: NoticeModel) {
         when (notice.action) {
             "replyThread" -> {
-                val reply = gson.fromJson(notice.content, ReplyThread::class.java)
+                val reply = JsonUtil.fromJson(notice.content, ReplyThread::class.java)
                 val text = if (reply.user.isEmpty()) {
                     context.getString(R.string.format_reply_thread, reply.title)
                 } else {
@@ -46,7 +46,7 @@ class NoticeAdapter(
                 }
             }
             "modifyThread" -> {
-                val modify = gson.fromJson(notice.content, ModifyThread::class.java)
+                val modify = JsonUtil.fromJson(notice.content, ModifyThread::class.java)
                 when (modify.key) {
                     "modifyThreadLock" -> {
                         val text = context.getString(R.string.format_close_thread, modify.title)
@@ -68,9 +68,5 @@ class NoticeAdapter(
 
     class ModifyThread(val key: String, val tid: Long, val args: OperateParam, val title: String) {
         class OperateParam(val tid: Long, val undo: Boolean, val reason: String)
-    }
-
-    companion object {
-        val gson = Gson()
     }
 }

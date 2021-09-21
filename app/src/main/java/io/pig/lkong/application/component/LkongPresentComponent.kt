@@ -6,6 +6,7 @@ import io.pig.lkong.application.module.LkongModule
 import io.pig.lkong.application.module.UserAccountModule
 import io.pig.lkong.ui.favorite.FavoriteFragment
 import io.pig.lkong.ui.history.HistoryFragment
+import io.pig.lkong.ui.home.HomeFragment
 import io.pig.lkong.ui.post.list.PostListActivity
 import io.pig.lkong.ui.setting.SettingFragment
 import javax.inject.Singleton

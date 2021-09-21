@@ -16,7 +16,7 @@ abstract class AbstractSelection<T> {
     private val selectionArgs: MutableList<String> = ArrayList(5)
     private val orderBy = StringBuilder()
 
-    var notify: Boolean? = null
+    private var notify: Boolean? = null
 
     private var groupBy: String? = null
 

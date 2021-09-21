@@ -181,6 +181,10 @@ class UserAccountManager {
         throw SignInException("need to sign in")
     }
 
+    fun getCurrentUserId(): Long {
+        return this.getAuthObject().userId
+    }
+
     private fun setCurrentUserAccount(userId: Long) {
         this.currentAccount = userAccounts[userId]
         this.authObject = getAuthObject(currentAccount!!)

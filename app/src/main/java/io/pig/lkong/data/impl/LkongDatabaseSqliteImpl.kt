@@ -1,11 +1,17 @@
 package io.pig.lkong.data.impl
 
+import android.content.ContentResolver
 import android.content.Context
 import androidx.room.Room
 import io.pig.lkong.data.LkongDatabase
 import io.pig.lkong.data.db.HistoryDatabase
 import io.pig.lkong.data.entity.HistoryEntity
+import io.pig.lkong.data.provider.cacahe.CacheObjectCursor
+import io.pig.lkong.data.provider.cacahe.CacheObjectSelection
+import io.pig.lkong.http.data.resp.data.NoticeRespData
 import io.pig.lkong.model.HistoryModel
+import io.pig.lkong.notice.NoticeCacheConst
+import io.pig.lkong.util.JsonUtil
 import java.util.*
 
 /**
@@ -18,6 +24,8 @@ class LkongDatabaseSqliteImpl(context: Context) : LkongDatabase {
         context,
         HistoryDatabase::class.java, "lkong"
     ).build()
+
+    private val contentResolver: ContentResolver = context.contentResolver
 
     private val dao = db.historyDao()
 
@@ -64,5 +72,24 @@ class LkongDatabaseSqliteImpl(context: Context) : LkongDatabase {
             lastReadTime = System.currentTimeMillis()
         )
         dao.insert(entity)
+    }
+
+    override fun loadNotice(userId: Long): NoticeRespData? {
+        val json = getCachedValue(NoticeCacheConst.generateNoticeCountKey(userId)) ?: ""
+        return JsonUtil.fromJsonOfNull(json, NoticeRespData::class.java)
+    }
+
+    private fun getCachedValue(key: String): String? {
+        val cacheSelection = CacheObjectSelection()
+        cacheSelection.cacheKey(key)
+        val cursor: CacheObjectCursor = cacheSelection.query(contentResolver)!!
+        return if (cursor.count > 0) {
+            cursor.moveToFirst()
+            val json = cursor.cacheValue()
+            cursor.close()
+            json
+        } else {
+            null
+        }
     }
 }
