@@ -11,7 +11,7 @@ class PostRespThreadData(
     val status: String,
     val lock: Boolean,
     val first: String,
-    val digest: Boolean?,
+    val digest: List<String?>?,
     val dateline: Long,
     val lastpost: Long,
     val author: AuthorData

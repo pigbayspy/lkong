@@ -374,7 +374,7 @@ class PostListActivity : AppCompatActivity(), Injectable {
 
     private fun setThreadSubjectSpanned(thread: PostRespThreadData) {
         val spannableTitle = SpannableStringBuilder()
-        if (thread.digest == true) {
+        if (!thread.digest.isNullOrEmpty()) {
             val digestIndicator = getString(R.string.indicator_thread_digest)
             spannableTitle.append(digestIndicator)
             spannableTitle.setSpan(

@@ -35,7 +35,9 @@ class NotifyActivity : AppCompatActivity() {
         val mentionFragment = MentionFragment.newInstance()
         val mentionItem =
             FragmentItem(mentionFragment, getString(R.string.drawer_item_mentions), -1)
-        val fragments = listOf(noticeItem, mentionItem)
+        val pmFragment = PmFragment.newInstance()
+        val pmItem = FragmentItem(pmFragment, getString(R.string.drawer_item_private_messages), -1)
+        val fragments = listOf(noticeItem, mentionItem, pmItem)
         pages.offscreenPageLimit = fragments.size - 1
         val fragmentAdapter = MainTabFragmentAdapter(supportFragmentManager, fragments)
         pages.adapter = fragmentAdapter

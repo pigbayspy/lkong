@@ -11,6 +11,7 @@ import io.pig.lkong.http.data.req.ForumThreadReq
 import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.req.NewRateReq
 import io.pig.lkong.http.data.req.NoticeReq
+import io.pig.lkong.http.data.req.PrivateMsgListReq
 import io.pig.lkong.http.data.req.PunchReq
 import io.pig.lkong.http.data.req.SignReq
 import io.pig.lkong.http.data.req.SystemNoticeReq
@@ -26,6 +27,7 @@ import io.pig.lkong.http.data.resp.ForumThreadResp
 import io.pig.lkong.http.data.resp.HotThreadResp
 import io.pig.lkong.http.data.resp.NewRateResp
 import io.pig.lkong.http.data.resp.NoticeResp
+import io.pig.lkong.http.data.resp.PrivateMsgListResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
 import io.pig.lkong.http.data.resp.SignInResp
@@ -157,6 +159,11 @@ object LkongRepository {
     ): RespBase<NewRateResp> {
         val req = NewRateReq(num, pid, reason, tid)
         return lkongSpec.createRate(req)
+    }
+
+    suspend fun getPmMsgList(date: Long): RespBase<PrivateMsgListResp> {
+        val req = PrivateMsgListReq(date)
+        return lkongSpec.getPmList(req)
     }
 
     private fun getCookie(key: String): String {
