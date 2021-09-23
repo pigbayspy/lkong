@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recyclerview_item_private_chat_relative_layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/item_pm_user_avatar_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/image_avatar_desc" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/item_pm_user_text_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/item_pm_user_text_dateline"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:tag="text_color|primary_text,text_size|subheading"
+            android:textSize="@dimen/text_size_subhead" />
+
+        <TextView
+            android:id="@+id/item_pm_user_text_dateline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="end"
+            android:tag="text_color|secondary_text"
+            android:textSize="@dimen/text_size_caption" />
+
+        <TextView
+            android:id="@+id/item_pm_user_text_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_pm_user_text_author"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:tag="text_color|secondary_text,text_size|body"
+            android:textSize="@dimen/text_size_body1" />
+    </RelativeLayout>
+</RelativeLayout>
