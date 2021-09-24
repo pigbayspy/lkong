@@ -91,6 +91,10 @@
             android:name=".ui.edit.NewThreadActivity"
             android:theme="@style/AppTheme.Translucent" />
 
+        <activity
+            android:name=".ui.pm.PmActivity"
+            android:theme="@style/AppTheme.Translucent" />
+
         <service
             android:name=".account.service.LkongAuthenticateService"
             android:enabled="true"

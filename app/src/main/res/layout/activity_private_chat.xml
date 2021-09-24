@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <include layout="@layout/layout_appbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_private_chat_ptrrecyclerview_messages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:background="#30000000"
+        android:elevation="@dimen/toolbar_elevation"
+        android:maxHeight="96dp"
+        android:minHeight="48dp">
+
+        <EditText
+            android:id="@+id/fragment_private_chat_edittext_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/fragment_private_chat_button_send"
+            android:background="@android:color/transparent"
+            android:maxHeight="96dp"
+            android:minHeight="48dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp" />
+
+        <ImageButton
+            android:id="@+id/fragment_private_chat_button_send"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_send_post"
+            android:src="@drawable/ic_action_send"
+            android:tag="tint|primary_text" />
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

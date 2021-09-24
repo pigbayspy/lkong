@@ -11,6 +11,7 @@ import io.pig.lkong.http.data.req.ForumThreadReq
 import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.req.NewRateReq
 import io.pig.lkong.http.data.req.NoticeReq
+import io.pig.lkong.http.data.req.PmMsgReq
 import io.pig.lkong.http.data.req.PrivateMsgListReq
 import io.pig.lkong.http.data.req.PunchReq
 import io.pig.lkong.http.data.req.SignReq
@@ -27,6 +28,7 @@ import io.pig.lkong.http.data.resp.ForumThreadResp
 import io.pig.lkong.http.data.resp.HotThreadResp
 import io.pig.lkong.http.data.resp.NewRateResp
 import io.pig.lkong.http.data.resp.NoticeResp
+import io.pig.lkong.http.data.resp.PmMsgResp
 import io.pig.lkong.http.data.resp.PrivateMsgListResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
@@ -164,6 +166,11 @@ object LkongRepository {
     suspend fun getPmMsgList(date: Long): RespBase<PrivateMsgListResp> {
         val req = PrivateMsgListReq(date)
         return lkongSpec.getPmList(req)
+    }
+
+    suspend fun getPmMsg(userId: Long, date: Long): RespBase<PmMsgResp> {
+        val req = PmMsgReq(userId, date)
+        return lkongSpec.getPmMsg(req)
     }
 
     private fun getCookie(key: String): String {

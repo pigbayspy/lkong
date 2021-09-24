@@ -15,6 +15,7 @@ import io.pig.lkong.model.ForumModel
 import io.pig.lkong.sync.SyncUtil
 import io.pig.lkong.ui.forum.content.ForumThreadActivity
 import io.pig.lkong.ui.notify.NotifyActivity
+import io.pig.lkong.ui.pm.PmActivity
 import io.pig.lkong.ui.post.list.PostListActivity
 import io.pig.lkong.ui.profile.UserProfileActivity
 
@@ -68,6 +69,15 @@ object AppNavigation {
         val intent = Intent(context, PostListActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_THREAD_ID, threadId)
         intent.putExtra(DataContract.BUNDLE_THREAD_CURRENT_PAGE, page)
+        context.startActivity(intent)
+    }
+
+    fun openPmActivity(
+        context: Context,
+        targetUserId: Long
+    ) {
+        val intent = Intent(context, PmActivity::class.java)
+        intent.putExtra(DataContract.BUNDLE_USER_ID, targetUserId)
         context.startActivity(intent)
     }
 

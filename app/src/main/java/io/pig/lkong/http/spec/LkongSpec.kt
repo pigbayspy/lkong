@@ -13,6 +13,7 @@ import io.pig.lkong.http.data.req.HotThreadReq
 import io.pig.lkong.http.data.req.NewRateReq
 import io.pig.lkong.http.data.req.NewThreadReq
 import io.pig.lkong.http.data.req.NoticeReq
+import io.pig.lkong.http.data.req.PmMsgReq
 import io.pig.lkong.http.data.req.PrivateMsgListReq
 import io.pig.lkong.http.data.req.PunchReq
 import io.pig.lkong.http.data.req.SignReq
@@ -30,6 +31,7 @@ import io.pig.lkong.http.data.resp.HotThreadResp
 import io.pig.lkong.http.data.resp.NewRateResp
 import io.pig.lkong.http.data.resp.NewThreadResp
 import io.pig.lkong.http.data.resp.NoticeResp
+import io.pig.lkong.http.data.resp.PmMsgResp
 import io.pig.lkong.http.data.resp.PrivateMsgListResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
@@ -111,5 +113,8 @@ interface LkongSpec {
     suspend fun createRate(@Body rateReq: NewRateReq): RespBase<NewRateResp>
 
     @POST(RestApiConst.GRAPHQL)
-    suspend fun getPmList(@Body privateMsgListReq: PrivateMsgListReq):RespBase<PrivateMsgListResp>
+    suspend fun getPmList(@Body privateMsgListReq: PrivateMsgListReq): RespBase<PrivateMsgListResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getPmMsg(@Body pmMsgReq: PmMsgReq): RespBase<PmMsgResp>
 }

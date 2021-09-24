@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.PmUserModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.differ.PmUserDiffer
 import io.pig.lkong.ui.adapter.item.PmUserViewHolder
 import io.pig.lkong.util.DateUtil
@@ -44,5 +45,8 @@ class PmUserAdapter(private val context: Context) :
             pmUser.authorAvatar,
             avatarSize
         )
+        viewHolder.itemView.setOnClickListener {
+            AppNavigation.openPmActivity(context, pmUser.authorId)
+        }
     }
 }
