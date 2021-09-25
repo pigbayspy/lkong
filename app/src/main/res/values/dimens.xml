@@ -10,6 +10,7 @@
     <dimen name="text_size_headline">24sp</dimen>
     <dimen name="text_size_title">20sp</dimen>
     <dimen name="text_size_subhead">16sp</dimen>
+    <dimen name="text_size_tiny">10sp</dimen>
     <dimen name="width_sign_in_card_view">512dp</dimen>
 
     <!-- Regular -->
