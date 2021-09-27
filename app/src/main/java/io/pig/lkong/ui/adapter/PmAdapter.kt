@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.PrivateMessageModel
 import io.pig.lkong.ui.adapter.differ.PrivateMessageDiffer
-import io.pig.lkong.ui.adapter.item.PrivateMsgViewHolder
+import io.pig.lkong.ui.adapter.item.PmReceiveMsgViewHolder
+import io.pig.lkong.ui.adapter.item.PmSendMsgViewHolder
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.SlateUtil
@@ -25,36 +26,36 @@ class PmAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = when (viewType) {
+        return when (viewType) {
             TYPE_SEND -> {
-                inflater.inflate(R.layout.item_private_message_send, parent, false)
-            }
-            TYPE_RECEIVE -> {
-                inflater.inflate(R.layout.item_private_message_receive, parent, false)
+                val view = inflater.inflate(R.layout.item_private_message_send, parent, false)
+                PmSendMsgViewHolder(view)
             }
             else -> {
-                inflater.inflate(R.layout.item_private_message_receive, parent, false)
+                val view = inflater.inflate(R.layout.item_private_message_receive, parent, false)
+                PmReceiveMsgViewHolder(view)
             }
         }
-        return PrivateMsgViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        val viewHolder = holder as PrivateMsgViewHolder
+        val viewHolder = holder as PmSendMsgViewHolder
         val msg = getItem(position)
-        viewHolder.messageText.text = SlateUtil.slateToHtml(msg.content)
+        viewHolder.messageText.text = SlateUtil.slateToText(msg.content)
         viewHolder.datelineText.text = DateUtil.formatDateByToday(
             msg.dateline,
             todayPrefix
         )
-        ImageLoaderUtil.loadLkongAvatar(
-            context,
-            viewHolder.avatarImage,
-            userId,
-            userAvatar,
-            avatarSize
-        )
+        if (viewHolder is PmReceiveMsgViewHolder) {
+            ImageLoaderUtil.loadLkongAvatar(
+                context,
+                viewHolder.avatarImage,
+                userId,
+                userAvatar,
+                avatarSize
+            )
+        }
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -46,7 +46,12 @@ class PmUserAdapter(private val context: Context) :
             avatarSize
         )
         viewHolder.itemView.setOnClickListener {
-            AppNavigation.openPmActivity(context, pmUser.authorId, pmUser.authorAvatar)
+            AppNavigation.openPmActivity(
+                context,
+                pmUser.authorId,
+                pmUser.authorName,
+                pmUser.authorAvatar
+            )
         }
     }
 }

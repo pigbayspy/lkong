@@ -75,10 +75,12 @@ object AppNavigation {
     fun openPmActivity(
         context: Context,
         userId: Long,
+        username:String,
         userAvatar:String?
     ) {
         val intent = Intent(context, PmActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_USER_ID, userId)
+        intent.putExtra(DataContract.BUNDLE_USER_NAME, username)
         intent.putExtra(DataContract.BUNDLE_USER_AVATAR, userAvatar)
         context.startActivity(intent)
     }
