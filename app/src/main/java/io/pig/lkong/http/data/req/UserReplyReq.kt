@@ -1,20 +1,13 @@
 package io.pig.lkong.http.data.req
 
-/**
- * @author yinhang
- * @since 2021/09/10
- */
-class TimelineReq(nextTime: Long) {
+class UserReplyReq(uid: Long, page: Int, digest: Boolean) {
     val query = """
     query {
-        feeds(onlyThread: false, nextTime: $nextTime) {
-            data {
-                ...MixPostComponent
-            }
-            nextTime
+        userReplies(uid:$uid, page:$page, isDigest:$digest) {
+            ...indexContent
         }
     }
-    fragment MixPostComponent on MixPost {
+    fragment indexContent on MixPost {
         author {
             uid
             name

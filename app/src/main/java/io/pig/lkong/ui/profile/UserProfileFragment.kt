@@ -15,6 +15,7 @@ import io.pig.lkong.databinding.ActivityUserProfileBinding
 import io.pig.lkong.model.UserModel
 import io.pig.lkong.ui.profile.fans.FansFragment
 import io.pig.lkong.ui.profile.followers.FollowersFragment
+import io.pig.lkong.ui.profile.reply.UserReplyFragment
 import io.pig.lkong.ui.profile.thread.UserThreadsFragment
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
@@ -66,9 +67,11 @@ class UserProfileFragment : Fragment() {
                 getString(R.string.text_profile_header_followers),
                 statsTextSize
             )
-            setOnClickListener {
-                val fragment = FansFragment.newInstance(user.uid, user.name)
-                activity.switchFragment(fragment)
+            if (user.fans > 0) {
+                setOnClickListener {
+                    val fragment = FansFragment.newInstance(user.uid, user.name)
+                    activity.switchFragment(fragment)
+                }
             }
         }
         binding.profileTextFollowersCount.apply {
@@ -77,9 +80,11 @@ class UserProfileFragment : Fragment() {
                 getString(R.string.text_profile_header_following),
                 statsTextSize
             )
-            setOnClickListener {
-                val fragment = FollowersFragment.newInstance(user.uid, user.name)
-                activity.switchFragment(fragment)
+            if (user.followers > 0) {
+                setOnClickListener {
+                    val fragment = FollowersFragment.newInstance(user.uid, user.name)
+                    activity.switchFragment(fragment)
+                }
             }
         }
         binding.profileTextThreadCount.apply {
@@ -88,16 +93,26 @@ class UserProfileFragment : Fragment() {
                 getString(R.string.text_profile_header_threads),
                 statsTextSize
             )
-            setOnClickListener {
-                val fragment = UserThreadsFragment.newInstance(user.uid, user.name, user.avatar)
-                activity.switchFragment(fragment)
+            if (user.threads > 0) {
+                setOnClickListener {
+                    val fragment = UserThreadsFragment.newInstance(user.uid, user.name, user.avatar)
+                    activity.switchFragment(fragment)
+                }
             }
         }
-        binding.profileTextPostCount.text = getUserStatsText(
-            user.posts,
-            getString(R.string.text_profile_header_posts),
-            statsTextSize
-        )
+        binding.profileTextPostCount.apply {
+            text = getUserStatsText(
+                user.posts,
+                getString(R.string.text_profile_header_posts),
+                statsTextSize
+            )
+            if (user.posts > 0) {
+                setOnClickListener {
+                    val fragment = UserReplyFragment.newInstance(user.uid)
+                    activity.switchFragment(fragment)
+                }
+            }
+        }
         binding.profileTextCoin.text = user.money.toString()
         binding.profileTextDiamond.text = user.diamond.toString()
         binding.profileTextTotalPunch.text = user.punchAllDay.toString()

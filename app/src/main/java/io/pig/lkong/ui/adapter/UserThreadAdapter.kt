@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.R
 import io.pig.lkong.model.UserThreadModel
+import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.differ.UserThreadDiffer
 import io.pig.lkong.ui.adapter.item.ThreadViewHolder
 import io.pig.lkong.util.DateUtil
@@ -41,7 +42,7 @@ class UserThreadAdapter(
         bindThread(viewHolder, model)
     }
 
-    fun bindThread(
+    private fun bindThread(
         viewHolder: ThreadViewHolder,
         threadModel: UserThreadModel
     ) {
@@ -71,5 +72,8 @@ class UserThreadAdapter(
             userAvatar,
             avatarSize
         )
+        viewHolder.itemView.setOnClickListener {
+            AppNavigation.openPostListActivity(context, threadModel.tid)
+        }
     }
 }

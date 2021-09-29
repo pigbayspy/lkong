@@ -21,6 +21,7 @@ import io.pig.lkong.http.data.req.SystemNoticeReq
 import io.pig.lkong.http.data.req.ThreadPostReq
 import io.pig.lkong.http.data.req.TimelineReq
 import io.pig.lkong.http.data.req.UserProfileReq
+import io.pig.lkong.http.data.req.UserReplyReq
 import io.pig.lkong.http.data.req.UserThreadReq
 import io.pig.lkong.http.data.resp.AtMeResp
 import io.pig.lkong.http.data.resp.CollectionResp
@@ -40,6 +41,7 @@ import io.pig.lkong.http.data.resp.SystemNoticeResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
 import io.pig.lkong.http.data.resp.TimelineResp
 import io.pig.lkong.http.data.resp.UserProfileResp
+import io.pig.lkong.http.data.resp.UserReplyResp
 import io.pig.lkong.http.data.resp.UserThreadsResp
 import io.pig.lkong.http.data.resp.data.FansResp
 import io.pig.lkong.http.data.resp.data.FollowersResp
@@ -117,4 +119,7 @@ interface LkongSpec {
 
     @POST(RestApiConst.GRAPHQL)
     suspend fun getPmMsg(@Body pmMsgReq: PmMsgReq): RespBase<PmMsgResp>
+
+    @POST(RestApiConst.GRAPHQL)
+    suspend fun getUserReply(@Body userReplyReq: UserReplyReq): RespBase<UserReplyResp>
 }
