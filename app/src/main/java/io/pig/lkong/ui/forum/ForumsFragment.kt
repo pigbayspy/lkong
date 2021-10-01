@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import io.pig.lkong.R
-import io.pig.lkong.databinding.FragmentForumsBinding
+import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.ForumModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.preference.BoolPrefs
@@ -29,7 +29,7 @@ class ForumsFragment : Fragment() {
     }
 
     private lateinit var showInGridPrefs: BoolPrefs
-    private lateinit var binding: FragmentForumsBinding
+    private lateinit var binding: LayoutSimpleRecycleBinding
     private lateinit var forumsViewModel: ForumsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +42,7 @@ class ForumsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         forumsViewModel = ViewModelProvider(this).get(ForumsViewModel::class.java)
-        binding = FragmentForumsBinding.inflate(inflater, container, false)
+        binding = LayoutSimpleRecycleBinding.inflate(inflater, container, false)
         val root = binding.root
         forumsViewModel.apply {
             forums.observe(viewLifecycleOwner) {
@@ -74,8 +74,8 @@ class ForumsFragment : Fragment() {
     }
 
     private fun refreshForumList(forums: List<ForumModel>) {
-        binding.recycleListForum.layoutManager = getLayoutManager()
-        binding.recycleListForum.adapter =
+        binding.simpleContentList.layoutManager = getLayoutManager()
+        binding.simpleContentList.adapter =
             ForumListAdapter(requireActivity(), showInGridPrefs.get(), clickListener, forums)
     }
 

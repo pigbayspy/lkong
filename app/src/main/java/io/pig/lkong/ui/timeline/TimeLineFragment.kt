@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.pig.lkong.databinding.FragmentTimeLineBinding
+import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.TimelineModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.TimelineAdapter
@@ -20,7 +20,7 @@ import io.pig.ui.common.getThemeKey
  */
 class TimeLineFragment : Fragment() {
     private lateinit var timelineViewModel: TimelineViewModel
-    private lateinit var binding: FragmentTimeLineBinding
+    private lateinit var binding: LayoutSimpleRecycleBinding
 
     private val listener = object : OnTimelineClickListener {
         override fun onItemTimelineClick(view: View, timeline: TimelineModel) {
@@ -39,7 +39,7 @@ class TimeLineFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         timelineViewModel = ViewModelProvider(this).get(TimelineViewModel::class.java)
-        binding = FragmentTimeLineBinding.inflate(inflater, container, false)
+        binding = LayoutSimpleRecycleBinding.inflate(inflater, container, false)
         val root = binding.root
         timelineViewModel.apply {
             timelines.observe(viewLifecycleOwner) {
@@ -54,7 +54,7 @@ class TimeLineFragment : Fragment() {
             timelineViewModel.refresh()
         }
         val layoutMgr = LinearLayoutManager(requireContext())
-        binding.recycleListTimeline.apply {
+        binding.simpleContentList.apply {
             layoutManager = layoutMgr
             adapter = listAdapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {

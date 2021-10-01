@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import io.pig.lkong.databinding.FragmentHotThreadBinding
+import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.HotThreadModel
 import io.pig.lkong.model.listener.OnItemThreadClickListener
 import io.pig.lkong.navigation.AppNavigation
@@ -26,14 +26,14 @@ class HotThreadFragment : Fragment() {
     }
 
     private lateinit var hotThreadViewModel: HotThreadViewModel
-    private lateinit var binding: FragmentHotThreadBinding
+    private lateinit var binding: LayoutSimpleRecycleBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         hotThreadViewModel = ViewModelProvider(this).get(HotThreadViewModel::class.java)
-        binding = FragmentHotThreadBinding.inflate(inflater, container, false)
+        binding = LayoutSimpleRecycleBinding.inflate(inflater, container, false)
         val root = binding.root
         hotThreadViewModel.apply {
             hotThreads.observe(viewLifecycleOwner) {
@@ -51,9 +51,9 @@ class HotThreadFragment : Fragment() {
     }
 
     private fun refreshHotThread(hotThreads: List<HotThreadModel>) {
-        binding.recycleListHotThread.layoutManager =
+        binding.simpleContentList.layoutManager =
             StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        binding.recycleListHotThread.adapter =
+        binding.simpleContentList.adapter =
             HotThreadAdapter(requireActivity(), getThemeKey(), listener, hotThreads)
     }
 

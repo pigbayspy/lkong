@@ -88,6 +88,7 @@
     <string name="text_profile_header_posts">回复</string>
     <string name="text_profile_header_count_zero">0</string>
     <string name="format_fans_of">%1$s 的粉丝</string>
+    <string name="format_replies_of">%1$s 的粉丝</string>
     <string name="format_followers_of">%1$s 关注了</string>
     <string name="format_threads_of">%1$s 的主题</string>
     <string name="format_digests_by">$1%s 的精华帖</string>

@@ -108,7 +108,7 @@ class UserProfileFragment : Fragment() {
             )
             if (user.posts > 0) {
                 setOnClickListener {
-                    val fragment = UserReplyFragment.newInstance(user.uid)
+                    val fragment = UserReplyFragment.newInstance(user.uid, user.name)
                     activity.switchFragment(fragment)
                 }
             }

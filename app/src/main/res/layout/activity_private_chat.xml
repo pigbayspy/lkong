@@ -52,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/fragment_private_chat_button_send"
             android:background="@android:color/transparent"
+            android:inputType="text"
             android:maxHeight="96dp"
             android:minHeight="48dp"
             android:paddingStart="16dp"

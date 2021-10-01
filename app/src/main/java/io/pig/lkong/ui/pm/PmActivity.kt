@@ -10,7 +10,6 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityPrivateChatBinding
 import io.pig.lkong.model.PrivateMessageModel
 import io.pig.lkong.ui.adapter.PmAdapter
-import io.pig.lkong.ui.notify.PmFragment
 import io.pig.ui.common.getPrimaryColor
 
 class PmActivity : AppCompatActivity() {
