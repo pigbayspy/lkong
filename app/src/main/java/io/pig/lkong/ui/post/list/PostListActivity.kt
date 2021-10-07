@@ -235,8 +235,11 @@ class PostListActivity : AppCompatActivity(), Injectable {
     }
 
     private fun initFab() {
-        val postControlColor =
-            if (primaryColorInPostControl.get()) getPrimaryColor() else getAccentColor()
+        val postControlColor = if (primaryColorInPostControl.get()) {
+            getPrimaryColor()
+        } else {
+            getAccentColor()
+        }
         val postControlColorDark = ThemeUtil.makeColorDarken(postControlColor, 0.8f)
         val postControlColorRipple = ThemeUtil.makeColorDarken(postControlColor, 0.9f)
         fab.setBackgroundColor(postControlColorDark)
@@ -250,9 +253,9 @@ class PostListActivity : AppCompatActivity(), Injectable {
         return List(postListViewModel.getPages()) {
             getString(
                 R.string.format_post_list_page_indicator_detail,
-                it,
-                (it - 1) * PAGE_SIZE + 1,
-                it * PAGE_SIZE
+                it + 1,
+                it * PAGE_SIZE + 1,
+                (it + 1) * PAGE_SIZE
             )
         }
     }

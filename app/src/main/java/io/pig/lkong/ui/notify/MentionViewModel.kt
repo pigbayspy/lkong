@@ -28,7 +28,7 @@ class MentionViewModel : ViewModel() {
                 val respBase = LkongRepository.getAtMe(date.value!!)
                 if (respBase.data != null) {
                     val result = respBase.data.atme.data
-                    val mentionModels = result.map {
+                    val mentionModels = result.filterNotNull().map {
                         TimelineModel(it)
                     }
                     mentions.value = mentions.value.let {
