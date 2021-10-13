@@ -3,6 +3,7 @@ package io.pig.lkong.sync
 import android.accounts.Account
 import android.content.ContentResolver
 import android.os.Bundle
+import androidx.core.os.bundleOf
 
 /**
  * 同步工具类
@@ -19,9 +20,10 @@ object SyncUtil {
     const val SYNC_FREQ_HALF_HOUR = 1800L
 
     fun manualSync(account: Account, auth: String) {
-        val settingsBundle = Bundle()
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
+        val settingsBundle = bundleOf(
+            ContentResolver.SYNC_EXTRAS_MANUAL to true,
+            ContentResolver.SYNC_EXTRAS_EXPEDITED to true
+        )
         /*
          * Request the sync for the default account, authority, and
          * manual sync settings

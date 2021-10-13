@@ -54,10 +54,7 @@ object AppNavigation {
         context.startActivity(intent)
     }
 
-    fun openForumContentActivity(
-        context: Context,
-        forum: ForumModel
-    ) {
+    fun openForumContentActivity(context: Context, forum: ForumModel) {
         val intent = Intent(context, ForumThreadActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_FORUM_ID, forum.fid)
         intent.putExtra(DataContract.BUNDLE_FORUM_NAME, forum.name)
@@ -75,8 +72,8 @@ object AppNavigation {
     fun openPmActivity(
         context: Context,
         userId: Long,
-        username:String,
-        userAvatar:String?
+        username: String,
+        userAvatar: String?
     ) {
         val intent = Intent(context, PmActivity::class.java)
         intent.putExtra(DataContract.BUNDLE_USER_ID, userId)

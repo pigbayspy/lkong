@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.ProgressBar
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.pig.lkong.R
@@ -126,15 +127,15 @@ class SignInActivity : AccountAuthenticatorActivity() {
                     val accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE)
 
                     // 构建 Bundle
-                    val data = Bundle()
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, userName)
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
-                    data.putString(PARAM_USER_PASS, userPassword)
-                    data.putString(KEY_ACCOUNT_USER_ID, signResult.uid.toString())
-                    data.putString(KEY_ACCOUNT_USER_NAME, signResult.name)
-                    data.putString(KEY_ACCOUNT_USER_AVATAR, signResult.avatar)
-                    data.putString(KEY_ACCOUNT_USER_AUTH, signResult.authCookie)
-
+                    val data = bundleOf(
+                        AccountManager.KEY_ACCOUNT_NAME to userName,
+                        AccountManager.KEY_ACCOUNT_TYPE to accountType,
+                        PARAM_USER_PASS to userPassword,
+                        KEY_ACCOUNT_USER_ID to signResult.uid.toString(),
+                        KEY_ACCOUNT_USER_NAME to signResult.name,
+                        KEY_ACCOUNT_USER_AVATAR to signResult.avatar,
+                        KEY_ACCOUNT_USER_AUTH to signResult.authCookie
+                    )
                     // 构建 intent
                     val intent = Intent()
                     intent.putExtras(data)
@@ -227,12 +228,12 @@ class SignInActivity : AccountAuthenticatorActivity() {
             val userName = loginIntent.getStringExtra(KEY_ACCOUNT_USER_NAME)
             val userAvatar = loginIntent.getStringExtra(KEY_ACCOUNT_USER_AVATAR)
             val userAuth = loginIntent.getStringExtra(KEY_ACCOUNT_USER_AUTH)
-            val userData = Bundle()
-            userData.putString(KEY_ACCOUNT_USER_ID, userId)
-            userData.putString(KEY_ACCOUNT_USER_NAME, userName)
-            userData.putString(KEY_ACCOUNT_USER_AVATAR, userAvatar)
-            userData.putString(KEY_ACCOUNT_USER_AUTH, userAuth)
-
+            val userData = bundleOf(
+                KEY_ACCOUNT_USER_ID to userId,
+                KEY_ACCOUNT_USER_NAME to userName,
+                KEY_ACCOUNT_USER_AVATAR to userAvatar,
+                KEY_ACCOUNT_USER_AUTH to userAuth
+            )
             // Creating the account on the device and setting the auth token we got
             // Not setting the auth token will cause
             // another call to the server to authenticate the user

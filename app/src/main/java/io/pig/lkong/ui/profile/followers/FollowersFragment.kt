@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -74,10 +75,10 @@ class FollowersFragment : Fragment() {
 
         fun newInstance(userId: Long, username: String) =
             FollowersFragment().apply {
-                arguments = Bundle().apply {
-                    putLong(DataContract.BUNDLE_USER_ID, userId)
-                    putString(DataContract.BUNDLE_USER_NAME, username)
-                }
+                arguments = bundleOf(
+                    DataContract.BUNDLE_USER_ID to userId,
+                    DataContract.BUNDLE_USER_NAME to username
+                )
             }
     }
 }

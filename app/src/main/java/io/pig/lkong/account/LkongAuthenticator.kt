@@ -7,6 +7,7 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import io.pig.lkong.account.const.AccountConst.AUTH_LABEL
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_NAME
 import io.pig.lkong.account.const.AccountConst.KEY_ACCOUNT_TYPE
@@ -44,11 +45,11 @@ class LkongAuthenticator(private val context: Context) :
             }
         }
         if (authToken.isNotEmpty()) {
-            val result = Bundle()
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
-            result.putString(AccountManager.KEY_AUTHTOKEN, authToken)
-            return result
+            return bundleOf(
+                AccountManager.KEY_ACCOUNT_NAME to account.name,
+                AccountManager.KEY_ACCOUNT_TYPE to account.type,
+                AccountManager.KEY_AUTHTOKEN to authToken
+            )
         }
 
         // If we get here, then we couldn't access the user's password - so we
@@ -59,9 +60,7 @@ class LkongAuthenticator(private val context: Context) :
         intent.putExtra(KEY_ACCOUNT_TYPE, account.type)
         intent.putExtra(KEY_AUTH_TYPE, authTokenType)
         intent.putExtra(KEY_ACCOUNT_NAME, account.name)
-        val bundle = Bundle()
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent)
-        return bundle
+        return bundleOf(AccountManager.KEY_INTENT to intent)
     }
 
     override fun getAuthTokenLabel(authTokenType: String?): String {
@@ -87,9 +86,7 @@ class LkongAuthenticator(private val context: Context) :
         intent.putExtra(KEY_AUTH_TYPE, authTokenType)
         intent.putExtra(KEY_IS_ADDING_NEW_ACCOUNT, true)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
-        val bundle = Bundle()
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent)
-        return bundle
+        return bundleOf(AccountManager.KEY_INTENT to intent)
     }
 
     override fun confirmCredentials(
@@ -105,9 +102,7 @@ class LkongAuthenticator(private val context: Context) :
         account: Account,
         features: Array<out String>
     ): Bundle {
-        val result = Bundle()
-        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false)
-        return result
+        return bundleOf(AccountManager.KEY_BOOLEAN_RESULT to false)
     }
 
     override fun updateCredentials(

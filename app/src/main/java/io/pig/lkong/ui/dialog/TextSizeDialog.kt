@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
@@ -75,12 +76,12 @@ class TextSizeDialog : DialogFragment() {
             themeKey: String, title: CharSequence, recreateOnApply: Boolean
         ) {
             val dialog = TextSizeDialog()
-            val args = Bundle()
-            args.putString(KEY_MODE, textSizeMode)
-            args.putString(KEY_THEME_KEY, themeKey)
-            args.putString(KEY_TITLE, title as String)
-            args.putBoolean(KEY_RECREATE, recreateOnApply)
-            dialog.arguments = args
+            dialog.arguments = bundleOf(
+                KEY_MODE to textSizeMode,
+                KEY_THEME_KEY to themeKey,
+                KEY_TITLE to title as String,
+                KEY_RECREATE to recreateOnApply
+            )
             dialog.show(context.supportFragmentManager, TAG)
         }
     }
