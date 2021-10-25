@@ -30,7 +30,7 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
     private fun invalidateSettings() {
         val attachActivity = requireActivity()
         val config = ThemeConfig(requireContext(), themeKey)
-        val primaryColorPref: ColorPreference = findPreference("primary_color")!!
+        val primaryColorPref: ColorPreference = findPreference(ThemeUtil.KEY_PRIMARY_COLOR)!!
         primaryColorPref.setColor(ThemeUtil.primaryColor(attachActivity, themeKey), BLACK)
         primaryColorPref.setOnPreferenceClickListener {
             MaterialDialog(attachActivity)
@@ -45,7 +45,7 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
                 .show()
             return@setOnPreferenceClickListener true
         }
-        val accentColorPref: ColorPreference = findPreference("accent_color")!!
+        val accentColorPref: ColorPreference = findPreference(ThemeUtil.KEY_ACCENT_COLOR)!!
         accentColorPref.setColor(ThemeUtil.accentColor(attachActivity, themeKey), BLACK)
         accentColorPref.setOnPreferenceClickListener {
             MaterialDialog(attachActivity).title(R.string.setting_theme_accent_color)
@@ -99,7 +99,7 @@ class ThemeSettingFragment : PreferenceFragmentCompat() {
         val lightStatusMode: Preference =
             findPreference(ThemeUtil.KEY_LIGHT_STATUS_BAR_MODE)!!
         val lightToolbarMode: Preference =
-            findPreference("light_toolbar_mode")!!
+            findPreference(ThemeUtil.KEY_LIGHT_TOOLBAR_MODE)!!
         lightStatusMode.isEnabled = true
         lightStatusMode.setOnPreferenceChangeListener { _, newValue ->
             val constant: Int = (newValue as String).toInt()
