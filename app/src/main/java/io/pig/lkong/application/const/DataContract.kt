@@ -28,4 +28,7 @@ object DataContract {
 
     // notice
     const val BUNDLE_NOTICE_COUNT_MODEL = "bundle_notice_count_model"
+
+    // search
+    const val BUNDLE_SEARCH_QUERY = "bundle_search_query"
 }
