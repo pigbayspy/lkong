@@ -8,9 +8,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import io.pig.lkong.R
-import java.util.*
 
-class SearchItemAdapter(context: Context, options: ArrayList<SearchItem>) :
+class SearchItemAdapter(context: Context, options: List<SearchItem>) :
     ArrayAdapter<SearchItem>(context, 0, options) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

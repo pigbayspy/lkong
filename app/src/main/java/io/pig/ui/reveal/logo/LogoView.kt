@@ -21,7 +21,7 @@ class LogoView(context: Context, attrs: AttributeSet) : AppCompatTextView(contex
         setLogo(ResourcesCompat.getDrawable(resources, drawableRes, null))
     }
 
-    private fun setLogo(drawable: Drawable?) {
+    fun setLogo(drawable: Drawable?) {
         logoDrawable = drawable
         logoDrawable?.setBounds(
             0,

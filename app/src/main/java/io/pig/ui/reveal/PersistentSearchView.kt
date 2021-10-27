@@ -1,27 +1,36 @@
 package io.pig.ui.reveal
 
 import android.animation.Animator
+import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.inputmethodservice.KeyboardView
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.util.TypedValue
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnKeyListener
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.TextView.OnEditorActionListener
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -41,13 +50,21 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
     private val mDisplayMode: DisplayMode
     private var mSearchCardElevation: Int
     private val mHomeButtonMode: Int
-    private var mIsMic: Boolean
+    private val mLogoDrawable: Drawable?
+    private val mArrowButtonColor: Int
+    private val mSearchEditTextColor: Int
+    private val mSearchEditTextHint: String
+    private val mSearchEditTextHintColor: Int
+    private val mStringLogoDrawable: String?
+    private val mSearchTextColor: Int
 
+    private var mIsMic: Boolean
     private var mFromX: Int = 0
     private var mFromY: Int = 0
     private var mDesireRevealWidth: Int = 0
 
     private var mSearchListener: SearchListener? = null
+    private var mHomeButtonListener: HomeButtonListener? = null
 
     private var mCurrentState: SearchViewState? = null
     private var mLastState: SearchViewState? = null
@@ -55,9 +72,9 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
     private var showCustomKeyboard = false
     private var mVoiceRecognitionDelegate: VoiceRecognitionDelegate? = null
     private var mSuggestionBuilder: SearchSuggestionsBuilder? = null
-    private var mSearchItemAdapter: SearchItemAdapter? = null
+    private var mCustomKeyboardView: KeyboardView? = null
 
-    private val mCustomKeyboardView: KeyboardView? = null
+    private val mSearchItemAdapter: SearchItemAdapter
     private val mSearchSuggestions = mutableListOf<SearchItem>()
 
     private val mHomeButtonCloseIconState: HomeButton.IconState
@@ -90,6 +107,28 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
             R.styleable.PersistentSearchView_persistentSV_customToolbarHeight,
             calculateToolbarSize(context)
         )
+        mSearchTextColor = attrsValue.getColor(
+            R.styleable.PersistentSearchView_persistentSV_searchTextColor,
+            Color.BLACK
+        )
+        mLogoDrawable =
+            attrsValue.getDrawable(R.styleable.PersistentSearchView_persistentSV_logoDrawable)
+        mArrowButtonColor = attrsValue.getColor(
+            R.styleable.PersistentSearchView_persistentSV_homeButtonColor,
+            Color.BLACK
+        )
+        mSearchEditTextColor = attrsValue.getColor(
+            R.styleable.PersistentSearchView_persistentSV_editTextColor,
+            Color.BLACK
+        )
+        mSearchEditTextHint =
+            attrsValue.getString(R.styleable.PersistentSearchView_persistentSV_editHintText) ?: ""
+        mSearchEditTextHintColor = attrsValue.getColor(
+            R.styleable.PersistentSearchView_persistentSV_editHintTextColor,
+            Color.BLACK
+        )
+        mStringLogoDrawable =
+            attrsValue.getString(R.styleable.PersistentSearchView_persistentSV_logoString)
         val searchCardElevationValue = attrsValue.getDimensionPixelSize(
             R.styleable.PersistentSearchView_persistentSV_searchCardElevation,
             -1
@@ -141,6 +180,113 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
         mSearchCardView = findViewById(R.id.search_view_card_search)
         mMicButton = findViewById(R.id.search_view_button_mic)
         mSuggestionListView = findViewById(R.id.search_view_list_suggestions)
+
+        // set value to views
+        mSearchCardView.cardElevation = mSearchCardElevation.toFloat()
+        mSearchCardView.maxCardElevation = mSearchCardElevation.toFloat()
+        mHomeButton.setArrowDrawableColor(mArrowButtonColor)
+        mHomeButton.setState(mHomeButtonCloseIconState)
+        mHomeButton.setAnimationDuration(DURATION_HOME_BUTTON)
+        mSearchEditText.setTextColor(mSearchEditTextColor)
+        mSearchEditText.hint = mSearchEditTextHint
+        mSearchEditText.setHintTextColor(mSearchEditTextHintColor)
+        if (mLogoDrawable != null) {
+            mLogoView.setLogo(mLogoDrawable)
+        } else if (mStringLogoDrawable != null) {
+            mLogoView.setLogo(mStringLogoDrawable)
+        }
+        mLogoView.setTextColor(mSearchTextColor)
+
+        //
+        mSearchItemAdapter = SearchItemAdapter(getContext(), mSearchSuggestions)
+        mSuggestionListView.adapter = mSearchItemAdapter
+
+        // setUpLayoutTransition
+        val layoutTransition = LayoutTransition()
+        layoutTransition.setDuration(DURATION_LAYOUT_TRANSITION)
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING)
+        layoutTransition.setStartDelay(LayoutTransition.CHANGING, 0)
+
+        layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0)
+        mSearchCardView.layoutTransition = layoutTransition
+
+        // set listener
+        mHomeButton.setOnClickListener {
+            when (mCurrentState) {
+                SearchViewState.EDITING -> {
+                    cancelEditing()
+                }
+                SearchViewState.SEARCH -> {
+                    fromSearchToNormal()
+                }
+                else -> {
+                    mHomeButtonListener?.onHomeButtonClick()
+                }
+            }
+        }
+        mLogoView.setOnClickListener {
+            dispatchStateChange(SearchViewState.EDITING) // This would call when state is wrong.
+        }
+        mSearchEditText.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                clearSuggestions()
+                fromEditingToSearch(forceSearch = true, avoidSearch = false)
+                return@OnEditorActionListener true
+            }
+            false
+        })
+        mSearchEditText.setOnKeyListener(OnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                clearSuggestions()
+                fromEditingToSearch(forceSearch = true, avoidSearch = false)
+                return@OnKeyListener true
+            } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+                return@OnKeyListener mSearchListener != null && mSearchListener!!.onSearchEditBackPressed()
+            }
+            false
+        })
+        micStateChanged()
+        mMicButton.setOnClickListener {
+            micClick()
+        }
+        mSearchEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                if (!mAvoidTriggerTextWatcher) {
+                    if (s.isNotEmpty()) {
+                        showClearButton()
+                        buildSearchSuggestions(getSearchText())
+                    } else {
+                        showMicButton()
+                        buildEmptySearchSuggestions()
+                    }
+                }
+                mSearchListener?.onSearchTermChanged(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+    }
+
+    private fun cancelEditing() {
+        if (TextUtils.isEmpty(mLogoView.text)) {
+            fromEditingToNormal()
+        } else {
+            fromEditingToSearch(true)
+        }
+    }
+
+    private fun micClick() {
+        if (!mIsMic) {
+            setSearchString("", false)
+        } else {
+            mVoiceRecognitionDelegate?.onStartVoiceRecognition()
+        }
+    }
+
+    private fun clearSuggestions() {
+        mSearchItemAdapter.clear()
     }
 
     fun setStartPositionFromMenuItem(menuItemView: View) {
@@ -165,7 +311,6 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-
         var totalHeight = 0
         var searchCardWidth: Int
         val childCount = childCount
@@ -184,7 +329,6 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
                         MeasureSpec.makeMeasureSpec(searchCardWidth, MeasureSpec.EXACTLY)
                     measureChild(child, cardWidthSpec, heightMeasureSpec)
                     val childMeasuredHeight = child.getMeasuredHeight()
-                    val childMeasuredWidth = child.getMeasuredWidth()
                     val childHeight = childMeasuredHeight - verticalPadding * 2
                     totalHeight += childHeight + mCardVerticalPadding * 2
                 }
@@ -301,7 +445,7 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
     }
 
     private fun fromEditingToSearch() {
-        fromEditingToSearch(false, false)
+        fromEditingToSearch(forceSearch = false, avoidSearch = false)
     }
 
     private fun fromEditingToSearch(avoidSearch: Boolean) {
@@ -357,7 +501,7 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
             if (suggestions.isNotEmpty()) {
                 mSearchSuggestions.addAll(suggestions)
             }
-            mSearchItemAdapter?.notifyDataSetChanged()
+            mSearchItemAdapter.notifyDataSetChanged()
         }
     }
 
@@ -368,7 +512,7 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
             if (suggestions.isNotEmpty()) {
                 mSearchSuggestions.addAll(suggestions)
             }
-            mSearchItemAdapter?.notifyDataSetChanged()
+            mSearchItemAdapter.notifyDataSetChanged()
         }
     }
 
@@ -405,44 +549,45 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
             showClearButton()
         }
         if (openKeyboard) {
-            if (showCustomKeyboard && mCustomKeyboardView != null) {
+            if (showCustomKeyboard) {
                 // Show custom keyboard
-                mCustomKeyboardView.visibility = VISIBLE
-                mCustomKeyboardView.isEnabled = true
-
-                // Enable cursor, but still prevent default keyboard from showing up
-                mSearchEditText.setOnTouchListener { v, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            mCustomKeyboardView.visibility = VISIBLE
-                            mCustomKeyboardView.isEnabled = true
-                            val layout = (v as EditText).layout
-                            val x = event.x + mSearchEditText.scrollX
-                            val offset = layout.getOffsetForHorizontal(0, x)
-                            if (offset > 0) {
-                                if (x > layout.getLineMax(0)) mSearchEditText.setSelection(
-                                    offset
-                                ) else {
-                                    // Touch was at the end of the text
-                                    mSearchEditText.setSelection(offset - 1)
+                mCustomKeyboardView?.let {
+                    it.visibility = VISIBLE
+                    it.isEnabled = true
+                    // Enable cursor, but still prevent default keyboard from showing up
+                    mSearchEditText.setOnTouchListener { v, event ->
+                        when (event.action) {
+                            MotionEvent.ACTION_DOWN -> {
+                                it.visibility = VISIBLE
+                                it.isEnabled = true
+                                val layout = (v as EditText).layout
+                                val x = event.x + mSearchEditText.scrollX
+                                val offset = layout.getOffsetForHorizontal(0, x)
+                                if (offset > 0) {
+                                    if (x > layout.getLineMax(0)) mSearchEditText.setSelection(
+                                        offset
+                                    ) else {
+                                        // Touch was at the end of the text
+                                        mSearchEditText.setSelection(offset - 1)
+                                    }
+                                }
+                            }
+                            MotionEvent.ACTION_MOVE -> {
+                                val layout = (v as EditText).layout
+                                x = event.x + mSearchEditText.scrollX
+                                val offset = layout.getOffsetForHorizontal(0, x)
+                                if (offset > 0) {
+                                    if (x > layout.getLineMax(0)) mSearchEditText.setSelection(
+                                        offset
+                                    ) else {
+                                        // Touch point was at the end of the text
+                                        mSearchEditText.setSelection(offset - 1)
+                                    }
                                 }
                             }
                         }
-                        MotionEvent.ACTION_MOVE -> {
-                            val layout = (v as EditText).layout
-                            x = event.x + mSearchEditText.scrollX
-                            val offset = layout.getOffsetForHorizontal(0, x)
-                            if (offset > 0) {
-                                if (x > layout.getLineMax(0)) mSearchEditText.setSelection(
-                                    offset
-                                ) else {
-                                    // Touch point was at the end of the text
-                                    mSearchEditText.setSelection(offset - 1)
-                                }
-                            }
-                        }
+                        true
                     }
-                    true
                 }
             } else {
                 // Show default keyboard
@@ -519,8 +664,7 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator?) {}
 
-            override fun onAnimationCancel(animation: Animator?) {
-            }
+            override fun onAnimationCancel(animation: Animator?) {}
 
             override fun onAnimationEnd(animation: Animator?) {
                 // show search view here
@@ -617,9 +761,11 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
     }
 
     private fun hideKeyboard() {
-        if (showCustomKeyboard && mCustomKeyboardView != null) {
-            mCustomKeyboardView.visibility = GONE
-            mCustomKeyboardView.isEnabled = false
+        if (showCustomKeyboard) {
+            mCustomKeyboardView?.apply {
+                visibility = GONE
+                isEnabled = false
+            }
         } else {
             (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
                 applicationWindowToken, 0
@@ -679,6 +825,8 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
 
         private const val DURATION_REVEAL_CLOSE = 300L
         private const val DURATION_REVEAL_OPEN = 400L
+        private const val DURATION_LAYOUT_TRANSITION = 100L
+        private const val DURATION_HOME_BUTTON = 300L
 
         private val COS_45 = cos(Math.toRadians(45.0))
         private val RES_IDS_ACTION_BAR_SIZE = intArrayOf(R.attr.actionBarSize)
