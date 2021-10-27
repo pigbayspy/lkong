@@ -1,17 +1,36 @@
 package io.pig.ui.reveal
 
+import android.animation.Animator
+import android.annotation.SuppressLint
 import android.content.Context
+import android.inputmethodservice.KeyboardView
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.SparseArray
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.ListView
 import androidx.cardview.widget.CardView
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
 import io.pig.lkong.R
 import io.pig.ui.button.HomeButton
+import io.pig.ui.reveal.logo.LogoView
 import kotlin.math.ceil
 import kotlin.math.cos
+import kotlin.math.max
 
 class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(context, attrs) {
 
@@ -22,15 +41,35 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
     private val mDisplayMode: DisplayMode
     private var mSearchCardElevation: Int
     private val mHomeButtonMode: Int
-    private val mIsMic: Boolean
+    private var mIsMic: Boolean
+
+    private var mFromX: Int = 0
+    private var mFromY: Int = 0
+    private var mDesireRevealWidth: Int = 0
+
+    private var mSearchListener: SearchListener? = null
 
     private var mCurrentState: SearchViewState? = null
     private var mLastState: SearchViewState? = null
     private var mAvoidTriggerTextWatcher = false
+    private var showCustomKeyboard = false
+    private var mVoiceRecognitionDelegate: VoiceRecognitionDelegate? = null
+    private var mSuggestionBuilder: SearchSuggestionsBuilder? = null
+    private var mSearchItemAdapter: SearchItemAdapter? = null
+
+    private val mCustomKeyboardView: KeyboardView? = null
+    private val mSearchSuggestions = mutableListOf<SearchItem>()
 
     private val mHomeButtonCloseIconState: HomeButton.IconState
     private val mHomeButtonOpenIconState: HomeButton.IconState
     private val mHomeButtonSearchIconState: HomeButton.IconState
+
+    private val mHomeButton: HomeButton
+    private val mLogoView: LogoView
+    private val mSearchEditText: EditText
+    private val mSearchCardView: CardView
+    private val mMicButton: ImageView
+    private val mSuggestionListView: ListView
 
     init {
         isSaveEnabled = true
@@ -94,6 +133,29 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
         attrsValue.recycle()
 
         this.mIsMic = true
+
+        // init view
+        mHomeButton = findViewById(R.id.search_view_button_home)
+        mLogoView = findViewById(R.id.search_view_logo)
+        mSearchEditText = findViewById(R.id.search_view_edit_search)
+        mSearchCardView = findViewById(R.id.search_view_card_search)
+        mMicButton = findViewById(R.id.search_view_button_mic)
+        mSuggestionListView = findViewById(R.id.search_view_list_suggestions)
+    }
+
+    fun setStartPositionFromMenuItem(menuItemView: View) {
+        val metrics = resources.displayMetrics
+        val width = metrics.widthPixels
+        setStartPositionFromMenuItem(menuItemView, width)
+    }
+
+    private fun setStartPositionFromMenuItem(menuItemView: View, desireRevealWidth: Int) {
+        val location = IntArray(2)
+        menuItemView.getLocationInWindow(location)
+        val menuItemWidth = menuItemView.width
+        mFromX = location[0] + menuItemWidth / 2
+        mFromY = location[1]
+        this.mDesireRevealWidth = desireRevealWidth
     }
 
     private fun setCurrentState(state: SearchViewState) {
@@ -166,6 +228,18 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
         return ss
     }
 
+    private fun getSearchText(): String {
+        return mSearchEditText.text.toString()
+    }
+
+    private fun search() {
+        val searchTerm: String = getSearchText()
+        if (!TextUtils.isEmpty(searchTerm)) {
+            setLogoTextInt(searchTerm)
+            mSearchListener?.onSearch(searchTerm)
+        }
+    }
+
     override fun onRestoreInstanceState(state: Parcelable) {
         if (state !is SavedState) {
             super.onRestoreInstanceState(state)
@@ -177,10 +251,381 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
         for (i in 0 until childCount) {
             getChildAt(i).restoreHierarchyState(ss.childrenStates!!)
         }
-        // dispatchStateChange(ss.getCurrentSearchViewState())
+        dispatchStateChange(ss.getCurrentSearchViewState())
         this.mAvoidTriggerTextWatcher = false
     }
 
+    private fun fromNormalToSearch() {
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
+            setCurrentState(SearchViewState.SEARCH)
+            search()
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
+            visibility = VISIBLE
+            fromEditingToSearch()
+        }
+        mHomeButton.animateState(mHomeButtonSearchIconState)
+    }
+
+    private fun fromSearchToNormal() {
+        setLogoTextInt("")
+        setSearchString("", true)
+        setCurrentState(SearchViewState.NORMAL)
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
+            closeSearchInternal()
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
+            hideCircularlyToMenuItem()
+        }
+        setLogoTextInt("")
+        mSearchListener?.onSearchExit()
+        mHomeButton.animateState(mHomeButtonCloseIconState)
+    }
+
+    private fun fromSearchToEditing() {
+        openSearchInternal(true)
+        setCurrentState(SearchViewState.EDITING)
+        mHomeButton.animateState(mHomeButtonOpenIconState)
+    }
+
+    private fun fromEditingToNormal() {
+        setCurrentState(SearchViewState.NORMAL)
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
+            setSearchString("", false)
+            closeSearchInternal()
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
+            setSearchString("", false)
+            hideCircularlyToMenuItem()
+        }
+        setLogoTextInt("")
+        mSearchListener?.onSearchExit()
+        mHomeButton.animateState(mHomeButtonCloseIconState)
+    }
+
+    private fun fromEditingToSearch() {
+        fromEditingToSearch(false, false)
+    }
+
+    private fun fromEditingToSearch(avoidSearch: Boolean) {
+        fromEditingToSearch(false, avoidSearch)
+    }
+
+    private fun fromEditingToSearch(forceSearch: Boolean, avoidSearch: Boolean) {
+        if (TextUtils.isEmpty(getSearchText())) {
+            fromEditingToNormal()
+        } else {
+            setCurrentState(SearchViewState.SEARCH)
+            if ((getSearchText() != mLogoView.text || forceSearch) && !avoidSearch) {
+                search()
+            }
+            closeSearchInternal()
+            mHomeButton.animateState(mHomeButtonSearchIconState)
+        }
+    }
+
+    private fun dispatchStateChange(targetState: SearchViewState) {
+        if (targetState == SearchViewState.NORMAL) {
+            if (mCurrentState == SearchViewState.EDITING) {
+                fromEditingToNormal()
+            } else if (mCurrentState == SearchViewState.SEARCH) {
+                fromSearchToNormal()
+            }
+        } else if (targetState == SearchViewState.EDITING) {
+            if (mCurrentState == SearchViewState.NORMAL) {
+                fromNormalToEditing()
+            } else if (mCurrentState == SearchViewState.SEARCH) {
+                fromSearchToEditing()
+            }
+        } else if (targetState == SearchViewState.SEARCH) {
+            if (mCurrentState == SearchViewState.NORMAL) {
+                fromNormalToSearch()
+            } else if (mCurrentState == SearchViewState.EDITING) {
+                fromEditingToSearch()
+            }
+        }
+    }
+
+    private fun showClearButton() {
+        micStateChanged(false)
+        mMicButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_action_clear_black, null)
+        )
+    }
+
+    private fun buildSearchSuggestions(query: String) {
+        mSuggestionBuilder?.let {
+            mSearchSuggestions.clear()
+            val suggestions: Collection<SearchItem> = it.buildSearchSuggestion(10, query)
+            if (suggestions.isNotEmpty()) {
+                mSearchSuggestions.addAll(suggestions)
+            }
+            mSearchItemAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun buildEmptySearchSuggestions() {
+        mSuggestionBuilder?.let {
+            mSearchSuggestions.clear()
+            val suggestions: Collection<SearchItem> = it.buildEmptySearchSuggestion(10)
+            if (suggestions.isNotEmpty()) {
+                mSearchSuggestions.addAll(suggestions)
+            }
+            mSearchItemAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun openSearchInternal(openKeyboard: Boolean) {
+        mLogoView.visibility = GONE
+        mSearchEditText.visibility = VISIBLE
+        mSearchEditText.requestFocus()
+        mSuggestionListView.visibility = VISIBLE
+        mSuggestionListView.onItemClickListener =
+            OnItemClickListener { _, _, pos, _ ->
+                hideKeyboard()
+                val result: SearchItem = mSearchSuggestions[pos]
+                mSearchListener.let {
+                    if (it != null) {
+                        if (it.onSuggestion(result)) {
+                            setSearchString(result.value, true)
+                            fromEditingToSearch(forceSearch = true, avoidSearch = false)
+                        }
+                    } else {
+                        setSearchString(result.value, true)
+                        fromEditingToSearch(forceSearch = true, avoidSearch = false)
+                    }
+                }
+            }
+        val currentSearchText = getSearchText()
+        if (currentSearchText.isNotEmpty()) {
+            buildSearchSuggestions(currentSearchText)
+        } else {
+            buildEmptySearchSuggestions()
+        }
+        mSearchListener?.onSearchEditOpened()
+        if (getSearchText().isNotEmpty()) {
+            showClearButton()
+        }
+        if (openKeyboard) {
+            if (showCustomKeyboard && mCustomKeyboardView != null) {
+                // Show custom keyboard
+                mCustomKeyboardView.visibility = VISIBLE
+                mCustomKeyboardView.isEnabled = true
+
+                // Enable cursor, but still prevent default keyboard from showing up
+                mSearchEditText.setOnTouchListener { v, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            mCustomKeyboardView.visibility = VISIBLE
+                            mCustomKeyboardView.isEnabled = true
+                            val layout = (v as EditText).layout
+                            val x = event.x + mSearchEditText.scrollX
+                            val offset = layout.getOffsetForHorizontal(0, x)
+                            if (offset > 0) {
+                                if (x > layout.getLineMax(0)) mSearchEditText.setSelection(
+                                    offset
+                                ) else {
+                                    // Touch was at the end of the text
+                                    mSearchEditText.setSelection(offset - 1)
+                                }
+                            }
+                        }
+                        MotionEvent.ACTION_MOVE -> {
+                            val layout = (v as EditText).layout
+                            x = event.x + mSearchEditText.scrollX
+                            val offset = layout.getOffsetForHorizontal(0, x)
+                            if (offset > 0) {
+                                if (x > layout.getLineMax(0)) mSearchEditText.setSelection(
+                                    offset
+                                ) else {
+                                    // Touch point was at the end of the text
+                                    mSearchEditText.setSelection(offset - 1)
+                                }
+                            }
+                        }
+                    }
+                    true
+                }
+            } else {
+                // Show default keyboard
+                mSearchEditText.setOnTouchListener(null)
+                val inputMethodManager = context
+                    .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.toggleSoftInputFromWindow(
+                    applicationWindowToken,
+                    InputMethodManager.SHOW_FORCED, 0
+                )
+            }
+        }
+    }
+
+    private fun fromNormalToEditing() {
+        if (mDisplayMode == DisplayMode.TOOLBAR) {
+            setCurrentState(SearchViewState.EDITING)
+            openSearchInternal(true)
+        } else if (mDisplayMode == DisplayMode.MENUITEM) {
+            setCurrentState(SearchViewState.EDITING)
+            if (ViewCompat.isAttachedToWindow(this)) {
+                revealFromMenuItem()
+            } else {
+                viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        revealFromMenuItem()
+                    }
+                })
+            }
+        }
+        mHomeButton.animateState(mHomeButtonOpenIconState)
+    }
+
+    private fun revealFromMenuItem() {
+        visibility = VISIBLE
+        revealFrom(mFromX.toFloat(), mFromY.toFloat(), mDesireRevealWidth)
+    }
+
+    private fun revealFrom(x: Float, y: Float, desireRevealWidth: Int) {
+        val r = resources
+        val px = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 96f,
+            r.displayMetrics
+        )
+        val extraDesireRevealWidth = if (desireRevealWidth <= 0) {
+            if (measuredWidth <= 0) {
+                val metrics = resources.displayMetrics
+                metrics.widthPixels
+            } else {
+                measuredWidth
+            }
+        } else {
+            desireRevealWidth
+        }
+        val extraX = if (x <= 0) {
+            (extraDesireRevealWidth - mCardHeight / 2).toFloat()
+        } else {
+            x
+        }
+        val extraY = if (y <= 0) {
+            (mCardHeight / 2).toFloat()
+        } else {
+            y
+        }
+        val measuredHeight = measuredWidth
+        val finalRadius =
+            max(max(measuredHeight.toFloat(), px), extraDesireRevealWidth.toFloat()).toInt()
+        val animator = ViewAnimationUtils.createCircularReveal(
+            mSearchCardView, extraX.toInt(), extraY.toInt(), 0F, finalRadius.toFloat()
+        )
+        animator.interpolator = AccelerateDecelerateInterpolator()
+        animator.duration = DURATION_REVEAL_OPEN
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {}
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                // show search view here
+                openSearchInternal(true)
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {}
+        })
+        animator.start()
+    }
+
+    private fun setLogoTextInt(text: String) {
+        mLogoView.text = text
+    }
+
+    private fun setSearchString(text: String, avoidTriggerTextWatcher: Boolean) {
+        if (avoidTriggerTextWatcher) {
+            mAvoidTriggerTextWatcher = true
+        }
+        mSearchEditText.setText("")
+        mSearchEditText.append(text)
+        mAvoidTriggerTextWatcher = false
+    }
+
+    private fun hideCircularlyToMenuItem() {
+        if (mFromX == 0 || mFromY == 0) {
+            mFromX = right
+            mFromY = top
+        }
+        hideCircularly(mFromX, mFromY)
+    }
+
+    private fun hideCircularly(x: Int, y: Int) {
+        val r = resources
+        val px: Float = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 96f,
+            r.displayMetrics
+        )
+        val finalRadius = max(this.measuredWidth * 1.5F, px)
+        val animator =
+            ViewAnimationUtils.createCircularReveal(mSearchCardView, x, y, 0F, finalRadius)
+        animator.interpolator = AccelerateDecelerateInterpolator()
+        animator.duration = DURATION_REVEAL_CLOSE
+        animator.start()
+        animator.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {
+                onAnimationStart(animation, true)
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                visibility = GONE
+                closeSearchInternal()
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+            }
+        })
+    }
+
+    private fun showMicButton() {
+        micStateChanged(true)
+        mMicButton.setImageDrawable(
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_action_mic_black, null)
+        )
+    }
+
+    private fun micStateChanged(isMic: Boolean) {
+        mIsMic = isMic
+        micStateChanged()
+    }
+
+    private fun micStateChanged() {
+        mMicButton.visibility = if (!mIsMic || isMicEnabled()) {
+            VISIBLE
+        } else {
+            INVISIBLE
+        }
+    }
+
+    private fun isMicEnabled(): Boolean {
+        return mVoiceRecognitionDelegate != null
+    }
+
+    private fun closeSearchInternal() {
+        mLogoView.visibility = VISIBLE
+        mSearchEditText.visibility = GONE
+        mSuggestionListView.visibility = GONE
+        mSearchListener?.onSearchEditClosed()
+        showMicButton()
+        hideKeyboard()
+    }
+
+    private fun hideKeyboard() {
+        if (showCustomKeyboard && mCustomKeyboardView != null) {
+            mCustomKeyboardView.visibility = GONE
+            mCustomKeyboardView.isEnabled = false
+        } else {
+            (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                applicationWindowToken, 0
+            )
+        }
+    }
 
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable?>?) {
         dispatchFreezeSelfOnly(container)
@@ -188,45 +633,6 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
 
     override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable?>?) {
         dispatchThawSelfOnly(container)
-    }
-
-    private enum class DisplayMode(private val mode: Int) {
-        MENUITEM(0),
-        TOOLBAR(1);
-
-        fun toInt(): Int {
-            return mode
-        }
-
-        companion object {
-            fun fromInt(mode: Int): DisplayMode {
-                for (enumMode in values()) {
-                    if (enumMode.mode == mode) {
-                        return enumMode
-                    }
-                }
-                throw IllegalArgumentException()
-            }
-        }
-    }
-
-    enum class SearchViewState(private val state: Int) {
-        NORMAL(0), EDITING(1), SEARCH(2);
-
-        fun toInt(): Int {
-            return state
-        }
-
-        companion object {
-            fun fromInt(state: Int): SearchViewState {
-                for (enumState in values()) {
-                    if (enumState.state == state) {
-                        return enumState
-                    }
-                }
-                throw IllegalArgumentException()
-            }
-        }
     }
 
     class SavedState : BaseSavedState {
@@ -237,6 +643,10 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
             superState
         ) {
             this.currentSearchViewState = currentSearchViewState
+        }
+
+        fun getCurrentSearchViewState(): SearchViewState {
+            return currentSearchViewState
         }
 
         private constructor(parcel: Parcel, classLoader: ClassLoader) : super(parcel) {
@@ -266,6 +676,9 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
     }
 
     companion object {
+
+        private const val DURATION_REVEAL_CLOSE = 300L
+        private const val DURATION_REVEAL_OPEN = 400L
 
         private val COS_45 = cos(Math.toRadians(45.0))
         private val RES_IDS_ACTION_BAR_SIZE = intArrayOf(R.attr.actionBarSize)
