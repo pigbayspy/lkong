@@ -93,14 +93,13 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
         LayoutInflater.from(context).inflate(R.layout.layout_search_view, this, true)
 
         val attrsValue = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.PersistentSearchView
+            attrs, R.styleable.PersistentSearchView
         )
 
         mDisplayMode = DisplayMode.fromInt(
             attrsValue.getInt(
                 R.styleable.PersistentSearchView_persistentSV_displayMode,
-                DisplayMode.MENUITEM.toInt()
+                DisplayMode.MENUITEM.value
             )
         )
         mCustomToolbarHeight = attrsValue.getDimensionPixelSize(
@@ -108,30 +107,25 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
             calculateToolbarSize(context)
         )
         mSearchTextColor = attrsValue.getColor(
-            R.styleable.PersistentSearchView_persistentSV_searchTextColor,
-            Color.BLACK
+            R.styleable.PersistentSearchView_persistentSV_searchTextColor, Color.BLACK
         )
         mLogoDrawable =
             attrsValue.getDrawable(R.styleable.PersistentSearchView_persistentSV_logoDrawable)
         mArrowButtonColor = attrsValue.getColor(
-            R.styleable.PersistentSearchView_persistentSV_homeButtonColor,
-            Color.BLACK
+            R.styleable.PersistentSearchView_persistentSV_homeButtonColor, Color.BLACK
         )
         mSearchEditTextColor = attrsValue.getColor(
-            R.styleable.PersistentSearchView_persistentSV_editTextColor,
-            Color.BLACK
+            R.styleable.PersistentSearchView_persistentSV_editTextColor, Color.BLACK
         )
         mSearchEditTextHint =
             attrsValue.getString(R.styleable.PersistentSearchView_persistentSV_editHintText) ?: ""
         mSearchEditTextHintColor = attrsValue.getColor(
-            R.styleable.PersistentSearchView_persistentSV_editHintTextColor,
-            Color.BLACK
+            R.styleable.PersistentSearchView_persistentSV_editHintTextColor, Color.BLACK
         )
         mStringLogoDrawable =
             attrsValue.getString(R.styleable.PersistentSearchView_persistentSV_logoString)
         val searchCardElevationValue = attrsValue.getDimensionPixelSize(
-            R.styleable.PersistentSearchView_persistentSV_searchCardElevation,
-            -1
+            R.styleable.PersistentSearchView_persistentSV_searchCardElevation, -1
         )
         mHomeButtonMode =
             attrsValue.getInt(R.styleable.PersistentSearchView_persistentSV_homeButtonMode, 0)
@@ -241,7 +235,7 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
                 fromEditingToSearch(forceSearch = true, avoidSearch = false)
                 return@OnKeyListener true
             } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-                return@OnKeyListener mSearchListener != null && mSearchListener!!.onSearchEditBackPressed()
+                return@OnKeyListener mSearchListener?.onSearchEditBackPressed() ?: false
             }
             false
         })
@@ -346,11 +340,10 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
         for (i in 0 until count) {
             val child = getChildAt(i)
             if (i == 0 && child is CardView) {
-                val searchCard: CardView = child
                 val horizontalPadding =
-                    ceil(calculateHorizontalPadding(searchCard).toDouble()).toInt()
+                    ceil(calculateHorizontalPadding(child).toDouble()).toInt()
                 val verticalPadding =
-                    ceil(calculateVerticalPadding(searchCard).toDouble()).toInt()
+                    ceil(calculateVerticalPadding(child).toDouble()).toInt()
                 val searchCardLeft = mCardHorizontalPadding - horizontalPadding
                 val searchCardTop = mCardVerticalPadding - verticalPadding
                 val searchCardWidth = searchViewWidth - searchCardLeft * 2
@@ -390,12 +383,11 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
             return
         }
         this.mAvoidTriggerTextWatcher = true
-        val ss: SavedState = state
-        super.onRestoreInstanceState(ss.superState)
+        super.onRestoreInstanceState(state.superState)
         for (i in 0 until childCount) {
-            getChildAt(i).restoreHierarchyState(ss.childrenStates!!)
+            getChildAt(i).restoreHierarchyState(state.childrenStates!!)
         }
-        dispatchStateChange(ss.getCurrentSearchViewState())
+        dispatchStateChange(state.getCurrentSearchViewState())
         this.mAvoidTriggerTextWatcher = false
     }
 
@@ -595,8 +587,7 @@ class PersistentSearchView(context: Context, attrs: AttributeSet) : ViewGroup(co
                 val inputMethodManager = context
                     .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.toggleSoftInputFromWindow(
-                    applicationWindowToken,
-                    InputMethodManager.SHOW_FORCED, 0
+                    applicationWindowToken, InputMethodManager.SHOW_FORCED, 0
                 )
             }
         }
