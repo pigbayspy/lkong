@@ -18,7 +18,7 @@ object RxEventBus {
         instance = subject.toSerialized()
     }
 
-    fun sendEvent(event: AbstractEvent?) {
+    fun sendEvent(event: AbstractEvent) {
         instance.onNext(event)
     }
 
