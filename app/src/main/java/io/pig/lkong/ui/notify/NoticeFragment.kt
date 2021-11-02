@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.NoticeModel
 import io.pig.lkong.ui.adapter.NoticeAdapter
-import io.pig.ui.common.getThemeKey
+import io.pig.ui.common.AbstractFragment
 
-class NoticeFragment : Fragment() {
+class NoticeFragment : AbstractFragment() {
 
     private lateinit var binding: LayoutSimpleRecycleBinding
     private lateinit var noticeViewModel: NoticeViewModel

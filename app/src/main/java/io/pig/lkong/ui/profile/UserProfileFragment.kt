@@ -7,7 +7,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
@@ -19,8 +18,9 @@ import io.pig.lkong.ui.profile.reply.UserReplyFragment
 import io.pig.lkong.ui.profile.thread.UserThreadsFragment
 import io.pig.lkong.util.DateUtil
 import io.pig.lkong.util.ImageLoaderUtil
+import io.pig.ui.common.AbstractFragment
 
-class UserProfileFragment : Fragment() {
+class UserProfileFragment : AbstractFragment() {
 
     private val avatarSize by lazy { resources.getDimensionPixelSize(R.dimen.size_avatar_user_profile) }
 

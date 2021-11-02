@@ -22,6 +22,8 @@
     <string name="fab_desc">按钮</string>
     <string name="forward_desc">向前翻页</string>
     <string name="backward_desc">向前翻页</string>
+    <string name="voice_desc">语音输入</string>
+    <string name="search_desc">搜索</string>
 
     <!-- hint -->
     <string name="hint_content">内容</string>
@@ -32,6 +34,7 @@
     <string name="hint_url_value">链接地址</string>
     <string name="hint_rate_reason">评分理由</string>
     <string name="hint_rate_score">数值</string>
+    <string name="hint_search">搜索</string>
 
     <!-- menu 字段 -->
     <string name="action_logout">退出账号</string>

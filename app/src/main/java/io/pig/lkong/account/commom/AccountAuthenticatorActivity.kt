@@ -3,13 +3,13 @@ package io.pig.lkong.account.commom
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import io.pig.ui.common.AbstractActivity
 
 /**
  * @author yinhang
  * @since 2021/5/23
  */
-open class AccountAuthenticatorActivity : AppCompatActivity() {
+open class AccountAuthenticatorActivity : AbstractActivity() {
 
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
     private var resultBundle: Bundle? = null

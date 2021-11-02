@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import io.pig.lkong.MainActivity
@@ -18,9 +17,9 @@ import io.pig.lkong.ui.adapter.item.FragmentItem
 import io.pig.lkong.ui.forum.ForumsFragment
 import io.pig.lkong.ui.thread.hot.HotThreadFragment
 import io.pig.lkong.ui.timeline.TimeLineFragment
-import io.pig.ui.common.getPrimaryColor
+import io.pig.ui.common.AbstractFragment
 
-class HomeFragment : Fragment() {
+class HomeFragment : AbstractFragment() {
 
     private lateinit var binding: FragmentHomeBinding
 

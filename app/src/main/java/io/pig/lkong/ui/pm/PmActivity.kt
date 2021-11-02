@@ -1,7 +1,6 @@
 package io.pig.lkong.ui.pm
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,9 +9,9 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.ActivityPrivateChatBinding
 import io.pig.lkong.model.PrivateMessageModel
 import io.pig.lkong.ui.adapter.PmAdapter
-import io.pig.ui.common.getPrimaryColor
+import io.pig.ui.common.AbstractActivity
 
-class PmActivity : AppCompatActivity() {
+class PmActivity : AbstractActivity() {
 
     private lateinit var listAdapter: PmAdapter
     private lateinit var binding: ActivityPrivateChatBinding

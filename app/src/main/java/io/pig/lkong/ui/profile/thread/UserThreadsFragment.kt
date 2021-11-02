@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +14,9 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.UserThreadModel
 import io.pig.lkong.ui.adapter.UserThreadAdapter
+import io.pig.ui.common.AbstractFragment
 
-class UserThreadsFragment : Fragment() {
+class UserThreadsFragment : AbstractFragment() {
 
     private lateinit var listAdapter: UserThreadAdapter
 

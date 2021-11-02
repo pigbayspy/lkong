@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,9 +15,9 @@ import io.pig.lkong.model.TimelineModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.TimelineAdapter
 import io.pig.lkong.ui.adapter.listener.OnTimelineClickListener
-import io.pig.ui.common.getThemeKey
+import io.pig.ui.common.AbstractFragment
 
-class UserReplyFragment : Fragment() {
+class UserReplyFragment : AbstractFragment() {
 
     private lateinit var replyViewModel: ReplyViewModel
     private lateinit var binding: LayoutSimpleRecycleBinding

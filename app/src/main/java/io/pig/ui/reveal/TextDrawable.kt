@@ -21,10 +21,10 @@ class TextDrawable(resources: Resources, private val mText: String) : Drawable()
         val r = bounds
         val count = canvas.save()
         canvas.translate(r.left.toFloat(), r.top.toFloat())
-        val height = if (canvas.height < 0) {
+        val height = if (bounds.height() < 0) {
             r.height()
         } else {
-            canvas.height
+            bounds.height()
         }
         canvas.drawText(mText, 0f, height / 2 - (paint.descent() + paint.ascent()) / 2, paint)
         canvas.restoreToCount(count)

@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Spinner
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.ViewModelProvider
@@ -28,10 +27,9 @@ import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.ForumThreadAdapter
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 import io.pig.lkong.util.ThemeUtil
-import io.pig.ui.common.getAccentColor
-import io.pig.ui.common.isActivityDestroyed
+import io.pig.ui.common.AbstractActivity
 
-class ForumThreadActivity : AppCompatActivity() {
+class ForumThreadActivity : AbstractActivity() {
 
     private val listener = object : OnThreadClickListener {
         override fun onItemThreadClick(view: View, tid: Long) {

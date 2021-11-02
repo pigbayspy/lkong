@@ -13,13 +13,13 @@ import io.pig.lkong.theme.ThemeConfig
 import io.pig.lkong.ui.dialog.TextSizeDialog
 import io.pig.lkong.util.TextSizeUtil
 import io.pig.lkong.util.ThemeUtil
+import io.pig.ui.common.AbstractActivity
 import io.pig.ui.common.ColorPreference
-import io.pig.ui.common.getThemeKey
 
 class ThemeSettingFragment : PreferenceFragmentCompat() {
 
     private val themeKey: String by lazy {
-        requireActivity().getThemeKey()
+        (requireActivity() as AbstractActivity).getThemeKey()
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

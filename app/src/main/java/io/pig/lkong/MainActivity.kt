@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -39,17 +38,13 @@ import io.pig.lkong.ui.main.MainViewModel
 import io.pig.lkong.util.ImageLoaderUtil
 import io.pig.lkong.util.TextSizeUtil
 import io.pig.lkong.util.ThemeUtil
-import io.pig.ui.common.getPrimaryColor
-import io.pig.ui.common.isNightMode
-import io.pig.ui.common.processToolbar
-import io.pig.ui.common.toggleNightMode
+import io.pig.ui.common.AbstractActivity
 import io.pig.ui.snakebar.SnakeBarType
-import io.pig.ui.snakebar.showSnakeBar
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), Injectable {
+class MainActivity : AbstractActivity(), Injectable {
 
     companion object {
         val Running = AtomicBoolean(false)

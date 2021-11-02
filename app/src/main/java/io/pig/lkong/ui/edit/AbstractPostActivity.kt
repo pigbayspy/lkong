@@ -17,7 +17,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import io.pig.lkong.R
@@ -26,17 +25,14 @@ import io.pig.lkong.preference.PrefConst
 import io.pig.lkong.preference.Prefs
 import io.pig.lkong.preference.StringPrefs
 import io.pig.lkong.util.TextSizeUtil
-import io.pig.ui.common.getPrimaryColor
-import io.pig.ui.common.getThemeKey
-import io.pig.ui.common.toggleNightMode
+import io.pig.ui.common.AbstractActivity
 import io.pig.ui.snakebar.SnakeBarType
-import io.pig.ui.snakebar.showSnakeBar
 import io.pig.widget.html.AsyncDrawableType
 import io.pig.widget.html.AsyncTargetDrawable
 import io.pig.widget.html.ClickableImageSpan
 import io.pig.widget.html.EmojiSpan
 
-abstract class AbstractPostActivity : AppCompatActivity() {
+abstract class AbstractPostActivity : AbstractActivity() {
 
     protected lateinit var binding: ActivityNewThreadBinding
 

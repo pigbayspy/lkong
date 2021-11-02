@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.PmUserModel
 import io.pig.lkong.ui.adapter.PmUserAdapter
+import io.pig.ui.common.AbstractFragment
 
-class PmFragment : Fragment() {
+class PmFragment : AbstractFragment() {
 
     private lateinit var binding: LayoutSimpleRecycleBinding
     private lateinit var pmViewModel: PmViewModel

@@ -11,7 +11,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
@@ -44,18 +43,15 @@ import io.pig.lkong.ui.adapter.listener.OnPostButtonClickListener
 import io.pig.lkong.ui.common.Injectable
 import io.pig.lkong.util.SlateUtil
 import io.pig.lkong.util.ThemeUtil
-import io.pig.ui.common.getAccentColor
-import io.pig.ui.common.getPrimaryColor
-import io.pig.ui.common.getThemeKey
+import io.pig.ui.common.AbstractActivity
 import io.pig.ui.snakebar.SnakeBarType
-import io.pig.ui.snakebar.showSnakeBar
 import io.pig.widget.PagerControl
 import io.pig.widget.listener.OnPagerControlListener
 import io.pig.widget.util.QuickReturnHelper
 import javax.inject.Inject
 import kotlin.math.abs
 
-class PostListActivity : AppCompatActivity(), Injectable {
+class PostListActivity : AbstractActivity(), Injectable {
 
     private val primaryColorInPostControl = Prefs.getBoolPrefs(
         PrefConst.USE_PRIMARY_COLOR_POST_CONTROL, PrefConst.USE_PRIMARY_COLOR_POST_CONTROL_VALUE

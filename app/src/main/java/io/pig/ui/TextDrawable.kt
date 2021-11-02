@@ -1,6 +1,5 @@
 package io.pig.ui
 
-import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape

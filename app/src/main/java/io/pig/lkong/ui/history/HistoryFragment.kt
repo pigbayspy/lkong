@@ -1,8 +1,12 @@
 package io.pig.lkong.ui.history
 
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.R
@@ -15,9 +19,10 @@ import io.pig.lkong.model.listener.OnItemThreadClickListener
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.HistoryAdapter
 import io.pig.lkong.ui.common.Injectable
+import io.pig.ui.common.AbstractFragment
 import javax.inject.Inject
 
-class HistoryFragment : Fragment(), Injectable {
+class HistoryFragment : AbstractFragment(), Injectable {
 
     private val listener = object : OnItemThreadClickListener {
         override fun onItemThreadClick(view: View, tid: Long) {

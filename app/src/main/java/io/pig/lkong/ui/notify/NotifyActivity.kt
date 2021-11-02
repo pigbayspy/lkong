@@ -1,15 +1,14 @@
 package io.pig.lkong.ui.notify
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import io.pig.lkong.R
 import io.pig.lkong.databinding.ActivityNotifyBinding
 import io.pig.lkong.ui.adapter.MainTabFragmentAdapter
 import io.pig.lkong.ui.adapter.item.FragmentItem
-import io.pig.ui.common.getPrimaryColor
+import io.pig.ui.common.AbstractActivity
 
-class NotifyActivity : AppCompatActivity() {
+class NotifyActivity : AbstractActivity() {
 
     private lateinit var binding: ActivityNotifyBinding
 

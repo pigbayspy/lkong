@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +12,9 @@ import io.pig.lkong.model.TimelineModel
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.TimelineAdapter
 import io.pig.lkong.ui.adapter.listener.OnTimelineClickListener
-import io.pig.ui.common.getThemeKey
+import io.pig.ui.common.AbstractFragment
 
-class MentionFragment : Fragment() {
+class MentionFragment : AbstractFragment() {
 
     private lateinit var mentionViewModel: MentionViewModel
     private lateinit var binding: LayoutSimpleRecycleBinding

@@ -14,6 +14,7 @@ import io.pig.lkong.http.data.req.NoticeReq
 import io.pig.lkong.http.data.req.PmMsgReq
 import io.pig.lkong.http.data.req.PrivateMsgListReq
 import io.pig.lkong.http.data.req.PunchReq
+import io.pig.lkong.http.data.req.SearchThreadReq
 import io.pig.lkong.http.data.req.SignReq
 import io.pig.lkong.http.data.req.SystemNoticeReq
 import io.pig.lkong.http.data.req.ThreadPostReq
@@ -33,6 +34,7 @@ import io.pig.lkong.http.data.resp.PmMsgResp
 import io.pig.lkong.http.data.resp.PrivateMsgListResp
 import io.pig.lkong.http.data.resp.PunchResp
 import io.pig.lkong.http.data.resp.RespBase
+import io.pig.lkong.http.data.resp.SearchThreadResp
 import io.pig.lkong.http.data.resp.SignInResp
 import io.pig.lkong.http.data.resp.SystemNoticeResp
 import io.pig.lkong.http.data.resp.ThreadPostResp
@@ -178,6 +180,11 @@ object LkongRepository {
     suspend fun getUserReply(userId: Long, page: Int): RespBase<UserReplyResp> {
         val req = UserReplyReq(userId, page, false)
         return lkongSpec.getUserReply(req)
+    }
+
+    suspend fun searchThread(text: String): RespBase<SearchThreadResp> {
+        val req = SearchThreadReq(text)
+        return lkongSpec.searchThread(req)
     }
 
     private fun getCookie(key: String): String {

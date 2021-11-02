@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
@@ -12,12 +11,12 @@ import io.pig.lkong.model.HotThreadModel
 import io.pig.lkong.model.listener.OnItemThreadClickListener
 import io.pig.lkong.navigation.AppNavigation
 import io.pig.lkong.ui.adapter.HotThreadAdapter
-import io.pig.ui.common.getThemeKey
+import io.pig.ui.common.AbstractFragment
 
 /**
  * 热门
  */
-class HotThreadFragment : Fragment() {
+class HotThreadFragment : AbstractFragment() {
 
     private val listener = object : OnItemThreadClickListener {
         override fun onItemThreadClick(view: View, tid: Long) {

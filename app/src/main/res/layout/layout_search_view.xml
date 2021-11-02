@@ -50,9 +50,9 @@
                 android:layout_marginEnd="16dp"
                 android:layout_toStartOf="@id/search_view_button_mic"
                 android:layout_toEndOf="@+id/search_view_button_home"
-                android:background="@null"
                 android:ems="10"
                 android:gravity="start|center"
+                android:hint="@string/hint_search"
                 android:imeOptions="actionSearch|flagNoExtractUi"
                 android:singleLine="true"
                 android:textColor="#212121"
@@ -66,6 +66,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentEnd="true"
+                android:contentDescription="@string/voice_desc"
                 android:scaleType="center"
                 android:src="@drawable/ic_action_mic_black" />
 

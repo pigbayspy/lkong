@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import io.pig.lkong.R
@@ -16,13 +15,14 @@ import io.pig.lkong.preference.PrefConst.FORUMS_IN_GRID
 import io.pig.lkong.preference.PrefConst.FORUMS_IN_GRID_VALUE
 import io.pig.lkong.preference.Prefs
 import io.pig.lkong.ui.adapter.ForumListAdapter
+import io.pig.ui.common.AbstractFragment
 
 /**
  * 板块列表
  *
  * @author yinhang
  */
-class ForumsFragment : Fragment() {
+class ForumsFragment : AbstractFragment() {
 
     private val clickListener: (forum: ForumModel) -> Unit = {
         AppNavigation.openForumContentActivity(requireContext(), it)

@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.FragmentSearchBinding
+import io.pig.lkong.ui.adapter.SearchResultAdapter
 
 class SearchFragment(private val listener: OnSearchResultListener) : Fragment() {
+
+    private val searchAdapter = SearchResultAdapter(requireContext())
 
     private lateinit var viewModel: SearchViewModel
     private lateinit var binding: FragmentSearchBinding
@@ -23,7 +27,13 @@ class SearchFragment(private val listener: OnSearchResultListener) : Fragment() 
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root = binding.root
+        initRecycle()
         return root
+    }
+
+    private fun initRecycle() {
+        binding.fragmentSearchRecycle.adapter = searchAdapter
+        binding.fragmentSearchRecycle.layoutManager = LinearLayoutManager(requireContext())
     }
 
     companion object {

@@ -3,6 +3,7 @@ package io.pig.lkong.model.listener
 import android.os.Parcel
 import android.os.Parcelable
 import io.pig.lkong.http.data.resp.data.ForumThreadRespData
+import io.pig.lkong.http.data.resp.data.SearchThreadRespData
 import io.pig.lkong.ui.adapter.base.BaseCollectionItem
 
 /**
@@ -29,6 +30,18 @@ class ForumThreadModel : BaseCollectionItem {
         this.authorAvatar = item.author.avatar
         this.title = item.title
         this.digest = item.digest != null
+        this.replies = item.replies
+        this.dateline = item.dateline
+    }
+
+    constructor(item: SearchThreadRespData.ThreadItem) {
+        this.tid = item.tid
+        this.fid = item.forum.fid
+        this.authorId = item.author.uid
+        this.authorName = item.author.name
+        this.authorAvatar = item.author.avatar
+        this.title = item.title
+        this.digest = false
         this.replies = item.replies
         this.dateline = item.dateline
     }

@@ -1,8 +1,12 @@
 package io.pig.lkong.ui.favorite
 
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.pig.lkong.R
@@ -18,10 +22,11 @@ import io.pig.lkong.preference.StringPrefs
 import io.pig.lkong.ui.adapter.FavoriteAdapter
 import io.pig.lkong.ui.adapter.listener.OnThreadClickListener
 import io.pig.lkong.ui.common.Injectable
+import io.pig.ui.common.AbstractFragment
 import javax.inject.Inject
 
 
-class FavoriteFragment : Fragment(), Injectable {
+class FavoriteFragment : AbstractFragment(), Injectable {
 
     private val listener = object : OnThreadClickListener {
         override fun onItemThreadClick(view: View, tid: Long) {

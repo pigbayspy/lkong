@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,9 +13,10 @@ import io.pig.lkong.application.const.DataContract
 import io.pig.lkong.databinding.LayoutSimpleRecycleBinding
 import io.pig.lkong.model.FansModel
 import io.pig.lkong.ui.adapter.FansAdapter
+import io.pig.ui.common.AbstractFragment
 
 
-class FansFragment : Fragment() {
+class FansFragment : AbstractFragment() {
 
     private val listAdapter by lazy { FansAdapter(requireContext()) }
 
