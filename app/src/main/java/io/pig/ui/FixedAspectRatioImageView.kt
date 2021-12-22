@@ -28,7 +28,6 @@ class FixedAspectRatioImageView(context: Context, attrs: AttributeSet, defStyle:
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         try {
-            val drawable = drawable
             var width = measuredWidth
             var height = measuredHeight
             if (drawable == null) {

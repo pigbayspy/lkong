@@ -21,7 +21,7 @@ import io.pig.ui.common.AbstractFragment
 
 class HomeFragment : AbstractFragment() {
 
-    private lateinit var binding: FragmentHomeBinding
+    private var binding: FragmentHomeBinding? = null
 
     private lateinit var pages: ViewPager
     private lateinit var tabs: TabLayout
@@ -33,9 +33,10 @@ class HomeFragment : AbstractFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val tBinding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = tBinding
         initConfig()
-        val root: View = binding.root
+        val root: View = tBinding.root
         initTabs(inflater, container)
         return root
     }
@@ -50,6 +51,11 @@ class HomeFragment : AbstractFragment() {
         detachTab()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     private fun initConfig() {
         // 初始化界面设置
         forumsFirst = Prefs.getBoolPrefs(
@@ -61,7 +67,7 @@ class HomeFragment : AbstractFragment() {
     private fun initTabs(inflater: LayoutInflater, container: ViewGroup?) {
         // 初始化 tab
         tabs = inflater.inflate(R.layout.layout_tab, container, false) as TabLayout
-        pages = binding.fragmentContentMainPager
+        pages = binding!!.fragmentContentMainPager
         tabs.setBackgroundColor(getPrimaryColor())
         setupViewPager()
     }

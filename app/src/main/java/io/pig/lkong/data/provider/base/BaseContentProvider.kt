@@ -129,18 +129,17 @@ abstract class BaseContentProvider : ContentProvider() {
         projection: Array<String>?,
         tableName: String,
         idColumn: String
-    ): Array<String?>? {
+    ): Array<String>? {
         if (projection == null) {
             return null
         }
-        val res = arrayOfNulls<String>(projection.size)
-        for (i in projection.indices) {
-            if (projection[i] == idColumn) {
-                res[i] = tableName + "." + idColumn + " AS " + BaseColumns._ID
+        val res: Array<String> = projection.map {
+            return@map if (it == idColumn) {
+                tableName + "." + idColumn + " AS " + BaseColumns._ID
             } else {
-                res[i] = projection[i]
+                it
             }
-        }
+        }.toTypedArray()
         return res
     }
 
