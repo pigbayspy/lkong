@@ -1,21 +1,9 @@
 package io.pig.lkong.ui.edit
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Html.ImageGetter
-import android.text.SpannableString
-import androidx.core.content.res.ResourcesCompat
-import io.pig.lkong.R
 import io.pig.lkong.application.const.DataContract
-import io.pig.lkong.util.SlateUtil
-import io.pig.ui.html.EmptyImageGetter
-import io.pig.ui.html.HtmlTagHandler
-import io.pig.ui.html.HtmlUtil
-import io.pig.widget.html.ClickableImageSpan
 
 class NewThreadActivity : AbstractPostActivity() {
-
-    private val tagHandler = HtmlTagHandler()
 
     private var isEditMode = false
 
@@ -43,52 +31,7 @@ class NewThreadActivity : AbstractPostActivity() {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        if (isInEditMode()) {
-            binding.newThreadEditTitle.setText(editTitle)
-            val imageGetter: ImageGetter = EmptyImageGetter()
-            val spannedText = SlateUtil.slateToHtml(editContent)
-            val spannedHtml = HtmlUtil.htmlToSpanned(spannedText, imageGetter, tagHandler)
-            val drawable: Drawable =
-                ResourcesCompat.getDrawable(resources, R.drawable.placeholder_loading, null)!!
-            val spannableString =
-                replaceImageSpan(drawable, postId, spannedHtml) as SpannableString
-            binding.newThreadEditContent.append(spannableString)
-            val imageSpanContainer = ImageSpanContainerImpl(binding.newThreadEditContent)
-            val objects = spannableString.getSpans(
-                0, spannableString.length,
-                Any::class.java
-            )
-            for (spanObj in objects) {
-                if (spanObj is ClickableImageSpan) {
-                    spanObj.loadImage(imageSpanContainer)
-                }
-            }
-        }
-        editTextHandler = ImageEditTextHandler(binding.newThreadEditContent)
-    }
 
-    override fun sendData(title: String?, content: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getLogTag(): String {
-        return TAG
-    }
-
-    override fun hasTitleField(): Boolean {
-        return true
-    }
-
-    override fun getTitleString(): String {
-        return if (isInEditMode()) {
-            getString(R.string.button_edit)
-        } else {
-            forumName
-        }
-    }
-
-    override fun isInEditMode(): Boolean {
-        return isEditMode
     }
 
     companion object {
